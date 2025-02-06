@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypt times</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link href="./static/styles/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <div class="converter-container">
+        <h1>Let's go {{ format.toUpperCase() }}!</h1>
+        <div v-if="isCrypt == true" class="input-container">
+          <input type="text" v-model="itemname" placeholder="itemname..." required>
+          <input type="text" v-model="username" placeholder="username..." required>
+          <input type="text" v-model="password" placeholder="password..." required>
+        </div>
+
+        <div v-if="isCrypt == false" class="input-container">
+          <input type="text" v-model="itemname" placeholder="password..." required>
+          <input type="text" v-model="username" placeholder="secretKey..." required>
+          <input type="text" v-model="password" placeholder="ivSpec..." required>
+        </div>
+
+        <div class="button-container">
+            <button v-if="isCrypt == true" @click="encrypt">encrypt</button>
+            <button v-if="isCrypt == false" @click="decrypt">decrypt</button>
+            <div class="switch">
+                <input v-model="isCrypt" class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox">
+                <label class="switch-label" for="switchID1">
+                    <span class="switch-txt" turnOn="encrypt" turnOff="decrypt":data-format="isCrypt ? 'encrypt' : 'decrypt'"></span>
+                    <span class="switch-Round-btn"></span>
+                </label>
+                <!-- <p>{{isMP4}}</p> -->
+            </div>
+        </div>
+        <div v-if="errorMessage" class="error">
+          {{ errorMessage }}
+      </div>
+      <div v-if="successMessage" class="success" @click="copyText">
+        {{ successMessage }}
+    </div>
+  </div>
+</div>
+  <script src="./static/script/common.js"></script>
+  <script src="./static/script/script.js"></script>
+</body>
+</html>

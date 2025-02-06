@@ -9,16 +9,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfig {
-
     @Bean
-    public WebMvcConfigurer webMvcConfigurer() {
+    public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.DELETE.name())
+                registry.addMapping("/api/**")
                         .allowedOrigins("*")
-                        .allowedHeaders(HttpHeaders.CONTENT_TYPE);
+                        .allowedMethods("GET", "POST", "OPTIONS")  // Match API Gateway methods
+                        .allowedHeaders("Content-Type", "Authorization", "X-Amz-Date",
+                                "X-Api-Key", "X-Amz-Security-Token")
+                        .exposedHeaders("Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Methods")
+                        .maxAge(3600);  // Cache preflight for 1 hour
             }
         };
     }
