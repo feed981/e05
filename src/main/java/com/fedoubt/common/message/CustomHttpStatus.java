@@ -1,10 +1,8 @@
 package com.fedoubt.common.message;
 
 public enum CustomHttpStatus implements ApiStatus {
-    URL_CANNOT_BE_NULL_OR_EMPTY(400,"URL cannot be null or empty"),
-    INVALID_YOUTUBE_URL(400,"Invalid YouTube URL"),
-    TOO_MANY_REQUESTS(429,"Too many requests. Please try again later"),
-    SERVER_ERROR(503,"服务器内部错误"),
+    INVALID_REQUEST_DATA(400, "Invalid request data"),
+    INTERNAL_SERVER_ERROR(500,  "Internal Server Error"),
     CONFLICT(409, "Conflict"),
 
     ;

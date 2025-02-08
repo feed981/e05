@@ -3,3 +3,7 @@
 logging:
   level:
     root: WARN
+key:
+  path:
+    public: public_key.pem
+    private: private_key.pem
