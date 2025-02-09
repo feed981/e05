@@ -1,10 +1,11 @@
-package com.fedoubt.services;
+package com.feddoubt.Cry.service;
 
 
-import com.fedoubt.dtos.CryDto;
-import com.fedoubt.pojos.Cry;
+import com.feddoubt.model.Cry.dtos.CryDto;
+import com.feddoubt.model.Cry.pojos.Cry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -23,12 +24,14 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 public class CryService {
     private final int ITERATIONS = 10000;
     private final int KEY_LENGTH = 256;
 
-    public String decrypt(CryDto crydto) {
-        String result = crydto.getItemname();
+
+    public String decrypt(CryDto cryDto) throws Exception {
+        String result = cryDto.getItemname();
         Cry cry = new Cry();
         cry.setUserId(result.split(":")[0]);
         String userId = cry.getUserId();
@@ -53,12 +56,7 @@ public class CryService {
         IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
         String encryptedPassword = cry.getEncryptedPassword();
 
-        String decryptedPassword = null;
-        try {
-            decryptedPassword = decrypt(encryptedPassword, secretKey, ivSpec);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String decryptedPassword = decrypt(encryptedPassword, secretKey, ivSpec);
 
         cry.setCombinedPassword(decryptedPassword);
 
@@ -75,7 +73,7 @@ public class CryService {
         return cry.getResult();
     }
 
-    public String encrypt(CryDto crydto) {
+    public String encrypt(CryDto crydto) throws Exception {
         Cry cry = new Cry();
         String originalPassword = crydto.getPassword();
         cry.setOriginalPassword(originalPassword);
@@ -98,12 +96,7 @@ public class CryService {
         cry.setCombinedPassword(combinedPassword);
 
         // 生成密鑰
-        SecretKey secretKey = null;
-        try {
-            secretKey = generateAESKey();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        SecretKey secretKey = generateAESKey();
         cry.setSecretKey(secretKey);
 
         // 生成IV
@@ -112,12 +105,7 @@ public class CryService {
         cry.setIvSpec(ivSpec);
 
         // 加密
-        String encryptedPassword = null;
-        try {
-            encryptedPassword = encrypt(combinedPassword, secretKey, ivSpec);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String encryptedPassword = encrypt(combinedPassword, secretKey, ivSpec);
         cry.setSecretKeyStr(Base64.getEncoder().encodeToString(secretKey.getEncoded()));
         cry.setIvSpecStr(Base64.getEncoder().encodeToString(iv));
         cry.setEncryptedPassword(encryptedPassword);

@@ -7,3 +7,6 @@ key:
   path:
     public: public_key.pem
     private: private_key.pem
+jwt:
+  secret: u7NBGK9za2UERr4SFRhH+3x5Uv+q2KYMKVRc92l+jBM=
+  ttl: 36000000
