@@ -36,16 +36,29 @@ public class CryController {
 
     @PostMapping(value = "/encrypt", consumes = {"application/json", "application/octet-stream"})
     public ResponseEntity<?> encrypt(@RequestBody byte[] data) {
+        CryDto cryDto = requestData(data);
+        if(cryDto == null){
+            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(ResponseUtils.success(cryService.encrypt(cryDto)));
+    }
 
+    @PostMapping(value = "/decrypt", consumes = {"application/json", "application/octet-stream"})
+    public ResponseEntity<?> decrypt(@RequestBody byte[] data) {
+        CryDto cryDto = requestData(data);
+        if(cryDto == null){
+            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseEntity.ok(ResponseUtils.success(cryService.decrypt(cryDto)));
+    }
+
+    private CryDto requestData(byte[] data){
         try {
-            log.info("encrypt data:{}",data);
+            log.info("data:{}",data);
             EncryptionRequest request = objectMapper.readValue(data, EncryptionRequest.class);
-//            if (data == null || data.length == 0) {
-//                return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
-//            }
             if (request == null || StringUtils.isEmpty(request.getEncryptedKey())
                     || StringUtils.isEmpty(request.getEncryptedData())) {
-                return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
+                return null;
             }
 
             String processedData = encryptionService.processEncryptedData(
@@ -56,28 +69,10 @@ public class CryController {
 
             CryDto cryDto = objectMapper.readValue(processedData, CryDto.class);
             log.info("cryDto:{}",cryDto);
-            return ResponseEntity.ok(ResponseUtils.success(cryService.encrypt(cryDto)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INTERNAL_SERVER_ERROR);
+            return cryDto;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping(value = "/decrypt", consumes = {"application/json", "application/octet-stream"})
-    public ResponseEntity<?> decrypt(@RequestBody byte[] data) {
-        if (data == null || data.length == 0) {
-            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
-        }
-
-        try{
-            CryDto request = objectMapper.readValue(data, CryDto.class);
-            String itemname = request.getItemname();
-            return ResponseEntity.ok(ResponseUtils.success(cryService.decrypt(itemname)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseUtils.error("Invalid request format"));
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.fedoubt.controllers;
+package com.feddoubt.Cry.controller.v1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +18,15 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/key")
 public class PublicKeyController {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(PublicKeyController.class);
-
+    
     @Value("${key.path.public:src/main/resources/public_key.pem}")
     private String publicKeyPath;
+
+
+    @Value("${key.path.private:src/main/resources/private_key.pem}")
+    private String privateKeyPath;
 
     @GetMapping("/public")
     public ResponseEntity<?> getPublicKey() {
@@ -32,15 +36,43 @@ public class PublicKeyController {
             Resource resource = new ClassPathResource(publicKeyPath);
             String publicKey = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
             return ResponseEntity.ok(publicKey);
-
+            
         } catch (FileNotFoundException e) {
             logger.error("Public key file not found: {}", publicKeyPath, e);
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("Public key file not found");
+                
+        } catch (IOException e) {
+            logger.error("Error reading public key file: {}", publicKeyPath, e);
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error reading public key file");
+                
+        } catch (Exception e) {
+            logger.error("Unexpected error while reading public key: {}", e.getMessage(), e);
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Internal server error");
+        }
+    }
+
+    @GetMapping("/private")
+    public ResponseEntity<?> getPrivateKey() {
+        try {
+            // 使用 ClassPathResource 來讀取資源檔案
+            Resource resource = new ClassPathResource(privateKeyPath);
+            String publicKey = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
+            return ResponseEntity.ok(publicKey);
+
+        } catch (FileNotFoundException e) {
+            logger.error("Public key file not found: {}", privateKeyPath, e);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Public key file not found");
 
         } catch (IOException e) {
-            logger.error("Error reading public key file: {}", publicKeyPath, e);
+            logger.error("Error reading public key file: {}", privateKeyPath, e);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error reading public key file");

@@ -1,4 +1,4 @@
-package com.fedoubt.pojos;
+package com.feddoubt.model.Cry.pojos;
 
 import lombok.Data;
 
