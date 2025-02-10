@@ -38,7 +38,7 @@ public class CryController {
     public ResponseEntity<?> encrypt(@RequestBody byte[] data) {
         CryDto cryDto = requestData(data);
         if(cryDto == null){
-            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
         }
         return ResponseEntity.ok(ResponseUtils.success(cryService.encrypt(cryDto)));
     }
@@ -47,7 +47,7 @@ public class CryController {
     public ResponseEntity<?> decrypt(@RequestBody byte[] data) {
         CryDto cryDto = requestData(data);
         if(cryDto == null){
-            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseUtils.httpStatus2ApiResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
         }
         return ResponseEntity.ok(ResponseUtils.success(cryService.decrypt(cryDto)));
     }
