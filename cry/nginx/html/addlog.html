@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thread-Style Log (Vue.js)</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            height: 90vh; /* Make it take most of the screen */
+        }
+        .input-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .log-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-top: 10px;
+        }
+        .log-entry {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #1DA1F2;
+            white-space: pre-line; /* Keeps line breaks */
+        }
+        .log-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1DA1F2;
+            margin-bottom: 5px;
+        }
+        .timestamp {
+            font-size: 14px;
+            font-weight: bold;
+            color: gray;
+            display: block;
+            margin-top: 5px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .add-btn {
+            margin-top: 10px;
+            background: #1DA1F2;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .add-btn:hover {
+            background: #0d8ae5;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="container">
+            <h1>New Log!</h1>
+            <input v-model="newTitle" class="input-field" placeholder="Enter Log Title (Big Heading)">
+            <textarea v-model="newLog" class="input-field" placeholder="Write a new log entry..."></textarea>
+            <input type="date" v-model="logDate" class="input-field">
+            <button class="add-btn" @click="addLog">Add Log</button>
+        <!-- Input Section (Always Visible) -->
+        <!-- Scrollable Logs -->
+        <div class="log-container">
+            <div v-for="log in logs" :key="log.id" class="log-entry">
+                <div class="log-title">{{ log.title }}</div>
+                <p v-html="log.text.replace(/\n/g, '<br>')"></p>
+                <span class="timestamp">{{ log.date }}</span>
+            </div>
+            <div class="log-entry"><div class="log-title">jwt security</div><p>--</p><span class="timestamp">2025/02/09</span></div>
+            <div class="log-entry"><div class="log-title">End-to-End Encryption (E2EE)</div><p>1. The backend generates an RSA key pair (public and private keys).<br>2. The frontend generates an AES-256 key and encrypts it using the RSA public key.<br>This ensures that the AES key is not transmitted in plaintext.<br>3. The frontend encrypts the data using AES-256.<br>The data is already encrypted before transmission, preventing interception.<br>4. The backend decrypts the AES key using the RSA private key, then decrypts the data using AES.<br>Only the backend, which possesses the RSA private key, can decrypt the data.<br></p><span class="timestamp">2025/02/08</span></div>
+            <div class="log-entry"><div class="log-title">CloudFront + API Gateway</div><p>1. 設定 API Gateway (後端) 的 CloudFront 行為<br>2. 設定 Cache Policy<br>CloudFront 也托管靜態網站 (S3)，但 API Gateway 只處理 /api/*<br>在 API Gateway 的行為 (/api/*) 設定：<br><br>Cache Policy: Managed-CachingDisabled<br>API 不應該快取，因為 API 回應是動態的。<br>Origin Request Policy: Managed-AllViewerExceptHostHeader<br>允許 CloudFront 傳遞 Headers 和 Query Strings 給 API Gateway。<br>確保 Authorization 和 Content-Type Headers 不會被 CloudFront 過濾掉。<br>3. CloudFront 403 ERROR<br>因為 CloudFront 目前不允許 POST、PUT、DELETE 等非 GET/HEAD 請求，這通常發生在 CloudFront 連接 API Gateway 時<br>4. 405<br>API Gateway 直連成功，但 CloudFront 返回 405 Method Not Allowed，表示 CloudFront 沒有正確將 POST 請求轉發給 API Gateway，可能是 CloudFront Behaviors 設定不完整 或 API Gateway CORS 問題。</p><span class="timestamp">2025/02/07</span></div>
+            <div class="log-entry"><div class="log-title">S3 + CloudFront (AccessDenied)</div><p>1. 清除 CloudFront 快取<br>CloudFront "Invalidations"（失效處理）<br>2. CloudFront Origin 設定錯誤<br>Origin Type 是 S3。<br>Use Origin Access Control (OAC)<br>3. CloudFront "Behaviors" 設定<br>Viewer Protocol Policy：選擇 Redirect HTTP to HTTPS 或 HTTPS only。<br>Cache Policy：選擇 Managed-CachingDisabled（確保不會有快取問題）。<br>4. 測試 &amp; 驗證<br>curl -I https://your-cloudfront-domain.cloudfront.net/index.html</p><span class="timestamp">2025/02/06</span></div> 
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    newTitle: "",
+                    newLog: "",
+                    logDate: "",
+                    logs: []
+                };
+            },
+            methods: {
+                addLog() {
+                    if (!this.newTitle.trim() || !this.newLog.trim() || !this.logDate) {
+                        alert("Please enter a title, log text, and date.");
+                        return;
+                    }
+
+                    this.logs.unshift({
+                        id: Date.now(),
+                        title: this.newTitle,
+                        text: this.newLog,
+                        date: this.formatDate(this.logDate)
+                    });
+
+                    this.newTitle = "";
+                    this.newLog = "";
+                    this.logDate = "";
+                },
+                formatDate(dateString) {
+                    const date = new Date(dateString);
+                    return date.toISOString().split("T")[0].replace(/-/g, "/"); // Format as YYYY/MM/DD
+                }
+            }
+        }).mount("#app");
+    </script>
+
+</body>
+</html>
