@@ -1,18 +1,20 @@
 package com.fedoubt.filter;
 
 import com.fedoubt.configs.jwt.JwtProvider;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 
 @Slf4j
 @Component
 public class ServiceFilter extends OncePerRequestFilter {
-    private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtProvider jwtProvider;
@@ -41,7 +43,7 @@ public class ServiceFilter extends OncePerRequestFilter {
             }
 
             if (path.contains("/api/v1/key/public") || path.contains("/api/v1/cry")) {
-                String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+                String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
                 log.info("authHeader: {}", authHeader);
 
                 if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
@@ -73,6 +75,22 @@ public class ServiceFilter extends OncePerRequestFilter {
             log.info("Before chain.doFilter");
             filterChain.doFilter(request, response);
             log.info("After chain.doFilter");
+
+        } catch (ExpiredJwtException e) {
+            log.info("Token 已過期，重新生成中...");
+            // 取得過期 Token 的使用者資訊（如果 JWT 有儲存 userId，可解析出來）
+//            String expiredToken = request.getHeader(AUTHORIZATION_HEADER);
+            String userId = UUID.randomUUID().toString(); // 無法解析時，使用隨機 UUID
+
+            // 重新生成 Token
+            String newToken = jwtProvider.generateToken(userId);
+            log.info("新 Token 生成完成: {}", newToken);
+
+            // 將新 Token 設置到 Response Header
+            response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + newToken);
+
+            // 重新執行請求
+            filterChain.doFilter(request, response);
 
         } catch (Exception e) {
             log.error("Filter error", e);
