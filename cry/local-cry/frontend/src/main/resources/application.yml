@@ -1,0 +1,14 @@
+server:
+  port: 64202
+spring:
+  application:
+    name: Cry-service
+  banner:
+    location: classpath:banner.txt
+key:
+  path:
+    public: public_key.pem
+    private: private_key.pem
+jwt:
+  secret: 9hfSSZ/E7ndfkX97u5RpDGxTzJeZezxYx8QonBUMwTc=
+  ttl: 36000000

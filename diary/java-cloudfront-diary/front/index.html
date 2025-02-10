@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diary times</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/1.3.1/forge.min.js"></script>
+  <link href="./static/styles/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <div v-if="!isCalendarVisible" class="auth-container">
+      <h1>Let's go Diary!</h1>
+      <div class="input-container">
+        <input type="text" v-model="username" placeholder="username..." required>
+        <input type="text" v-model="password" placeholder="password..." required>
+      </div>
+
+      <div class="button-container">
+        <button @click="register">Register</button>
+        <button @click="login">Login</button>
+      </div>
+    </div>
+      
+    <div v-if="isCalendarVisible && !isDiaryVisible" class="calendar-container">
+      <h1>My Diary Calendar</h1>
+      <button @click="logout">Logout</button>
+      <div id="calendar-nav">
+        <button class="button2" @click="prevYear">« Prev Year</button>
+        <button class="button2" @click="prevMonth">‹ Prev Month</button>
+        <button class="button2 now" >{{ monthNames[currentMonth] }} {{ currentYear }}</button>
+        <button class="button2" @click="nextMonth">Next Month ›</button>
+        <button class="button2" @click="nextYear">Next Year »</button>
+      </div>
+
+      <div id="calendar">
+        <div v-for="n in firstDay" :key="'empty-' + n" class="day"></div>
+        <div v-for="day in daysInMonth" :key="day"
+            class="day" 
+            :class="{ 'has-entry': hasDiaryEntry(day) }"
+            @click="openDiary(getDateString(day))">
+            {{ day }}
+        </div>
+      </div>
+    </div>
+    <div v-if="isDiaryVisible" class="dayiv">
+      {{ selectedDate }}
+    </div>
+    <div v-if="isDiaryVisible"  class="diary-container" :style="{ height: containerHeight + 'px' }">
+      <h1  ref="diaryTitle">Diary Entry</h1>
+      <div class="button-container" ref="buttonContainer">
+        <button @click="saveDiary">Save</button>
+        <button @click="isDiaryVisible = false">Close</button>
+      </div>
+      <br>
+      <div>
+        <textarea v-model="diaryEntry" @input="adjustHeight" ref="diaryTextarea"></textarea>
+      </div>
+    </div>
+  </div>
+<script src="./static/script/script.min.js"></script>
+</body>
+</html>
