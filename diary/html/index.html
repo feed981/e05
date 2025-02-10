@@ -31,8 +31,12 @@
       
     <div v-if="isCalendarVisible && !isDiaryVisible" class="calendar-container">
       <h1>My Diary Calendar</h1>
-      <button @click="logout">Logout</button>
-      <div id="calendar-nav">
+      <div class="button-container">
+        <button @click="logout">Logout</button>
+        <button @click="backupDiary">backupDiary</button>
+      </div>
+
+        <div id="calendar-nav">
         <button class="button2" @click="prevYear">« Prev Year</button>
         <button class="button2" @click="prevMonth">‹ Prev Month</button>
         <button class="button2 now" >{{ monthNames[currentMonth] }} {{ currentYear }}</button>
@@ -65,6 +69,6 @@
       </div>
     </div>
   </div>
-<script src="./static/script/script.min.js"></script>
+<script src="./static/script/script.js"></script>
 </body>
 </html>

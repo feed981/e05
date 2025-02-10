@@ -70,18 +70,14 @@ createApp({
             isDiaryVisible: false,
             username: '',
             password: '',
-            errorMessage: '',
-            successMessage: '',
             currentYear: new Date().getFullYear(),
             currentMonth: new Date().getMonth(),
+            currentUser: null,
             selectedDate: "",
             diaryEntry: "",
             monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-            containerHeight: 250 // 初始高度
+            containerHeight: 250, // 初始高度
         };
-    },
-    mounted() {
-        // this.checkOrGenerateToken();
     },
     computed: {
         firstDay() {
@@ -92,25 +88,26 @@ createApp({
         }
     },
     methods: {
-        async checkOrGenerateToken() {
-            let token = localStorage.getItem('token');
-    
-            if (!token) {
-                try {
-                    const response = await apiAuth.get('/token');
-                    token = response.data;
-                    localStorage.setItem('token', token);
-                } catch (error) {
-                    console.error('無法獲取 token:', error);
+        backupDiary() {
+            if (!this.currentUser) {
+                return;
+            }
+            
+            const backup = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(`diary_${this.currentUser}_`)) {
+                    backup[key] = localStorage.getItem(key);
                 }
             }
-            axios.interceptors.request.use(config => {
-                const token = localStorage.getItem('token');
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`;
-                }
-                return config;
-            });
+            
+            const data = JSON.stringify(backup, null, 2);
+            const blob = new Blob([data], { type: "application/json" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `diary_backup_${this.currentUser}.json`;
+            link.click();
+            URL.revokeObjectURL(link.href);
         },
         adjustHeight() {
             this.$nextTick(() => {
@@ -132,26 +129,42 @@ createApp({
         },
         register() {
             if (this.username && this.password) {
-                localStorage.setItem("diaryUser", this.username);
-                localStorage.setItem("diaryPass", this.password);
-                notyf.success("register success！");
-                this.clearForm();
+              let users = JSON.parse(localStorage.getItem("diaryUsers") || "[]");
+              
+              if (users.some(user => user.username === this.username)) {
+                notyf.error("Username already exists!");
+                return;
+              }
+              
+              users.push({
+                username: this.username,
+                password: this.password
+              });
+              console.log(JSON.stringify(users))
+              localStorage.setItem("diaryUsers", JSON.stringify(users));
+              notyf.success("Register success!");
+              this.clearForm();
             } else {
-                notyf.error("register error！");
+              notyf.error("Register error!");
             }
-        },
-        login() {
-            let storedUser = localStorage.getItem("diaryUser");
-            let storedPass = localStorage.getItem("diaryPass");
+          },
+      
+          login() {
+            let users = JSON.parse(localStorage.getItem("diaryUsers") || "[]");
+            let user = users.find(u => 
+              u.username === this.username && 
+              u.password === this.password
+            );
             
-            if (this.username === storedUser && this.password === storedPass) {
-                notyf.success("login success！")
-                this.isCalendarVisible = true;
-                this.clearForm();
+            if (user) {
+              this.currentUser = this.username;
+              notyf.success("Login success!");
+              this.isCalendarVisible = true;
+              this.clearForm();
             } else {
-                notyf.error("login error！")
+              notyf.error("Login error!");
             }
-        },
+          },
         logout(){
             this.isCalendarVisible = false;
             this.isDiaryVisible = false;
@@ -178,105 +191,26 @@ createApp({
         },
         getDateString(day) {
             return `${this.currentYear}-${String(this.currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        },
-        hasDiaryEntry(day) {
-            return localStorage.getItem("diary_" + this.getDateString(day)) !== null;
-        },
-        openDiary(date) {
+          },
+      
+          hasDiaryEntry(day) {
+            return localStorage.getItem(`diary_${this.currentUser}_${this.getDateString(day)}`) !== null;
+          },
+      
+          openDiary(date) {
             this.selectedDate = date;
-            this.diaryEntry = localStorage.getItem("diary_" + date) || "";
+            this.diaryEntry = localStorage.getItem(`diary_${this.currentUser}_${date}`) || "";
             this.isDiaryVisible = true;
-        },
-        saveDiary() {
+            
+          },
+      
+          saveDiary() {
             if (this.diaryEntry.trim()) {
-                localStorage.setItem("diary_" + this.selectedDate, this.diaryEntry);
+              localStorage.setItem(`diary_${this.currentUser}_${this.selectedDate}`, this.diaryEntry);
             } else {
-                localStorage.removeItem("diary_" + this.selectedDate);
+              localStorage.removeItem(`diary_${this.currentUser}_${this.selectedDate}`);
             }
             this.isDiaryVisible = false;
-        },
-        // async encrypt() {
-        //     this.errorMessage = '';
-        //     this.successMessage = '';
-            
-        //     if (!this.itemname || !this.username || !this.password) {
-        //         notyf.error("Please complete all fields！");
-        //         return;
-        //     }
-
-        //     const sensitiveData = {
-        //         itemname: this.itemname,
-        //         username: this.username,
-        //         password: this.password
-        //     };
-            
-        //     const encryptedData = await encryptionService.encryptData(sensitiveData);
-
-        //     await apiCry.post('/encrypt', {
-        //         encryptedKey: encryptedData.encryptedKey,
-        //         encryptedData: encryptedData.encryptedData
-        //     }).then(response => {
-        //         if (response.data.success === true) {
-        //             this.clearForm();
-        //             this.successMessage = `Your ${this.format.toUpperCase()} is
-        //              ${response.data.data}`;
-        //             this.success = response.data.data;
-        //             notyf.success("encrypt success！")
-
-        //         }else if(response.data.success === false){
-        //             this.errorMessage = response.data.message;
-        //             this.successMessage = '';
-        //         }
-        //     }).catch(error => {
-        //         if (error.response) {
-        //             this.errorMessage = '服务器内部错误';
-        //             this.embedUrl = '';
-        //             console.error('Request failed', error.response.data);
-        //         } else if (error.request) {
-        //             console.error('No response received', error.request);
-        //         } else {
-        //             console.error('Error', error.message);
-        //         }
-        //     });
-        // },
-        // async decrypt() {
-        //     this.errorMessage = '';
-        //     this.successMessage = '';
-            
-        //     const sensitiveData = {
-        //         itemname: this.itemname,
-        //         username: this.username,
-        //         password: this.password
-        //     };
-            
-        //     const encryptedData = await encryptionService.encryptData(sensitiveData);
-
-        //     await apiCry.post('/decrypt', {
-        //         encryptedKey: encryptedData.encryptedKey,
-        //         encryptedData: encryptedData.encryptedData
-        //     }).then(response => {
-        //         if (response.data.success === true) {
-        //             this.clearForm();
-        //             this.successMessage = `Your ${this.format.toUpperCase()} is
-        //             ${response.data.data}`;
-        //             this.success = response.data.data;
-        //             notyf.success("decrypt success！")
-
-        //         }else if(response.data.success === false){
-        //             this.errorMessage = response.data.message;
-        //             this.successMessage = '';
-        //         }
-        //     }).catch(error => {
-        //         if (error.response) {
-        //             this.errorMessage = '服务器内部错误';
-        //             this.embedUrl = '';
-        //             console.error('Request failed', error.response.data);
-        //         } else if (error.request) {
-        //             console.error('No response received', error.request);
-        //         } else {
-        //             console.error('Error', error.message);
-        //         }
-        //     });
-        // },
+          }
     }
 }).mount('#app');
