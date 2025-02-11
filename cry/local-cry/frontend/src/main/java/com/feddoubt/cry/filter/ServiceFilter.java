@@ -33,13 +33,26 @@ public class ServiceFilter extends OncePerRequestFilter {
         log.info("Request Method: {}", method);
         log.info("Request Headers: {}", Collections.list(request.getHeaderNames()));
 
+
         try {
+            if (path.contains("/swagger-ui") || path.contains("/v3/api-docs")) {
+                log.info("Processing Swagger request: {}", path);
+                filterChain.doFilter(request, response);
+                log.info("Swagger request processed: {} - Status: {}", path, response.getStatus());
+                return;
+            }
+            // ... 其他邏輯 ...
+        } catch (Exception e) {
+            log.error("Error processing request: " + path, e);
+            throw e;
+        }
+
+        try {
+
 
             if (path.contains("/api/v1/auth/token")) {
                 log.info("get auth token");
-                log.info("Before chain.doFilter");
                 filterChain.doFilter(request, response);
-                log.info("After chain.doFilter");
             }
 
             if (path.contains("/api/v1/key/public") || path.contains("/api/v1/cry")) {
@@ -70,11 +83,11 @@ public class ServiceFilter extends OncePerRequestFilter {
                 }
 
                 log.info("JWT 驗證成功, userId: {}", userId);
+                log.info("Before chain.doFilter");
+                filterChain.doFilter(request, response);
+                log.info("After chain.doFilter");
             }
 
-            log.info("Before chain.doFilter");
-            filterChain.doFilter(request, response);
-            log.info("After chain.doFilter");
 
         } catch (ExpiredJwtException e) {
             log.info("Token 已過期，重新生成中...");

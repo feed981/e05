@@ -30,7 +30,7 @@ public class Cry {
     }
 
     public void setResult2() {
-        List<String> words = Arrays.asList(this.userId,this.project == null ? "" : this.project,this.account,this.salt + this.originalPassword);
+        List<String> words = Arrays.asList(this.userId,this.project == null ? "" : this.project,this.account,this.originalPassword);
         this.result = String.join(":", words);
     }
 }
