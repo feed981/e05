@@ -66,6 +66,7 @@ const encryptionService = {
 createApp({
     data() {
         return {
+            isLight: false,
             isCrypt: true,
             username: '',
             password: '',
@@ -78,7 +79,16 @@ createApp({
     watch: {
         isCrypt(newValue, oldValue) {
             this.clearForm();
-        }
+        },
+        isLight(newVal) {
+            if (newVal) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        },
     },
     mounted() {
         this.checkOrGenerateToken();
