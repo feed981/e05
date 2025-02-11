@@ -4,68 +4,10 @@ const notyf = new Notyf({
     dismissible: true
 });
 
-// const apiCry = axios.create({
-//     baseURL: "/api/v1/cry",
-//     headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${localStorage.getItem('token')}`
-//     }
-// });
-
-// const apiKey = axios.create({
-//     baseURL: "/api/v1/key",
-//     headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${localStorage.getItem('token')}`
-//     }
-// });
-
-// const apiAuth = axios.create({
-//     baseURL: "/api/v1/auth",
-//     headers: {
-//         'Content-Type': 'application/json'
-//     }
-// });
-
-const encryptionService = {
-    async encryptData(data) {
-        try {
-            const { data: publicKeyPEM } = await apiKey.get('/public');
-            const aesKey = CryptoJS.lib.WordArray.random(32);
-            const aesKeyHex = aesKey.toString(CryptoJS.enc.Hex);
-            const rsa = forge.pki.publicKeyFromPem(publicKeyPEM);
-            const encryptedAESKey = forge.util.encode64(
-                rsa.encrypt(aesKeyHex)
-            );
-
-            const iv = CryptoJS.lib.WordArray.random(16);
-            const encryptedData = CryptoJS.AES.encrypt(
-                JSON.stringify(data),
-                aesKey,
-                {
-                    mode: CryptoJS.mode.CBC,
-                    padding: CryptoJS.pad.Pkcs7,
-                    iv: iv
-                }
-            );
-            const finalCiphertext = CryptoJS.enc.Base64.stringify(
-                CryptoJS.lib.WordArray.create(iv.words.concat(encryptedData.ciphertext.words))
-            );
-            
-            return {
-                encryptedKey: encryptedAESKey,
-                encryptedData: finalCiphertext
-            };
-        } catch (error) {
-            console.error('Encryption failed:', error);
-            throw new Error('加密失敗: ' + error.message);
-        }
-    }
-};
-
 createApp({
     data() {
         return {
+            isLight: false,
             isCalendarVisible: false,
             isDiaryVisible: false,
             username: '',
@@ -78,6 +20,17 @@ createApp({
             monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             containerHeight: 250, // 初始高度
         };
+    },
+    watch: {
+        isLight(newVal) {
+            if (newVal) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        },
     },
     computed: {
         firstDay() {
