@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
 
   # 添加一个共享文件夹配置，将 Windows 的本地路径映射到虚拟机内的路径
   config.vm.synced_folder ".", "/vagrant", disabled: true # 关闭默认
-  config.vm.synced_folder "D:/local/nginx", "/vagrant/nginx"
+  config.vm.synced_folder "D:/local/workspace/cry/nginx", "/vagrant/nginx"
 
   config.vm.boot_timeout = 1200 # 设置为600秒
 
