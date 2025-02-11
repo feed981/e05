@@ -24,8 +24,20 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) //  正確方式關閉 CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/token", "/api/v1/cry/**", "/api/v1/key/public").permitAll() // 允許這些路徑不需要認證
+                        .requestMatchers(
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/token",
+                                "/api/v1/cry/**",
+                                "/api/v1/key/public"
+                        ).permitAll() // 允許這些路徑不需要認證
                         .requestMatchers("/hi").permitAll()  // 添加測試 endpoint 例外
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .anyRequest().authenticated() // 其他 API 需要驗證
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 無狀態，使用 JWT

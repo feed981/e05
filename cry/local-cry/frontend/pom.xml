@@ -54,15 +54,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-core</artifactId>
-        </dependency>
 
         <dependency>
-            <groupId>com.amazonaws.serverless</groupId>
-            <artifactId>aws-serverless-java-container-spring</artifactId>
-            <version>1.8</version>  <!-- 或者 1.9.3，取決於你要用哪個版本 -->
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
     </dependencies>

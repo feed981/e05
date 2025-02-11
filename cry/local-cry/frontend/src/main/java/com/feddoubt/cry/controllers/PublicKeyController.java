@@ -1,5 +1,10 @@
 package com.feddoubt.cry.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +23,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/key")
+@Tag(name = "key API")
 public class PublicKeyController {
 
     private static final Logger logger = LoggerFactory.getLogger(PublicKeyController.class);
@@ -24,6 +31,20 @@ public class PublicKeyController {
     @Value("${key.path.public:src/main/resources/public_key.pem}")
     private String publicKeyPath;
 
+    @Operation(
+        summary = "public_key",
+        description = "E2EE - RSA public_key to encrypt frontend AES key",
+        security = @SecurityRequirement(name = "Bearer Authentication"),
+        parameters = {
+            @Parameter(
+                name = "Authorization",
+                description = "Bearer token",
+                required = true,
+                in = ParameterIn.HEADER,
+                example = "Bearer eyJhbGciOiJIUzI1NiJ9..."
+            )
+        }
+    )
     @GetMapping("/public")
     public ResponseEntity<?> getPublicKey() {
         try {
