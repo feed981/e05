@@ -15,7 +15,7 @@
   <style>
     body {
     font-family: Arial, sans-serif;
-    background-color: #414242;
+    background-color: #1E1E1E;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,8 +24,11 @@
   }
 
 
+
   .converter-container {
-    background-color: #fff;
+    background: #2C2C2C;
+    color: #E0E0E0;
+    /* background-color: #fff; */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -183,12 +186,38 @@
   max-width: 100%; /* 確保不超出父容器 */
 }
 
+     /* 🔹 白色模式 */
+     .light-mode {
+      background-color: #414242;
+      color: #333;
+    }
+
+    .light-mode .converter-container {
+      background-color: #fff;
+      color: #000;
+      padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    }
+
   </style>
 </head>
 <body>
   <div id="app">
     <div class="converter-container">
+      <div class="button-container">
         <h1>Let's go {{ format.toUpperCase() }}!</h1>
+        <div class="switch">
+          <input v-model="isLight" class="switch-checkbox" id="switchID2" type="checkbox" name="switch-checkbox">
+          <label class="switch-label" for="switchID2">
+            <span class="switch-txt" turnOn="light" turnOff="dark":data-format="isLight ? 'light' : 'dark'"></span>
+            <span class="switch-Round-btn"></span>
+          </label>
+        </div>
+      </div>
+
         <div v-if="isCrypt == true" class="input-container">
           <input type="text" v-model="itemname" placeholder="itemname..." required>
           <input type="text" v-model="username" placeholder="username..." required>
