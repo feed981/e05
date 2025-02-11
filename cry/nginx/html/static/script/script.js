@@ -182,6 +182,11 @@ createApp({
             this.errorMessage = '';
             this.successMessage = '';
             
+            if (!this.itemname || !this.username || !this.password) {
+                notyf.error("Please complete all fields！");
+                return;
+            }
+
             const sensitiveData = {
                 itemname: this.itemname,
                 username: this.username,
