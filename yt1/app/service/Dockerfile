@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 複製本地 JAR 文件到容器內
-COPY target/YT1-service-1.0-SNAPSHOT-0122.jar app.jar
+COPY target/yt1-service-1.0-SNAPSHOT-0212.jar app.jar
 
 # 暴露應用的端口
 EXPOSE 64101
