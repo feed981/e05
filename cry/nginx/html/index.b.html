@@ -160,10 +160,19 @@
 
 
 /* loading css*/
-.loader {
+.loader1 {
     border: 4px solid #f3f3f3;
     border-radius: 50%;
     border-top: 4px solid #1ba0ef;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+
+  .loader2 {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #0a61e2;
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
@@ -250,24 +259,29 @@
         </div>
       </div>
 
-        <div v-if="isCrypt == true" class="input-container">
+        <div v-if="isCrypt" class="input-container">
           <input type="text" v-model="itemname" placeholder="itemname..." required>
           <input type="text" v-model="username" placeholder="username..." required>
           <input type="text" v-model="password" placeholder="password..." required>
         </div>
 
-        <div v-if="isCrypt == false" class="input-container">
+        <div v-if="!isCrypt" class="input-container">
           <input type="text" v-model="itemname" placeholder="password..." required>
           <input type="text" v-model="username" placeholder="secretKey..." required>
           <input type="text" v-model="password" placeholder="ivSpec..." required>
         </div>
-        <div v-if="isLoading" class="loader-container">
-          <div class="loader">
+        <div v-if="isLoading1" class="loader-container">
+          <div class="loader1">
+          </div>
+        </div>
+
+        <div v-if="isLoading2" class="loader-container">
+          <div class="loader2">
           </div>
         </div>
         <div class="button-container">
-            <button v-if="isCrypt == true" @click="encrypt">encrypt</button>
-            <button v-if="isCrypt == false" @click="decrypt">decrypt</button>
+            <button v-if="isCrypt" @click="encrypt">encrypt</button>
+            <button v-if="!isCrypt" @click="decrypt">decrypt</button>
             <div class="switch">
                 <input v-model="isCrypt" class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox">
                 <label class="switch-label" for="switchID1">
