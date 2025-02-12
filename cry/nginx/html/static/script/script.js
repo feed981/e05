@@ -30,6 +30,7 @@ const apiAuth = axios.create({
 const encryptionService = {
     async encryptData(data) {
         try {
+            this.isLoading = true;
             const { data: publicKeyPEM } = await apiKey.get('/public');
             const aesKey = CryptoJS.lib.WordArray.random(32);
             const aesKeyHex = aesKey.toString(CryptoJS.enc.Hex);
@@ -66,6 +67,7 @@ const encryptionService = {
 createApp({
     data() {
         return {
+            isLoading: false,
             isLight: false,
             isCrypt: true,
             username: '',
@@ -142,6 +144,7 @@ createApp({
             
             if (!this.itemname || !this.username || !this.password) {
                 notyf.error("Please complete all fields！");
+                this.isLoading = false;
                 return;
             }
 
@@ -180,6 +183,8 @@ createApp({
                 } else {
                     console.error('Error', error.message);
                 }
+            }).finally(() => { 
+                this.isLoading = false;
             });
         },
         async decrypt() {
@@ -188,6 +193,7 @@ createApp({
             
             if (!this.itemname || !this.username || !this.password) {
                 notyf.error("Please complete all fields！");
+                this.isLoading = false;
                 return;
             }
 
@@ -226,6 +232,8 @@ createApp({
                 } else {
                     console.error('Error', error.message);
                 }
+            }).finally(() => { 
+                this.isLoading = false
             });
         },
     }
