@@ -107,8 +107,10 @@ createApp({
                     const response = await apiAuth.get('/token');
                     token = response.data;
                     localStorage.setItem('token', token);
+                    notyf.success("token success！")
                 } catch (error) {
                     console.error('無法獲取 token:', error);
+                    notyf.error("token error！")
                 }
             }
             axios.interceptors.request.use(config => {
@@ -165,8 +167,10 @@ createApp({
                 }else if(response.data.success === false){
                     this.errorMessage = response.data.message;
                     this.successMessage = '';
+                    notyf.error("encrypt error！")
                 }
             }).catch(error => {
+                notyf.error("encrypt error！")
                 if (error.response) {
                     this.errorMessage = '服务器内部错误';
                     this.embedUrl = '';
@@ -209,8 +213,10 @@ createApp({
                 }else if(response.data.success === false){
                     this.errorMessage = response.data.message;
                     this.successMessage = '';
+                    notyf.error("decrypt error！")
                 }
             }).catch(error => {
+                notyf.error("decrypt error！")
                 if (error.response) {
                     this.errorMessage = '服务器内部错误';
                     this.embedUrl = '';
