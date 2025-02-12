@@ -28,9 +28,8 @@ const apiAuth = axios.create({
 });
 
 const encryptionService = {
-    async encryptData(data) {
+    async encryptData(data ,onError) {
         try {
-            this.isLoading = true;
             const { data: publicKeyPEM } = await apiKey.get('/public');
             const aesKey = CryptoJS.lib.WordArray.random(32);
             const aesKeyHex = aesKey.toString(CryptoJS.enc.Hex);
@@ -58,16 +57,19 @@ const encryptionService = {
                 encryptedData: finalCiphertext
             };
         } catch (error) {
+            onError(false);
+            notyf.error("encrypt error！")
             console.error('Encryption failed:', error);
             throw new Error('加密失敗: ' + error.message);
-        }
+        };
     }
 };
 
 createApp({
     data() {
         return {
-            isLoading: false,
+            isLoading1: false,
+            isLoading2: false,
             isLight: false,
             isCrypt: true,
             username: '',
@@ -139,12 +141,13 @@ createApp({
                 .catch(err => console.error("copy error！", err));
         },
         async encrypt() {
+            this.isLoading1 = true;
             this.errorMessage = '';
             this.successMessage = '';
             
             if (!this.itemname || !this.username || !this.password) {
                 notyf.error("Please complete all fields！");
-                this.isLoading = false;
+                this.isLoading1 = false;
                 return;
             }
 
@@ -154,8 +157,12 @@ createApp({
                 password: this.password
             };
             
-            const encryptedData = await encryptionService.encryptData(sensitiveData);
-
+            const encryptedData = await encryptionService.encryptData(
+                sensitiveData, 
+                (state) => this.isLoading1 = state // 當失敗時，回調修改 isLoading1
+            );
+            
+            this.isLoading2 = true;
             await apiCry.post('/encrypt', {
                 encryptedKey: encryptedData.encryptedKey,
                 encryptedData: encryptedData.encryptedData
@@ -184,16 +191,18 @@ createApp({
                     console.error('Error', error.message);
                 }
             }).finally(() => { 
-                this.isLoading = false;
+                this.isLoading1 = false
+                this.isLoading2 = false
             });
         },
         async decrypt() {
+            this.isLoading1 = true;
             this.errorMessage = '';
             this.successMessage = '';
             
             if (!this.itemname || !this.username || !this.password) {
                 notyf.error("Please complete all fields！");
-                this.isLoading = false;
+                this.isLoading1 = false;
                 return;
             }
 
@@ -203,8 +212,12 @@ createApp({
                 password: this.password
             };
             
-            const encryptedData = await encryptionService.encryptData(sensitiveData);
+            const encryptedData = await encryptionService.encryptData(
+                sensitiveData, 
+                (state) => this.isLoading1 = state // 當失敗時，回調修改 isLoading1
+            );
 
+            this.isLoading2 = true;
             await apiCry.post('/decrypt', {
                 encryptedKey: encryptedData.encryptedKey,
                 encryptedData: encryptedData.encryptedData
@@ -233,7 +246,8 @@ createApp({
                     console.error('Error', error.message);
                 }
             }).finally(() => { 
-                this.isLoading = false
+                this.isLoading1 = false;
+                this.isLoading2 = false;
             });
         },
     }
