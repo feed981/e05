@@ -261,6 +261,34 @@
     width: 400px;
     }
 
+    select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    background: #28a745;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 滑鼠懸停時變化 */
+select:hover {
+  background-color: #045e4a;
+}
+
+/* 點擊時的樣式 */
+select:focus {
+    outline: none;
+    border-color: #ffffff;
+    box-shadow: 0 0 5px rgba(4, 80, 42, 0.5);
+}
+
+/* 下拉選單的箭頭樣式 */
+select::-ms-expand {
+    display: none; /* 隱藏 IE 的箭頭 */
+}
+
+
   </style>
 </head>
 <body>
@@ -301,7 +329,15 @@
       </div>
       <div class="button-container">
         <button @click="logout">Logout</button>
-        <button @click="backupDiary">backupDiary</button>
+
+            <!-- 選擇輸出格式 -->
+      <select @change="exportDiary($event)">
+        <option value="">Let's go backup!</option>
+        <option value="backupjson">1. json</option>
+        <option value="showupjson">json</option>
+        <option value="backuphtml">2. html</option>
+        <option value="showuphtml">html</option>
+    </select>
       </div>
 
         <div id="calendar-nav">
