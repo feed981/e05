@@ -1,4 +1,4 @@
-package com.feddoubt;
+package com.feddoubt.cry.utils;
 
 import java.io.File;
 
@@ -9,7 +9,7 @@ public class PrintDirectoryStructure {
     private static final String LAST_BRANCH = "└── ";
 
     public static void main(String[] args) {
-        String rootPath = "D:\\workspace3\\java-lambda-cry\\front";
+        String rootPath = "D:\\local\\workspace\\cry\\nginx";
         File rootDir = new File(rootPath);
 
         // Print root directory

@@ -30,6 +30,18 @@ const apiAuth = axios.create({
 const encryptionService = {
     async encryptData(data ,onError) {
         try {
+            if (!data || typeof data !== 'object') {
+                notyf.error("Please complete all fields！");
+                throw new Error("資料格式不正確");
+            }
+
+            for (const key in data) {
+                if (!data[key]) {
+                    notyf.error("Please complete all fields！");
+                    throw new Error(`${key} 不能為空`);
+                }
+            }
+
             const { data: publicKeyPEM } = await apiKey.get('/public');
             const aesKey = CryptoJS.lib.WordArray.random(32);
             const aesKeyHex = aesKey.toString(CryptoJS.enc.Hex);
@@ -103,6 +115,17 @@ createApp({
         }
     },
     methods: {
+        async refreshToken() {
+            try {
+                const response = await apiAuth.get('/token');
+                token = response.data;
+                localStorage.setItem('token', token);
+                notyf.success("refresh token success！")
+            } catch (error) {
+                console.error('無法獲取 token:', error);
+                notyf.error("token error！")
+            }
+        },
         async checkOrGenerateToken() {
             let token = localStorage.getItem('token');
     
@@ -111,17 +134,29 @@ createApp({
                     const response = await apiAuth.get('/token');
                     token = response.data;
                     localStorage.setItem('token', token);
-                    notyf.success("token success！")
                 } catch (error) {
                     console.error('無法獲取 token:', error);
                     notyf.error("token error！")
                 }
             }
+
             axios.interceptors.request.use(config => {
-                const token = localStorage.getItem('token');
+                let token = localStorage.getItem('token');
+
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
+
+                config.errorHandler = async (error) => {
+                    if (error.response && error.response.status === 401) {
+                        const newToken = await this.refreshToken();
+                        if (newToken) {
+                            config.headers.Authorization = `Bearer ${newToken}`;
+                            return axios(config); // 重新發送請求
+                        }
+                    }
+                    return Promise.reject(error);
+                };
                 return config;
             });
         },
@@ -182,8 +217,8 @@ createApp({
             }).catch(error => {
                 notyf.error("encrypt error！")
                 if (error.response) {
-                    this.errorMessage = '服务器内部错误';
-                    this.embedUrl = '';
+                    // this.errorMessage = '服务器内部错误';
+                    this.errorMessage = error.response.data.message;
                     console.error('Request failed', error.response.data);
                 } else if (error.request) {
                     console.error('No response received', error.request);
@@ -214,7 +249,7 @@ createApp({
             
             const encryptedData = await encryptionService.encryptData(
                 sensitiveData, 
-                (state) => this.isLoading1 = state // 當失敗時，回調修改 isLoading1
+                (state) => this.isLoading1 = state
             );
 
             this.isLoading2 = true;
@@ -237,8 +272,8 @@ createApp({
             }).catch(error => {
                 notyf.error("decrypt error！")
                 if (error.response) {
-                    this.errorMessage = '服务器内部错误';
-                    this.embedUrl = '';
+                    // this.errorMessage = '服务器内部错误';
+                    this.errorMessage = error.response.data.message;
                     console.error('Request failed', error.response.data);
                 } else if (error.request) {
                     console.error('No response received', error.request);
