@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feddoubt.common.config.message.CustomHttpStatus;
 import com.feddoubt.common.config.message.ResponseUtils;
+import com.feddoubt.cry.ex.CustomException;
 import com.feddoubt.cry.services.CryService;
 import com.feddoubt.cry.services.EncryptionService;
 import com.feddoubt.model.dtos.CryDto;
@@ -86,18 +87,11 @@ public class CryController {
     @PostMapping(value = "/encrypt", consumes = {"application/json", "application/octet-stream"})
     public ResponseEntity<?> encrypt(@RequestBody @Valid EncryptionRequest data) {
         CryDto cryDto = requestData(data);
-        if(cryDto == null){
-            return ResponseUtils.customResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
-        }
-        String encrypt = cryService.encrypt(cryDto);
-        return ResponseEntity.ok(ResponseUtils.success(encrypt));
+        return ResponseEntity.ok(ResponseUtils.success(cryService.encrypt(cryDto)));
     }
     //lambda
 //    public ResponseEntity<?> encrypt(@RequestBody @Valid byte[] data) {
 //        CryDto cryDto = requestData(data);
-//        if(cryDto == null){
-//            return ResponseUtils.customResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
-//        }
 //        return ResponseEntity.ok(ResponseUtils.success(cryService.encrypt(cryDto)));
 //    }
 
@@ -149,25 +143,12 @@ public class CryController {
     @PostMapping(value = "/decrypt", consumes = {"application/json", "application/octet-stream"})
     public ResponseEntity<?> decrypt(@RequestBody @Valid EncryptionRequest data) {
         CryDto cryDto = requestData(data);
-        if(cryDto == null){
-            return ResponseUtils.customResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
-        }
-        String decrypt = cryService.decrypt(cryDto);
-        return ResponseEntity.ok(ResponseUtils.success(decrypt));
+        return ResponseEntity.ok(ResponseUtils.success(cryService.decrypt(cryDto)));
     }
     //lambda
 //    public ResponseEntity<?> decrypt(@RequestBody @Valid byte[] data) {
 //        CryDto cryDto = requestData(data);
-//        String decrypt;
-//        if(cryDto == null){
-//            return ResponseUtils.customResponse(CustomHttpStatus.INVALID_REQUEST_DATA);
-//        }
-//        try{
-//            decrypt = cryService.decrypt(cryDto);
-//        } catch (ArrayIndexOutOfBoundsException e) {
-//            return ResponseUtils.customResponse(CustomHttpStatus.CONFLICT);
-//        }
-//        return ResponseEntity.ok(ResponseUtils.success(decrypt));
+//        return ResponseEntity.ok(ResponseUtils.success(cryService.decrypt(cryDto)));
 //    }
 
     private CryDto requestData(EncryptionRequest request){
@@ -176,7 +157,7 @@ public class CryController {
 //            EncryptionRequest request = objectMapper.readValue(data, EncryptionRequest.class);
             if (request == null || StringUtils.isEmpty(request.getEncryptedKey())
                     || StringUtils.isEmpty(request.getEncryptedData())) {
-                return null;
+                throw new CustomException(CustomHttpStatus.INVALID_REQUEST_DATA);
             }
 
             String processedData = encryptionService.processEncryptedData(
@@ -190,7 +171,7 @@ public class CryController {
             return cryDto;
         } catch (JsonProcessingException e) {
             log.error("JSON 解析錯誤: {}", e.getMessage());
-            return null;
+            throw new CustomException(CustomHttpStatus.INVALID_JSON_FORMAT);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
