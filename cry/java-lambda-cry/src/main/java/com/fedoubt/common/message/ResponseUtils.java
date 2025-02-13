@@ -40,13 +40,18 @@ public class ResponseUtils {
         return ApiResponse.<T>builder().code(500).success(false).build();
     }
 
-    public static <T> ResponseEntity<ApiResponse<T>> httpStatus2ApiResponse(ApiStatus httpStatus){
+    public static <T> ResponseEntity<ApiResponse<T>> customResponse(ApiStatus httpStatus){
         return ResponseEntity.ok(
                 error(
                         httpStatus.value(),
                         httpStatus.getReasonPhrase()
                 )
         );
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> handleCustomException(int code, String message) {
+        return ResponseEntity.status(code)
+                .body(error(code, message));
     }
 
 }
