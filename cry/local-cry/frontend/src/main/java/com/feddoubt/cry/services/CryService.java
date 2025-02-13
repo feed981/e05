@@ -1,8 +1,11 @@
 package com.feddoubt.cry.services;
 
+import com.feddoubt.common.config.message.CustomHttpStatus;
+import com.feddoubt.cry.ex.CustomException;
 import com.feddoubt.model.dtos.CryDto;
 import com.feddoubt.model.pojos.Cry;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -15,9 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,20 +27,62 @@ public class CryService {
     private final int ITERATIONS = 10000;
     private final int KEY_LENGTH = 256;
 
+    public void checkdata(CryDto crydto ,boolean isDecrypt){
+        log.info("dto:{}",crydto);
+        if (crydto == null || StringUtils.isEmpty(crydto.getItemname())
+                || StringUtils.isEmpty(crydto.getUsername())
+                || StringUtils.isEmpty(crydto.getPassword())) {
+            throw new CustomException(CustomHttpStatus.INVALID_REQUEST_DATA);
+        }
+        List<String> dataList = Optional.ofNullable(crydto.getDataList()).orElse(Collections.emptyList());
+        if(isDecrypt){
+            for (String data : dataList){
+                if(data.length()< 20){
+                    throw new CustomException(CustomHttpStatus.DATA_TOO_SHORT);
+                }
+                if(data.length() > 200){
+                    throw new CustomException(CustomHttpStatus.DATA_TOO_LONG);
+                }
+            }
+        }else{
+            for (String data : dataList){
+                if(data.length()< 4){
+                    throw new CustomException(CustomHttpStatus.DATA_TOO_SHORT);
+                }
+                if(data.length() >= 20){
+                    throw new CustomException(CustomHttpStatus.DATA_TOO_LONG);
+                }
+            }
+        }
+    }
+
     public String decrypt(CryDto crydto) {
+        checkdata(crydto ,true);
         String result = crydto.getItemname();
         Cry cry = new Cry();
-        cry.setUserId(result.split(":")[0]);
-        String userId = cry.getUserId();
-        String salt = userId.substring(8, 16);
-        cry.setSalt(salt);
-        cry.setOriginalPasswordlen(userId.substring(userId.length() - 2));
-        String originalPasswordlen = cry.getOriginalPasswordlen();
-        cry.setAccount(result.split(":")[1]);
-        cry.setResult(result.split(":")[2]);
-        cry.setSecretKeyStr(result.split(":")[3]);
-        cry.setIvSpecStr(result.split(":")[4]);
-        cry.setEncryptedPassword(result.split(":")[5]);
+        String salt;
+        if(!result.contains(":")){
+            throw new CustomException(CustomHttpStatus.INVALID_REQUEST_DATA);
+        }
+
+        if(result.split(":").length > 6){
+            throw new CustomException(CustomHttpStatus.DECRYPT_COLON_CONFLICT);
+        }
+
+        try {
+            cry.setUserId(result.split(":")[0]);
+            String userId = cry.getUserId();
+            salt = userId.substring(8, 16);
+            cry.setSalt(salt);
+            cry.setOriginalPasswordlen(userId.substring(userId.length() - 2));
+            cry.setAccount(result.split(":")[1]);
+            cry.setResult(result.split(":")[2]);
+            cry.setSecretKeyStr(result.split(":")[3]);
+            cry.setIvSpecStr(result.split(":")[4]);
+            cry.setEncryptedPassword(result.split(":")[5]);
+        } catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException e) {
+            throw new CustomException(CustomHttpStatus.INVALID_REQUEST_DATA);
+        }
 
         // 從 Base64 字串還原 SecretKey
         String secretKeyString = cry.getSecretKeyStr();
@@ -75,7 +118,14 @@ public class CryService {
     }
 
     public String encrypt(CryDto crydto) {
+        checkdata(crydto ,false);
         Cry cry = new Cry();
+        if(crydto.getItemname().contains(":")
+        || crydto.getUsername().contains(":")
+        || crydto.getPassword().contains(":")){
+            throw new CustomException(CustomHttpStatus.ENCRYPT_COLON_CONFLICT);
+        }
+
         String originalPassword = crydto.getPassword();
         cry.setOriginalPassword(originalPassword);
         cry.setAccount(crydto.getUsername());

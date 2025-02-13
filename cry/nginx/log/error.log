@@ -79,3 +79,4 @@
 2025/02/11 14:49:36 [error] 20#20: *1 open() "/usr/share/nginx/html/cry/favicon.ico" failed (2: No such file or directory), client: 10.0.2.2, server: , request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
 2025/02/11 16:25:10 [error] 20#20: *25 open() "/usr/share/nginx/html/swagger-ui/index.html" failed (2: No such file or directory), client: 10.0.2.2, server: , request: "GET /swagger-ui/index.html HTTP/1.1", host: "localhost:8080"
 2025/02/11 16:25:17 [error] 20#20: *25 open() "/usr/share/nginx/html/v3/api-docs" failed (2: No such file or directory), client: 10.0.2.2, server: , request: "GET /v3/api-docs HTTP/1.1", host: "localhost:8080"
+2025/02/13 14:05:26 [error] 19#19: *39 open() "/usr/share/nginx/html/swagger-ui.html" failed (2: No such file or directory), client: 10.0.2.2, server: , request: "GET /swagger-ui.html HTTP/1.1", host: "localhost:8080"

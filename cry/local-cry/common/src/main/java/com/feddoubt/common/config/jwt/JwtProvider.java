@@ -66,6 +66,7 @@ public class JwtProvider {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        Date expiration = new Date(System.currentTimeMillis() + 60 * 60 * 1000); //1hr
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
