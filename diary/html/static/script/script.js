@@ -4,6 +4,8 @@ const notyf = new Notyf({
     dismissible: true
 });
 
+let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New Text Document</title><link rel="icon" href="favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container"><div class="switch-container"><label class="switch"><input type="checkbox" id="modeSwitch" onchange="toggleMode()"> <span class="slider"></span></label></div><br>`;
+let template_e = `</div><script>function toggleMode(){document.body.classList.toggle("light-mode");var e=document.getElementById("modeSwitch");document.body.classList.contains("light-mode")?(localStorage.setItem("theme","light"),e.checked=!0):(localStorage.setItem("theme","dark"),e.checked=!1)}window.onload=function(){var e=document.getElementById("modeSwitch");"light"===localStorage.getItem("theme")&&(document.body.classList.add("light-mode"),e.checked=!0)}</script></body></html>`;
 createApp({
     data() {
         return {
@@ -17,6 +19,8 @@ createApp({
             currentUser: null,
             selectedDate: "",
             diaryEntry: "",
+            today: new Date().getDate(),
+            weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             containerHeight: 250, // 初始高度
             selectedFormat: "json",
@@ -115,9 +119,7 @@ createApp({
 
             const data = JSON.stringify(sortedBackup, null, 2);
 
-            const template = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>log - json</title><link rel="icon" href="favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{word-wrap: break-word; background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)}</style>
-</head><body><div id="app" class="container"><div class="switch-container"><label class="switch"><input type="checkbox" id="modeSwitch" onchange="toggleMode()"> <span class="slider"></span></label></div><br><pre class="log-entry">${data}</pre></div><script>function toggleMode(){document.body.classList.toggle("light-mode");var e=document.getElementById("modeSwitch");document.body.classList.contains("light-mode")?(localStorage.setItem("theme","light"),e.checked=!0):(localStorage.setItem("theme","dark"),e.checked=!1)}window.onload=function(){var e=document.getElementById("modeSwitch");"light"===localStorage.getItem("theme")&&(document.body.classList.add("light-mode"),e.checked=!0)}</script></body></html>`;
-            
+            const template = `${template_s}<pre>${data}</pre>${template_e}`;
             const newTab = window.open();
             if (newTab) {
                 newTab.document.write(template);
@@ -156,9 +158,7 @@ createApp({
             })
             .join("\n");
             
-            const template = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>log - html</title><link rel="icon" href="favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word; background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)}</style>
-</head><body><div id="app" class="container"><div class="switch-container"><label class="switch"><input type="checkbox" id="modeSwitch" onchange="toggleMode()"> <span class="slider"></span></label></div><br><div class="log-container">${logs}</div></div><script>function toggleMode(){document.body.classList.toggle("light-mode");var e=document.getElementById("modeSwitch");document.body.classList.contains("light-mode")?(localStorage.setItem("theme","light"),e.checked=!0):(localStorage.setItem("theme","dark"),e.checked=!1)}window.onload=function(){var e=document.getElementById("modeSwitch");"light"===localStorage.getItem("theme")&&(document.body.classList.add("light-mode"),e.checked=!0)}</script></body></html>`;
-
+            const template = `${template_s}<div class="log-container">${logs}</div>${template_e}`;
             // 生成html
             const blob = new Blob([template], { type: "text/html" });
             const url = URL.createObjectURL(blob);
@@ -195,8 +195,7 @@ createApp({
             })
             .join("\n");
             
-            const template = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crypt times - log</title><link rel="icon" href="favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)}</style>
-</head><body><div id="app" class="container"><div class="switch-container"><label class="switch"><input type="checkbox" id="modeSwitch" onchange="toggleMode()"> <span class="slider"></span></label></div><br><div class="log-container">${logs}</div></div><script>function toggleMode(){document.body.classList.toggle("light-mode");var e=document.getElementById("modeSwitch");document.body.classList.contains("light-mode")?(localStorage.setItem("theme","light"),e.checked=!0):(localStorage.setItem("theme","dark"),e.checked=!1)}window.onload=function(){var e=document.getElementById("modeSwitch");"light"===localStorage.getItem("theme")&&(document.body.classList.add("light-mode"),e.checked=!0)}</script></body></html>`;
+            const template = `${template_s}<div class="log-container">${logs}</div>${template_e}`;
 
             const newTab = window.open();
             if (newTab) {
@@ -270,6 +269,14 @@ createApp({
         logout(){
             this.isCalendarVisible = false;
             this.isDiaryVisible = false;
+        },
+        isToday(day) {
+            const now = new Date();
+            return (
+                day === this.today &&
+                this.currentYear === now.getFullYear() &&
+                this.currentMonth === now.getMonth()
+            );
         },
         prevMonth() {
             this.currentMonth--;
