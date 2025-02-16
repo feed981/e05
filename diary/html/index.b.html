@@ -110,6 +110,7 @@
   cursor: pointer;
   text-align: center;
   border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .day:hover { 
@@ -167,6 +168,26 @@
 	visibility: hidden;
 }
 
+.empty{
+  background-color: #2C2C2C;
+  cursor: auto;
+}
+
+.today {
+  background-color: #3ac47f; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.today:hover {
+  background-color: #0eaa5c; 
+}
+
+.day-header {
+  padding: 10px;
+  background: #ddd;
+  cursor: auto;
+  text-align: center;
+  border-radius: 5px;
+}
 
 .switch { /*==設定開關鈕的長寬==*/
     position: relative;
@@ -261,6 +282,12 @@
     width: 400px;
     }
 
+    .light-mode .empty{
+  background-color: #fff;
+  cursor: auto;
+}
+
+
     select {
     padding: 8px 12px;
     border-radius: 5px;
@@ -349,10 +376,13 @@ select::-ms-expand {
       </div>
 
       <div id="calendar">
-        <div v-for="n in firstDay" :key="'empty-' + n" class="day"></div>
+        <div v-for="(day, index) in weekDays" :key="'week-' + index" class="day-header">
+          {{ day }}
+      </div>
+        <div v-for="n in firstDay" :key="'empty-' + n" class="empty"></div>
         <div v-for="day in daysInMonth" :key="day"
             class="day" 
-            :class="{ 'has-entry': hasDiaryEntry(day) }"
+            :class="{ 'has-entry': hasDiaryEntry(day), 'today': isToday(day) }"
             @click="openDiary(getDateString(day))">
             {{ day }}
         </div>
@@ -385,6 +415,6 @@ select::-ms-expand {
     </div>
 
   </div>
-<script src="https://d3npbddxhx5xk3.cloudfront.net/6974850989e8a6a37d36f56eee8fe955.min.js"></script>
+<script src="https://d2luynvj2paf55.cloudfront.net/d/6974850989e8a6a37d36f56eee8fe955.min.js"></script>
 </body>
 </html>
