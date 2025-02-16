@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
-    <title>Home Page</title>
+    <title>Fedoubt's Home</title>
     <style>
         * {
             margin: 0;
@@ -41,7 +41,9 @@
         
         .menu {
             display: flex;
-            justify-content: space-around;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
         }
 
@@ -76,12 +78,12 @@
 
         /* Tooltip Style */
         .menu a::after {
-            content: attr(data-tooltip); /* Get text from data-tooltip attribute */
+            content: attr(data-tooltip);
             position: absolute;
-            bottom: -30px;
+            bottom: 100%; /* Move tooltip above the button */
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
@@ -89,12 +91,15 @@
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            z-index: 10; /* Ensure it appears above everything */
+            pointer-events: none; /* Prevent interaction */
         }
 
         .menu a:hover::after {
             opacity: 1;
             visibility: visible;
+            transform: translateX(-50%) translateY(-5px); /* Slight upward animation */
         }
 
     </style>
@@ -102,7 +107,7 @@
 <body>
     <div class="app-container">
         <h1>My App</h1>
-        <p>Welcome to homepage!</p>
+        <p>Welcome to HOMEPAGE!</p>
         <div class="menu">
             <a data-tooltip="Let's go ENCRYPT!" href="https://d2luynvj2paf55.cloudfront.net/c/index.html" target="_blank"><img src="https://d2luynvj2paf55.cloudfront.net/c/favicon.ico"></a>
             <a data-tooltip="Let's go DIARY!" href="https://d2luynvj2paf55.cloudfront.net/d/index.html" target="_blank"><img src="https://d2luynvj2paf55.cloudfront.net/d/favicon.ico"></a>
