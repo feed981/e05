@@ -181,18 +181,19 @@
 
 
     .light-mode .todo-item {
-    background: #414242;
-    border-left: 4px solid rgb(199, 199, 199);
-    border-bottom: 4px solid #575656;
+      color: #fff;
+  border-left: 4px solid #1ba0ef;
+  border-bottom: 4px solid #0056b3;
+  background-color: #7bb0e9;
     border-radius: 5px;
 }
 
 
 .light-mode .completed {
-  color: #fff;
-  border-left: 4px solid #1ba0ef;
-  border-bottom: 4px solid #0056b3;
-  background-color: #7bb0e9;
+  background: #414242;
+    border-left: 4px solid rgb(199, 199, 199);
+    border-bottom: 4px solid #575656;
+
 }
 
 .light-mode .category {
@@ -269,22 +270,24 @@ select::-ms-expand {
 }
 
 .todo-item {
-    background: #1E1E1E;
-    padding: 5px;
-    margin: 5px 0;
-  border-radius: 5px;
-    border-left: 4px solid #2C2C2C;
-    border-bottom: 4px solid #202020;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.completed {
-  color: #1E1E1E;
+    color: #1E1E1E;
   border-left: 4px solid #1ba0ef;
   border-bottom: 4px solid #0056b3;
   background-color: #7bb0e9;
+    padding: 5px;
+    margin: 5px 0;
+  border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-wrap: break-word; 
+}
+
+.completed {
+  color: #fff;
+    background: #1E1E1E;
+    border-left: 4px solid #2C2C2C;
+    border-bottom: 4px solid #202020;
 }
 
 .dropdown {
@@ -323,20 +326,23 @@ select::-ms-expand {
 .material-icons{
   cursor: pointer;
 }
-
-
+.text-content {
+    flex: 1;  /* 讓文字內容占用剩餘空間 */
+    word-wrap: break-word;  /* 允許長單字換行 */
+    min-width: 0;  /* 確保可以正確換行 */
+}
   </style>
 </head>
 <body>
   <div id="app">
     <div class="basic-container">
+      <span>　</span>
       <span v-if="isLight" @click="isLight = false" class="material-icons">toggle_on</span>
       <span v-if="!isLight" @click="isLight = true" class="material-icons">toggle_off</span>
       <span class="material-icons">mail</span>
       
       <div class="dropdown" 
-      @mouseenter="toggleDropdown('dropdownview', true)"
-      @mouseleave="toggleDropdown('dropdownview', false)">
+      @click="toggleDropdown('dropdownview', true)">
       <span class="material-icons">description</span>
       <ul v-show="dropdownview" class="dropdown-menu">
         <li @click="viewAs('json')">View as JSON</li>
@@ -402,7 +408,7 @@ select::-ms-expand {
           
           <div v-show="expandedCategories.includes(category)" class="category-content">
             <div @click="checkTodo(category, index)"  v-for="(todo, index) in sortedTodos(todos)" :key="index" class="todo-item" :class="{ completed: todo.completed }">
-              <span >{{ todo.text }} ({{ todo.date }})</span>
+              <span class="text-content">{{ todo.date }}　{{ todo.text }}</span>
               <span @click="removeTodo(category, index)" class="material-icons">delete</span>
             </div>
           </div>
