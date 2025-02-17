@@ -20,8 +20,6 @@ createApp({
             todoList: JSON.parse(localStorage.getItem("todos")) || {},
             expandedCategories: [],
             dropdownview: false,
-            dropdownexport: false
-
         };
     },
     computed: {
@@ -42,13 +40,10 @@ createApp({
     },
     methods: {
         toggleDropdown(type ,value) {
-            if (!value) {
-                setTimeout(() => {
-                    this[type] = value;
-                }, 1000);
-            } else {
-                this[type] = value;
-            }
+            this[type] = value;
+            setTimeout(() => {
+                this.dropdownview = false;
+            }, 3000);
         },
         html(){
             // 整理所有待辦事項到一個陣列
@@ -137,48 +132,51 @@ width: 400px;
             return htmlContent;
 
         },
+        viewopen(template ,text){
+            try{
+                const newTab = window.open();
+                if (newTab) {
+                    newTab.document.write(template);
+                    newTab.document.close();
+                } else {
+                    notyf.open({
+                        type: 'warning',
+                        message: `請允許彈出視窗以顯示 ${text}!`,
+                        background: 'orange',
+                        duration: 5000 // 5 秒後消失
+                    });
+                }
+            } catch (error) {
+                console.error('View failed:', error);
+                notyf.error(`Failed to view ${text} file`);
+            }
+        },
         viewAs(format) {
             notyf.success(`Viewing as ${format.toUpperCase()}`);
             this.dropdownview = false; // 關閉選單
             if(format === 'json'){
-                try{
-                    const jsonString = JSON.stringify(this.todoList, null, 2);
-                    const template = `${template_s}<pre>${jsonString}</pre>${template_e}`;
-                    const newTab = window.open();
-                    if (newTab) {
-                        newTab.document.write(template);
-                        newTab.document.close();
-                    } else {
-                        notyf.open({
-                            type: 'warning',
-                            message: '請允許彈出視窗以顯示 JSON!',
-                            background: 'orange',
-                            duration: 5000 // 5 秒後消失
-                        });
-                    }
-                } catch (error) {
-                    console.error('View failed:', error);
-                    notyf.error('Failed to view json file');
-                }
+                const jsonString = JSON.stringify(this.todoList, null, 2);
+                const template = `${template_s}<pre>${jsonString}</pre>${template_e}`;
+                this.viewopen(template ,format)
             }else if (format === 'html') {
-                try {
-                    let htmlContent = this.html();
-                    const newTab = window.open();
-                    if (newTab) {
-                        newTab.document.write(htmlContent);
-                        newTab.document.close();
-                    } else {
-                        notyf.open({
-                            type: 'warning',
-                            message: '請允許彈出視窗以顯示 HTML!',
-                            background: 'orange',
-                            duration: 5000 // 5 秒後消失
-                        });
-                    }
-                } catch (error) {
-                    console.error('View failed:', error);
-                    notyf.error('Failed to view HTML file');
-                }
+                let htmlContent = this.html();
+                this.viewopen(htmlContent ,format)
+            }
+        },
+        exportfile(template ,text ,type){
+            try {
+                const blob = new Blob([template], { type: type });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `todo_${this.getTodayDate()}.${text}`;
+                link.click();
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 1000);
+            } catch (error) {
+                console.error('Export failed:', error);
+                notyf.error(`Failed to export ${text} file`);
             }
         },
         exportAs(format) {
@@ -186,38 +184,12 @@ width: 400px;
             this.dropdownexport = false; // 關閉選單
             
             if(format === 'json'){
-                try{
-                    const jsonString = JSON.stringify(this.todoList, null, 2);
-                    const blob = new Blob([jsonString], { type: "application/json" });
-                    const link = document.createElement("a");
-                    link.href = URL.createObjectURL(blob);
-                    link.download = `todo_${this.getTodayDate()}.json`;
-                    link.click();
-                    URL.revokeObjectURL(link.href);
-                } catch (error) {
-                    console.error('Export failed:', error);
-                    notyf.error('Failed to export json file');
-                }
+                const jsonString = JSON.stringify(this.todoList, null, 2);
+                this.exportfile(jsonString ,format , "application/json");
 
             }else if (format === 'html') {
-                try {
-                    let htmlContent = this.html();
-
-                    // 生成html
-                    const blob = new Blob([htmlContent], { type: "text/html" });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.download = `todo_${this.getTodayDate()}.html`;
-                    link.click();
-                    setTimeout(() => {
-                        URL.revokeObjectURL(url);
-                    }, 1000);
-                } catch (error) {
-                    console.error('Export failed:', error);
-                    notyf.error('Failed to export HTML file');
-                }
-
+                let htmlContent = this.html();
+                this.exportfile(htmlContent ,format , "text/html");
             }
         },
         getTodayDate() {
