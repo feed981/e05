@@ -2,11 +2,15 @@ const { createApp } = Vue;
 
 const notyf = new Notyf({
     duration: 3000, // 顯示 3 秒
-    dismissible: true
+    dismissible: true,
+    position: {
+        x: 'center',
+        y: 'top'
+    }
 });
 
 
-let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New Text Document</title><link rel="icon" href="favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container">`;
+let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo List Export</title><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container">`;
 let template_e = `</div></body></html>`;
 
 createApp({
@@ -39,11 +43,25 @@ createApp({
         },
     },
     methods: {
+        sendEmail(){
+            const pageTitle = document.title;
+            const currentURL = window.location.href;
+            const emailSubject = `${currentURL} ${pageTitle}'s feedback`;
+            window.location.href = `mailto:oldfe01@outlook.com?subject=${encodeURIComponent(emailSubject)}&body=`;
+            notyf.open({
+                type: 'success',
+                message: `Open the user's default mail application to write feedback about ${pageTitle} at ${currentURL}.`,
+                background: '#1ba0ef',
+                duration: 5000 // 5 秒後消失
+            });
+        },
         toggleDropdown(type ,value) {
             this[type] = value;
-            setTimeout(() => {
-                this.dropdownview = false;
-            }, 3000);
+            if(value === false){
+                setTimeout(() => {
+                    this.dropdownview = false;
+                }, 100);
+            }
         },
         html(){
             // 整理所有待辦事項到一個陣列
@@ -67,6 +85,7 @@ createApp({
                 <head>
                     <meta charset="UTF-8">
                     <title>Todo List Export</title>
+                    <link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-log.ico" type="image/x-icon">
                     <style>
                                body {
 font-family: Arial, sans-serif;
@@ -116,7 +135,8 @@ width: 400px;
             // 加入每個待辦事項
             allTodos.forEach(todo => {
                 const itemClass = todo.completed ? 'completed' : '';
-                htmlContent += `<div class="todo-item">
+                htmlContent += `
+                <div class="todo-item">
                         <span class="date">${todo.date}</span>
                         <span class="category">${todo.category}</span>
                         <span class="text-content ${itemClass}">${todo.text}</span>
@@ -181,7 +201,6 @@ width: 400px;
         },
         exportAs(format) {
             notyf.success(`Exporting as ${format.toUpperCase()}`);
-            this.dropdownexport = false; // 關閉選單
             
             if(format === 'json'){
                 const jsonString = JSON.stringify(this.todoList, null, 2);
@@ -208,13 +227,20 @@ width: 400px;
         },
         addTodo() {
             if (!this.selectedCategory){
-                notyf.error('no category! please click <span class="button2 material-icons">add</span> add your category first');
+                notyf.error('select your category! or click <i class="font-awesome-i fa-solid fa-add"></i> add your category first');
             }
             if (!this.selectedCategory || !this.newTodo.text.trim() || !this.newTodo.date) return;
             this.todoList[this.selectedCategory].push({ ...this.newTodo });
             this.newTodo.text = "";
             this.saveTodos();
             notyf.success("add task successfully!");
+        },
+        checkTodo(category, index) {
+            this.todoList[category][index].completed = !this.todoList[category][index].completed;
+            this.saveTodos();
+            if(this.todoList[category][index].completed){
+                notyf.success(`check task successfully!`);
+            }
         },
         removeTodo(category, index) {
             this.todoList[category].splice(index, 1);
@@ -249,11 +275,6 @@ width: 400px;
                 notyf.success(`Successfully deleted '${category}' permanently.`);
             }
         },
-        checkTodo(category, index) {
-            this.todoList[category][index].completed = !this.todoList[category][index].completed;
-            if(this.todoList[category][index].completed){
-                notyf.success(`Successfully!`);
-            }
-        }
+
     }
 }).mount('#app');
