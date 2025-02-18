@@ -9,7 +9,9 @@ const notyf = new Notyf({
     }
 });
 
-
+(function() {
+    emailjs.init("un2nCxSnYlqZWdgMG");
+})();
 let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo List Export</title><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container">`;
 let template_e = `</div></body></html>`;
 
@@ -24,6 +26,17 @@ createApp({
             todoList: JSON.parse(localStorage.getItem("todos")) || {},
             expandedCategories: [],
             dropdownview: false,
+            isSendEmail: false,
+            formData: {
+                to_email: '',
+                from_name: '',
+                message: '',
+                pageTitle: '',
+                currentURL: '',
+            },
+            status: '',
+            sending: false,
+            isError: false
         };
     },
     computed: {
@@ -32,6 +45,15 @@ createApp({
         }
     },
     watch: {
+        isSendEmail(newVal){
+            if (!newVal) {
+                this.formData = {
+                    to_email: '',
+                    from_name: '',
+                    message: ''
+                };
+            }
+        },
         isLight(newVal) {
             if (newVal) {
                 document.body.classList.add('light-mode');
@@ -43,17 +65,36 @@ createApp({
         },
     },
     methods: {
-        sendEmail(){
-            const pageTitle = document.title;
-            const currentURL = window.location.href;
-            const emailSubject = `${currentURL} ${pageTitle}'s feedback`;
-            window.location.href = `mailto:oldfe01@outlook.com?subject=${encodeURIComponent(emailSubject)}&body=`;
-            notyf.open({
-                type: 'success',
-                message: `Open the user's default mail application to write feedback about ${pageTitle} at ${currentURL}.`,
-                background: '#1ba0ef',
-                duration: 5000 // 5 秒後消失
-            });
+        handleSubmit() {
+            this.sending = true;
+            this.status = 'Sending...';
+            this.isError = false;
+            this.formData.pageTitle = document.title;
+            this.formData.currentURL = window.location.href;
+
+            emailjs.send(
+                "service_qzarp8m",
+                "template_f3pkjrv",
+                this.formData
+            ).then(
+                (response) => {
+                    this.status = 'Sending successfully!';
+                    this.sending = false;
+                    this.formData = {
+                        pageTitle: '',
+                        currentURL: '',
+                        to_email: '',
+                        from_name: '',
+                        message: ''
+                    };
+                },
+                (error) => {
+                    this.status = 'Sending error ,try later...';
+                    this.isError = true;
+                    this.sending = false;
+                    console.error('error:', error);
+                }
+            );
         },
         toggleDropdown(type ,value) {
             this[type] = value;
