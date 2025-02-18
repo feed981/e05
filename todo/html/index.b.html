@@ -11,6 +11,9 @@
   <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <style>
     body {
     font-family: Arial, sans-serif;
@@ -90,8 +93,8 @@
 
   .button2{
     border-radius: 5px;
-    background-color: #127ebd;
-    font-size: 36px;
+    /* background-color: #127ebd; */
+    font-size: 16px;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -101,9 +104,6 @@
   justify-content: center;
   }
 
-  .button2:hover {
-    background-color: #0056b3;
-  }
   .button2-container{
     display: flex;
     align-items: center;
@@ -210,6 +210,14 @@
     background-color: #0056b3;
 }
 
+.light-mode  .menu i{
+  color: #000;
+}
+
+.light-mode .font-awesome-i{
+  color: #000;
+}
+
 .date{
   padding: 8px 12px;
   border: 2px;
@@ -253,10 +261,7 @@ select::-ms-expand {
 
 .category {
   background-color: #2C2C2C;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* 左右對齊 */
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 5px;
@@ -297,16 +302,19 @@ select::-ms-expand {
     cursor: pointer;
 }
 
+
 .dropdown-menu {
     position: absolute;
     top: 30px;
     left: 0;
-    background: #1ba0ef;
+    color: #e0e0e0;
+    background: #2C2C2C;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     list-style: none;
     padding: 0;
     margin: 0;
     width: 150px;
+    transition: all 0.3s ease;
 }
 
 .dropdown-menu li {
@@ -315,7 +323,7 @@ select::-ms-expand {
 }
 
 .dropdown-menu li:hover {
-    background: #0056b3;
+    background: #6a7075;
 }
 
 .dropdown span {
@@ -323,44 +331,114 @@ select::-ms-expand {
     cursor: pointer;
 }
 
-.material-icons{
+.material-icons .font-awesome-i {
   cursor: pointer;
+  color: #fff;
 }
+
+
+
 .text-content {
     flex: 1;  /* 讓文字內容占用剩餘空間 */
     word-wrap: break-word;  /* 允許長單字換行 */
     min-width: 0;  /* 確保可以正確換行 */
 }
+
+.notyf__toast {
+    max-width: 300px; /* 設定最大寬度 */
+    white-space: normal; /* 允許換行 */
+    word-break: break-word; /* 避免超出容器 */
+}
+
+        
+.menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .menu i {
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .menu i img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .menu i:active {
+            transform: scale(0.95);
+        }
+
+        /* Tooltip Style */
+        .menu i::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%; /* Move tooltip above the button */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            z-index: 10; /* Ensure it appears above everything */
+            pointer-events: none; /* Prevent interaction */
+        }
+
+        .menu i:hover::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-5px); /* Slight upward animation */
+        }
+
   </style>
 </head>
 <body>
   <div id="app">
-    <div class="basic-container">
-      <span>　</span>
-      <span v-if="isLight" @click="isLight = false" class="material-icons">toggle_on</span>
-      <span v-if="!isLight" @click="isLight = true" class="material-icons">toggle_off</span>
-      <span class="material-icons">mail</span>
-      
-      <div class="dropdown" 
-      @click="toggleDropdown('dropdownview', true)">
-      <span class="material-icons">description</span>
-      <ul v-show="dropdownview" class="dropdown-menu">
-        <li @click="viewAs('json')">View as JSON</li>
-        <li @click="viewAs('html')">View as HTML</li>
-        <li @click="exportAs('json')">Export as JSON</li>
-        <li @click="exportAs('html')">Export as HTML</li>
-      </ul>
-    </div>
 
-    </div>
+        <div class="menu">
+          <i data-tooltip="toggle_on the light" v-if="isLight" @click="isLight = false" class="font-awesome-i fa-solid fa-toggle-on"></i>
+          <i data-tooltip="toggle_off the light" v-if="!isLight" @click="isLight = true" class="font-awesome-i fa-solid fa-toggle-off"></i>
+          <!-- <span data-tooltip="toggle_on" v-if="isLight" @click="isLight = false" class="material-icons">toggle_on</span>
+          <span data-tooltip="toggle_off" v-if="!isLight" @click="isLight = true" class="material-icons">toggle_off</span> -->
+          <i data-tooltip="feedback" @click="sendEmail" class="font-awesome-i fa-solid fa-envelope"></i>
+          <div class="dropdown" @click="toggleDropdown('dropdownview', true)">
+            <i data-tooltip="view or export the data" class="font-awesome-i fa-solid fa-file-export"></i>
+          <ul v-show="dropdownview" class="dropdown-menu">
+            <li @click="viewAs('json')">View as JSON</li>
+            <li @click="viewAs('html')">View as HTML</li>
+            <li @click="exportAs('json')">Export as JSON</li>
+            <li @click="exportAs('html')">Export as HTML</li>
+            <li @click="toggleDropdown('dropdownview', false)"><i data-tooltip="close" class="font-awesome-i fa-regular fa-circle-xmark"></i></li>
+          </ul>
+        </div>
+      </div>
+
     <div v-if="!isCategoryVisible" class="todo-container">
-      <h1>Let's go TODOLIST!</h1>
+
+        <h1>Let's go TODOLIST!</h1>
 
 
 
       <div class="button-container">
         <div class="flex-container">
-          <span @click="isCategoryVisible = true" class="button2 material-icons">add</span>
+          <div class="menu">
+          <i data-tooltip="add category" @click="isCategoryVisible = true" class="font-awesome-i fa-solid fa-add"></i>
+        </div>
           <select v-model="selectedCategory">
             <option value="">choose your category</option>
             <option v-for="(todos, category) in todoList" :key="category" :value="category">
@@ -368,48 +446,46 @@ select::-ms-expand {
             </option>
           </select>
         </div>
+
           <input class="date" type="date" v-model="newTodo.date">
         </div>
 
         <div class="button-container">
           <input type="text" v-model="newTodo.text" placeholder="Enter a task...">
-          <button @click="addTodo">Save</button>
+          <div class="menu">
+            <i data-tooltip="send" @click="addTodo" class="font-awesome-i fa-solid fa-paper-plane"></i>
+            </div>
         </div>
     </div>
 
     <div v-if="isCategoryVisible" class="todo-container">
       
-        <div class="button-container">
           <h1>Let's go CATEGORY!</h1>
-          <div class="switch">
-            <input v-model="isLight" class="switch-checkbox" id="switchID2" type="checkbox" name="switch-checkbox">
-            <label class="switch-label" for="switchID2">
-              <span class="switch-txt" turnOn="light" turnOff="dark":data-format="isLight ? 'light' : 'dark'"></span>
-              <span class="switch-Round-btn"></span>
-            </label>
-          </div>
-        </div>
           <div class="input-container" >
             <input type="text" style="margin-right: 0px;" v-model="newCategory" placeholder="Enter a new category..." required>
           </div>
-          <div class="button-container" ref="buttonContainer">
-            <button @click="saveCategory">Save</button>
-            <button @click="isCategoryVisible = false">Close</button>
-          </div>
+            <div class="menu">
+              <i data-tooltip="send" @click="saveCategory" class="font-awesome-i fa-solid fa-paper-plane"></i>
+              <i data-tooltip="back to todos" @click="isCategoryVisible = false" class="font-awesome-i fa-regular fa-circle-xmark"></i>
+            </div>
       </div>
       
       <div v-if="isListVisible" class="category-container">
         <div v-for="(todos, category) in todoList" :key="category">
           <div class="category" @click="toggleCategory(category)">
-            <span v-if="isCategoryVisible" @click.stop="removeCategory(category)" class="material-icons">delete</span>
-            <span class="category-name">{{ category }}</span><span v-if="todos.length === 0">　(No tasks available.)</span>
-            <span class="category-openup material-icons">menu_open</span>
+            <div class="menu">
+              <i data-tooltip="remove category" v-if="isCategoryVisible" @click.stop="removeCategory(category)" class="font-awesome-i fa-solid fa-trash"></i>
+              <span class="category-name">{{ category }}</span><span v-if="todos.length === 0">　(No tasks available.)</span>
+              <i data-tooltip="dropdown this category"  class="font-awesome-i category-openup fa-solid fa-chevron-down"></i>
+            </div>
           </div>
           
           <div v-show="expandedCategories.includes(category)" class="category-content">
             <div @click="checkTodo(category, index)"  v-for="(todo, index) in sortedTodos(todos)" :key="index" class="todo-item" :class="{ completed: todo.completed }">
               <span class="text-content">{{ todo.date }}　{{ todo.text }}</span>
-              <span @click="removeTodo(category, index)" class="material-icons">delete</span>
+              <div class="menu">
+                <i data-tooltip="remove todo"  @click="removeTodo(category, index)" class="font-awesome-i fa-solid fa-trash"></i>
+                </div>
             </div>
           </div>
         </div>
