@@ -1,11 +1,19 @@
 const { createApp } = Vue;
 const notyf = new Notyf({
     duration: 3000, // 顯示 3 秒
-    dismissible: true
+    dismissible: true,
+    position: {
+        x: 'center',
+        y: 'top'
+    }
 });
 
-let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New Text Document</title><link rel="icon" href="favicon-log.ico" type="image/x-icon"><link rel="shortcut icon" href="favicon-log.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container"><div class="switch-container"><label class="switch"><input type="checkbox" id="modeSwitch" onchange="toggleMode()"> <span class="slider"></span></label></div><br>`;
-let template_e = `</div><script>function toggleMode(){document.body.classList.toggle("light-mode");var e=document.getElementById("modeSwitch");document.body.classList.contains("light-mode")?(localStorage.setItem("theme","light"),e.checked=!0):(localStorage.setItem("theme","dark"),e.checked=!1)}window.onload=function(){var e=document.getElementById("modeSwitch");"light"===localStorage.getItem("theme")&&(document.body.classList.add("light-mode"),e.checked=!0)}</script></body></html>`;
+(function() {
+    emailjs.init("un2nCxSnYlqZWdgMG");
+})();
+
+let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Diary Export</title><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-export.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon-export.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}</style></head><body><div id="app" class="container">`;
+let template_e = `</div></body></html>`;
 createApp({
     data() {
         return {
@@ -24,9 +32,34 @@ createApp({
             monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             containerHeight: 250, // 初始高度
             selectedFormat: "json",
+            dropdownview: false,
+            isSendEmail: false,
+            formData: {
+                to_email: '',
+                from_name: '',
+                message: '',
+                pageTitle: '',
+                currentURL: '',
+            },
+            status: '',
+            sending: false,
+            isError: false
         };
     },
     watch: {
+        watch: {
+            isSendEmail(newVal){
+                if (!newVal) {
+                    this.formData = {
+                        pageTitle: '',
+                        currentURL: '',
+                        to_email: '',
+                        from_name: '',
+                        message: ''
+                    };
+                }
+            },
+        },
         isLight(newVal) {
             if (newVal) {
                 document.body.classList.add('light-mode');
@@ -46,183 +79,147 @@ createApp({
         }
     },
     methods: {
-        exportDiary(event) {
-            const format = event.target.value;
-            notyf.success(`${format} success!`);
+        handleSubmit() {
+            this.sending = true;
+            this.status = 'Sending...';
+            this.isError = false;
+            this.formData.pageTitle = document.title;
+            this.formData.currentURL = window.location.href;
 
-            if (format === "exportJson") {
-                this.exportJson();
-            } else if (format === "viewAsJson") {
-                this.viewAsJson();
-            } else if (format === "exportHtml") {
-                this.exportHtml();
-            } else if (format === "viewAsHtml") {
-                this.viewAsHtml();
-            }
-            event.target.value = "";
+            emailjs.send(
+                "service_qzarp8m",
+                "template_f3pkjrv",
+                this.formData
+            ).then(
+                (response) => {
+                    this.status = 'Sending successfully!';
+                    this.sending = false;
+                    this.formData = {
+                        pageTitle: '',
+                        currentURL: '',
+                        to_email: '',
+                        from_name: '',
+                        message: ''
+                    };
+                },
+                (error) => {
+                    this.status = 'Sending error ,try later...';
+                    this.isError = true;
+                    this.sending = false;
+                    console.error('error:', error);
+                }
+            );
         },
-        exportJson() {
-            if (!this.currentUser) {
-              return;
+        toggleDropdown(type ,value) {
+            this[type] = value;
+            if(value === false){
+                setTimeout(() => {
+                    this.dropdownview = false;
+                }, 100);
             }
-        
-            const backup = [];
-        
+        },
+        getSortedDiaryEntries(user) {
+            if (!user) return [];
+
+            const entries = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith(`diary_${this.currentUser}_`)) {
-                    const date = key.replace(`diary_${this.currentUser}_`, ""); // 取得 YYYY-MM-DD
-                    backup.push({ date, content: localStorage.getItem(key) });
+                if (key.startsWith(`diary_${user}_`)) {
+                    const date = key.replace(`diary_${user}_`, ""); // 提取 YYYY-MM-DD
+                    entries.push({ date, content: localStorage.getItem(key) });
                 }
             }
 
-            // sort
-            backup.sort((a, b) => b.date.localeCompare(a.date));
-
-            // convert to json
-            const sortedBackup = backup.reduce((obj, entry) => {
-                obj[`diary_${this.currentUser}_${entry.date}`] = entry.content;
+            return entries.sort((a, b) => b.date.localeCompare(a.date));
+        },
+        toJSON(user) {
+            const entries = this.getSortedDiaryEntries(user);
+            const sortedBackup = entries.reduce((obj, entry) => {
+                obj[`diary_${user}_${entry.date}`] = entry.content;
                 return obj;
             }, {});
-
-            const data = JSON.stringify(sortedBackup, null, 2);
-            const blob = new Blob([data], { type: "application/json" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `diary_backup_${this.currentUser}.json`;
-            link.click();
-            URL.revokeObjectURL(link.href);
-        },
-        viewAsJson() {
-            if (!this.currentUser) {
-                return;
-            }
-
-            const backup = [];
         
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(`diary_${this.currentUser}_`)) {
-                    const date = key.replace(`diary_${this.currentUser}_`, ""); // 取得 YYYY-MM-DD
-                    backup.push({ date, content: localStorage.getItem(key) });
+            return JSON.stringify(sortedBackup, null, 2);
+        },
+        toHTML(user) {
+            return this.getSortedDiaryEntries(user)
+                .map(({ date, content }) => {
+                    return `<div class="log-entry">
+                                <p>${content.replace(/\n/g, "<br>")}</p>
+                                <span class="timestamp">${date}</span>
+                            </div>`;
+                })
+                .join("\n");
+        },
+        viewopen(template ,text){
+            try{
+                const newTab = window.open();
+                if (newTab) {
+                    newTab.document.write(template);
+                    newTab.document.close();
+                } else {
+                    notyf.open({
+                        type: 'warning',
+                        message: `請允許彈出視窗以顯示 ${text}!`,
+                        background: 'orange',
+                        duration: 5000 // 5 秒後消失
+                    });
                 }
-            }
-
-            // sort
-            backup.sort((a, b) => b.date.localeCompare(a.date));
-
-            // convert to json
-            const sortedBackup = backup.reduce((obj, entry) => {
-                obj[`diary_${this.currentUser}_${entry.date}`] = entry.content;
-                return obj;
-            }, {});
-
-            const data = JSON.stringify(sortedBackup, null, 2);
-
-            const template = `${template_s}<pre>${data}</pre>${template_e}`;
-            const newTab = window.open();
-            if (newTab) {
-                newTab.document.write(template);
-                newTab.document.close();
-            } else {
-                notyf.open({
-                    type: 'warning',
-                    message: '請允許彈出視窗以顯示 JSON!',
-                    background: 'orange',
-                    duration: 5000 // 5 秒後消失
-                  });
+            } catch (error) {
+                console.error('View failed:', error);
+                notyf.error(`Failed to view ${text} file`);
             }
         },
-        exportHtml() {
-            if (!this.currentUser) {
-                return;
-            }
+        viewAs(format) {
+            notyf.success(`Viewing as ${format.toUpperCase()}`);
+            this.dropdownview = false; // 關閉選單
+            let viewAs = '';
+            if(format === 'json'){
+                const jsonString = this.toJSON(this.currentUser);
+                viewAs = `${template_s}<pre>${jsonString}</pre>${template_e}`;
 
-            const backup = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(`diary_${this.currentUser}_`)) {
-                    backup[key] = localStorage.getItem(key);
-                }
+            }else if (format === 'html') {
+                const htmlContent = this.toHTML(this.currentUser);
+                viewAs = `${template_s}<div class="log-container">${htmlContent}</div>${template_e}`;
             }
-
-            // 解析json
-            const logs = Object.entries(backup)
-            .map(([key, content]) => {
-                const date = key.replace(`diary_${this.currentUser}_`, ""); // 提取 YYYY-MM-DD
-                return { date, content };
-            })
-            .sort((a, b) => b.date.localeCompare(a.date)) // 日期降序排列
-            .map(({ date, content }) => {
-                return `<div class="log-entry"><p>${content.replace(/\n/g, "<br>")}</p><span class="timestamp">${date}</span></div>`;
-            })
-            .join("\n");
-            
-            const template = `${template_s}<div class="log-container">${logs}</div>${template_e}`;
-            // 生成html
-            const blob = new Blob([template], { type: "text/html" });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `diary_log_${this.currentUser}.html`;
-            link.click();
-            setTimeout(() => {
-                URL.revokeObjectURL(url);
-            }, 1000);
+            this.viewopen(viewAs ,format)
         },
-        viewAsHtml() {
-            if (!this.currentUser) {
-                return;
-            }
-
-            const backup = {};
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(`diary_${this.currentUser}_`)) {
-                    backup[key] = localStorage.getItem(key);
-                }
-            }
-
-            // 解析json
-            const logs = Object.entries(backup)
-            .map(([key, content]) => {
-                const date = key.replace(`diary_${this.currentUser}_`, ""); // 提取 YYYY-MM-DD
-                return { date, content };
-            })
-            .sort((a, b) => b.date.localeCompare(a.date)) // 日期降序排列
-            .map(({ date, content }) => {
-                return `<div class="log-entry"><p>${content.replace(/\n/g, "<br>")}</p><span class="timestamp">${date}</span></div>`;
-            })
-            .join("\n");
-            
-            const template = `${template_s}<div class="log-container">${logs}</div>${template_e}`;
-
-            const newTab = window.open();
-            if (newTab) {
-                newTab.document.write(template);
-                newTab.document.close();
-            } else {
-                notyf.open({
-                    type: 'warning',
-                    message: '請允許彈出視窗以顯示 HTML!',
-                    background: 'orange',
-                    duration: 5000 // 5 秒後消失
-                });
+        getTodayDate() {
+            const today = new Date();
+            return today.toISOString().split("T")[0]; // 轉成 YYYY-MM-DD 格式
+        },
+        exportfile(template ,format ,type ,user){
+            try {
+                const blob = new Blob([template], { type: type });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `diary_${user}_${this.getTodayDate()}.${format}`;
+                link.click();
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 1000);
+            } catch (error) {
+                console.error('Export failed:', error);
+                notyf.error(`Failed to export ${format} file`);
             }
         },
-        adjustHeight() {
-            this.$nextTick(() => {
-                let textarea = this.$refs.diaryTextarea;
-                let title = this.$refs.diaryTitle;
-                let buttonContainer = this.$refs.buttonContainer;
-                textarea.style.height = "auto"; // 先恢复默认
+        exportAs(format) {
+            notyf.success(`Exporting as ${format.toUpperCase()}`);
+            let exportAs = '';
+            let type = '';
+            const user = this.currentUser;
+            if(format === 'json'){
+                exportAs = this.toJSON(user);
+                type = "application/json";
+                
+            }else if (format === 'html') {
+                const htmlContent = this.toHTML(user);
+                exportAs = `${template_s}<div class="log-container">${htmlContent}</div>${template_e}`;
+                type = "text/html";
+            }
 
-                // 计算外层容器的总高度
-                // let extraHeight = (title?.offsetHeight || 0) + (buttonContainer?.offsetHeight || 0) + 40;
-                // this.containerHeight = Math.max(250, textarea.scrollHeight + extraHeight);
-                textarea.style.height = textarea.scrollHeight + "px"; // 计算新高度
-                this.containerHeight = Math.max(250, textarea.scrollHeight + 20); // 更新容器高度
-            });
+            this.exportfile(exportAs ,format , type ,user);
         },
         clearForm() {
             this.username = '';
@@ -249,7 +246,6 @@ createApp({
               notyf.error("Register error!");
             }
           },
-      
           login() {
             let users = JSON.parse(localStorage.getItem("diaryUsers") || "[]");
             let user = users.find(u => 
@@ -269,6 +265,7 @@ createApp({
         logout(){
             this.isCalendarVisible = false;
             this.isDiaryVisible = false;
+            this.isSendEmail = false;
         },
         isToday(day) {
             const now = new Date();
