@@ -182,15 +182,15 @@
 
 
 .light-mode .completed {
-  background: #414242;
+  background: #5f6161;
     border-left: 4px solid rgb(199, 199, 199);
     border-bottom: 4px solid #575656;
 
 }
 
 .light-mode .category {
-  background-color: #fff;
-  color: #000;
+  background-color: #999797;
+  color: #ebebeb;
 }
 
 
@@ -250,7 +250,7 @@ select::-ms-expand {
 
 
 .category {
-  background-color: #2C2C2C;
+  background-color: #353434;
   padding: 10px 12px;
   border-radius: 5px;
   cursor: pointer;
@@ -265,7 +265,6 @@ select::-ms-expand {
 }
 
 .todo-item {
-    color: #1E1E1E;
   border-left: 4px solid #359bd6;
   border-bottom: 4px solid #0056b3;
   background-color: #2e94cf;
@@ -280,9 +279,9 @@ select::-ms-expand {
 
 .completed {
   color: #fff;
-    background: #1E1E1E;
+    background: #6e6e6e;
     border-left: 4px solid #2C2C2C;
-    border-bottom: 4px solid #202020;
+    border-bottom: 4px solid #414141;
 }
 
 .dropdown {
@@ -290,6 +289,7 @@ select::-ms-expand {
     display: inline-block;
     margin-right: 20px;
     cursor: pointer;
+    z-index: 9999;
 }
 
 
@@ -332,6 +332,7 @@ select::-ms-expand {
     flex: 1;  /* 讓文字內容占用剩餘空間 */
     word-wrap: break-word;  /* 允許長單字換行 */
     min-width: 0;  /* 確保可以正確換行 */
+    text-align: left;
 }
 
 .notyf__toast {
@@ -403,6 +404,47 @@ select::-ms-expand {
             margin-bottom: 20px;
         }
         
+@media screen and (max-width: 768px) {
+  .todo-container ,.category-container{
+    background: #1E1E1E;
+    color: #E0E0E0;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 8px rgb(255, 255, 255);
+  }
+  .light-mode{
+    background-color: #fff;
+  }
+  .light-mode .todo-container ,
+  .light-mode .category-container{
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 4px 8px rgb(17, 17, 17);
+    }
+    .menu i{
+      font-size: 22px;
+    }
+    .font-awesome-i-inbutton {
+      background-color: #1E1E1E;
+    }
+
+    .input-container2 {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .input-container2   .input-text{
+    border-radius: 0px 5px 5px 0px;
+    margin: 0px 0px 10px -20px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -456,7 +498,7 @@ select::-ms-expand {
           <i data-tooltip="add category" @click="isCategoryVisible = true" class="font-awesome-i fa-solid fa-add"></i>
         </div>
           <select v-model="selectedCategory">
-            <option value="">choose your category</option>
+            <option value="">category</option>
             <option v-for="(todos, category) in todoList" :key="category" :value="category">
               {{ category }}
             </option>
