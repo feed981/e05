@@ -77,6 +77,10 @@ const encryptionService = {
     }
 };
 
+(function() {
+    emailjs.init("un2nCxSnYlqZWdgMG");
+})();
+
 createApp({
     data() {
         return {
@@ -90,10 +94,34 @@ createApp({
             errorMessage: '',
             success: '',
             successMessage: '',
+            isSendEmail: false,
+            formData: {
+                to_email: '',
+                from_name: '',
+                message: '',
+                pageTitle: '',
+                currentURL: '',
+            },
+            status: '',
+            sending: false,
+            isError: false
         };
     },
     watch: {
-        isCrypt(newValue, oldValue) {
+        watch: {
+            isSendEmail(newVal){
+                if (!newVal) {
+                    this.formData = {
+                        pageTitle: '',
+                        currentURL: '',
+                        to_email: '',
+                        from_name: '',
+                        message: ''
+                    };
+                }
+            },
+        },
+        isCrypt() {
             this.clearForm();
         },
         isLight(newVal) {
@@ -115,6 +143,37 @@ createApp({
         }
     },
     methods: {
+        handleSubmit() {
+            this.sending = true;
+            this.status = 'Sending...';
+            this.isError = false;
+            this.formData.pageTitle = document.title;
+            this.formData.currentURL = window.location.href;
+
+            emailjs.send(
+                "service_qzarp8m",
+                "template_f3pkjrv",
+                this.formData
+            ).then(
+                (response) => {
+                    this.status = 'Sending successfully!';
+                    this.sending = false;
+                    this.formData = {
+                        pageTitle: '',
+                        currentURL: '',
+                        to_email: '',
+                        from_name: '',
+                        message: ''
+                    };
+                },
+                (error) => {
+                    this.status = 'Sending error ,try later...';
+                    this.isError = true;
+                    this.sending = false;
+                    console.error('error:', error);
+                }
+            );
+        },
         async refreshToken() {
             try {
                 const response = await apiAuth.get('/token');
