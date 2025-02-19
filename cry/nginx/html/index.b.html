@@ -18,6 +18,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+
+
+
     body {
     font-family: Arial, sans-serif;
     background-color: #1E1E1E;
@@ -25,7 +28,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+    margin: 0; 
   }
 
 
@@ -199,8 +202,8 @@
   .light-mode  .heading-style2 {
 
     font-family: 'Courier New', monospace;
-    color: #e4ca37;
-    text-shadow: 0 0 10px rgba(255, 251, 0, 0.8);
+    color: #ffd900;
+    text-shadow: 0 0 10px #ffdc17(209, 224, 78, 0.8);
 }
 
     .menu {
@@ -278,6 +281,45 @@
     cursor: pointer;
   }
 
+  @media screen and (max-width: 768px) {
+  .converter-container {
+    background: #1E1E1E;
+    color: #E0E0E0;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 8px rgb(255, 255, 255);
+  }
+  .light-mode{
+    background-color: #fff;
+  }
+  .light-mode .converter-container {
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 4px 8px rgb(17, 17, 17);
+    }
+    .menu i{
+      font-size: 22px;
+    }
+    .font-awesome-i-inbutton {
+      background-color: #1E1E1E;
+    }
+
+    .input-container2 {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .input-container2   .input-text{
+    border-radius: 0px 5px 5px 0px;
+    margin: 0px 0px 10px -20px;
+  }
+}
   </style>
 </head>
 <body>
@@ -335,7 +377,7 @@
           <div class="loader2">
           </div>
         </div>
-          <div class="menu">
+          <div class="menu menu2">
             <i v-if="isCrypt" data-tooltip="encrypt" @click="encrypt" class="font-awesome-i fa-solid fa-paper-plane"></i>
             <i data-tooltip="toggle_on encrypt" v-if="isCrypt" @click="isCrypt = false" class="font-awesome-i fa-solid fa-toggle-on"></i>
             <i v-if="!isCrypt" data-tooltip="decrypt" @click="decrypt" class="font-awesome-i fa-solid fa-paper-plane"></i>

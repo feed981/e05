@@ -139,6 +139,7 @@
   border: #1E1E1E 1px solid;
   background: #1E1E1E; /* 浅灰色背景 */
   color: #fff;
+  margin: 0px 0px 20px 0px;
   /*
   resize: none; 禁止调整大小 
   min-height: 400px;
@@ -413,6 +414,53 @@ select::-ms-expand {
     font-size: 24px;
     cursor: pointer;
 }
+
+ 
+@media screen and (max-width: 768px) {
+  .auth-container ,.calendar-container , .diary-container{
+    background: #1E1E1E;
+    color: #E0E0E0;
+    border-radius: 10px;
+    text-align: center;
+    width: 380px;
+    box-shadow: 0 4px 8px rgb(255, 255, 255);
+  }
+  .light-mode{
+    background-color: #fff;
+  }
+  .light-mode .auth-container ,
+  .light-mode .calendar-container
+  .light-mode .diary-container{
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      text-align: center;
+      width: 380px;
+      box-shadow: 0 4px 8px rgb(17, 17, 17);
+    }
+    .menu i{
+      font-size: 22px;
+    }
+    .font-awesome-i-inbutton {
+      background-color: #1E1E1E;
+    }
+    .diary-container textarea {
+    border: #444444 1px solid;
+  background: #1E1E1E;
+  color: #fff;
+  width: 380px;
+  max-width: 380px;
+  margin: 0px 0px 20px 0px;
+  }
+
+  .light-mode .diary-container textarea {
+    /* box-shadow: 0 4px 8px rgb(179, 179, 179); */
+    border: #e9e5e5 1px solid;
+  background: #fff;
+  color: #000;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -503,8 +551,8 @@ select::-ms-expand {
         <h1 class="heading-style4" ref="diaryTitle">DIARY ENTRY!</h1>
         <span class="selectedDate" v-if="isDiaryVisible">{{ selectedDate }}</span>
       </div>
-      <textarea style="margin-bottom: 10px;" v-model="diaryEntry" ref="diaryTextarea"></textarea>
-        <div class="menu">
+      <textarea v-model="diaryEntry" ref="diaryTextarea"></textarea>
+      <div class="menu">
           <i data-tooltip="send" @click="saveDiary" class="font-awesome-i fa-solid fa-paper-plane"></i>
           <i data-tooltip="back" @click="isDiaryVisible = false" class="font-awesome-i fa-regular fa-circle-xmark"></i>
         </div>
