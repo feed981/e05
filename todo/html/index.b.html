@@ -10,7 +10,6 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
@@ -322,7 +321,7 @@ select::-ms-expand {
     cursor: pointer;
 }
 
-.material-icons .font-awesome-i {
+.font-awesome-i {
   cursor: pointer;
   color: #fff;
 }
@@ -412,8 +411,6 @@ select::-ms-expand {
         <div class="menu">
           <i data-tooltip="toggle_on the light" v-if="isLight" @click="isLight = false" class="font-awesome-i fa-solid fa-toggle-on"></i>
           <i data-tooltip="toggle_off the light" v-if="!isLight" @click="isLight = true" class="font-awesome-i fa-solid fa-toggle-off"></i>
-          <!-- <span data-tooltip="toggle_on" v-if="isLight" @click="isLight = false" class="material-icons">toggle_on</span>
-          <span data-tooltip="toggle_off" v-if="!isLight" @click="isLight = true" class="material-icons">toggle_off</span> -->
           <i v-if="!isSendEmail" data-tooltip="feedback" @click="isSendEmail = true" class="font-awesome-i fa-solid fa-envelope"></i>
           <div v-if="!isSendEmail" class="dropdown" @click="toggleDropdown('dropdownview', true)">
             <i data-tooltip="view or export the data" class="font-awesome-i fa-solid fa-file-export"></i>
