@@ -15,9 +15,7 @@ cd ./nginx/html
 html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o output.html index.html
 html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o index.html index.b.html
 
-html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o log.html log.b.html
-html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o 518a909927f279c78581ba5b3ea63c46.html log.b.html 
-
+html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o exportHtmlModel.html exportHtmlModel.b.html
 ## JS
 
 Soredemo js o kakitai md5=6974850989e8a6a37d36f56eee8fe955
@@ -35,4 +33,3 @@ javascript-obfuscator script.js --output 6974850989e8a6a37d36f56eee8fe955.min.js
 2. ./static/styles/styles.css add index.b.html
 2. Minification index.b.html & styles.css
 html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o output.html index.html
-3. log.html Minification and rename to Soredemo nikki wa kakitai md5=518a909927f279c78581ba5b3ea63c46
