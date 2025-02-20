@@ -107,9 +107,13 @@ createApp({
             }
         },
         html(){
+
+            let htmlContent = `
+               <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Todo List Export</title><link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Glitch&family=Nabla&family=Butcherman&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.todo-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:Creepster,cursive;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3);font-size:2.5em;text-align:center;margin-bottom:20px}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
+            `;
             // 整理所有待辦事項到一個陣列
             const allTodos = [];
-                    
+        
             // 遍歷每個分類並整理資料
             Object.entries(this.todoList).forEach(([category, items]) => {
                 items.forEach(item => {
@@ -122,72 +126,58 @@ createApp({
             
             // 按日期降序排序
             allTodos.sort((a, b) => new Date(b.date) - new Date(a.date));
-            let htmlContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Todo List Export</title>
-                    <link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
-                    <style>
-                               body {
-font-family: Arial, sans-serif;
-background-color: #1E1E1E;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-margin: 0;
-}
 
-                        .todo-item { 
-                            border-bottom: 1px solid #eee; 
-                            padding: 10px;
-                            display: flex;
-                            align-items: center;
-                        }
-                        .date { color: #e0e0e0; margin-right: 15px; }
-                        .category { 
-                            background:rgb(122, 119, 119);
-                            padding: 3px 8px;
-                            border-radius: 3px;
-                            margin-right: 15px;
-                        }
-                        .completed { text-decoration: line-through; color: #999; }
-                                .text-content {
-    flex: 1;  /* 讓文字內容占用剩餘空間 */
-    word-wrap: break-word;  /* 允許長單字換行 */
-    min-width: 0;  /* 確保可以正確換行 */
-}
-.todo-container {
-width: 80%;
-color: #e0e0e0;
-padding: 20px;
-}
-                        
-                    </style>
-                </head>
-                <body>
-                    <div class="todo-container">
-            `;
-            
-            // 加入每個待辦事項
-            allTodos.forEach(todo => {
-                const itemClass = todo.completed ? 'completed' : '';
-                htmlContent += `
-                <div class="todo-item">
-                        <span class="date">${todo.date}</span>
-                        <span class="category">${todo.category}</span>
-                        <span class="text-content ${itemClass}">${todo.text}</span>
-                    </div>
-                    `;
-                });
+            // 按 category 和 date 分組
+const groupedTodos = {};
+
+// 依類別與日期與完成狀態分組
+allTodos.forEach(todo => {
+    // 確保 completed 是字串形式的 "true" 或 "false"
+    const completedStatus = String(todo.completed);
+
+    if (!groupedTodos[todo.category]) {
+        groupedTodos[todo.category] = {};
+    }
+    if (!groupedTodos[todo.category][todo.date]) {
+        groupedTodos[todo.category][todo.date] = { true: [], false: [] };
+    }
+
+    // 檢查是否存在對應的陣列
+    if (!groupedTodos[todo.category][todo.date][completedStatus]) {
+        groupedTodos[todo.category][todo.date][completedStatus] = [];
+    }
+
+    groupedTodos[todo.category][todo.date][completedStatus].push(todo.text);
+});
+
+// 依照類別與日期排序
+const sortedCategories = Object.keys(groupedTodos).sort(); // 類別排序
+
+sortedCategories.forEach(category => {
+    htmlContent += `<h1 class="heading-style1">${category}</h1>`;
+
+    // 日期排序（由新到舊）
+    const sortedDates = Object.keys(groupedTodos[category]).sort((a, b) => new Date(b) - new Date(a));
+
+    sortedDates.forEach(date => {
+        htmlContent += `<div class="log-entry">`;
+
+        // 遍歷 `true`（完成） 和 `false`（未完成）
+        Object.keys(groupedTodos[category][date]).forEach(status => {
+            let isCompleted = status === "true"; // 轉換為布林值
+            let itemClass = isCompleted ? "completed" : "pending"; // 設定不同的 CSS 類別
+
+            groupedTodos[category][date][status].forEach((task, index) => {
+                htmlContent += `<div class="text-content ${itemClass}">${index + 1}. ${task}</div>`;
+            });
+        });
+
+        htmlContent += `<div class="date-title">${date}</div>`;
+        htmlContent += `</div>`;
+    });
+});
                 
-            htmlContent += `
-                </div>
-                </body>
-                </html>
-            `;
+            htmlContent += `</div></div></body></html>`;
             return htmlContent;
 
         },
@@ -274,6 +264,11 @@ padding: 20px;
             this.saveTodos();
             notyf.success("add task successfully!");
         },
+        copyTodo(text) {
+            navigator.clipboard.writeText(text.trim())
+                .then(() => notyf.success("copy success！"))
+                .catch(err => console.error("copy error！", err));
+        },
         checkTodo(category, index) {
             this.todoList[category][index].completed = !this.todoList[category][index].completed;
             this.saveTodos();
@@ -281,14 +276,21 @@ padding: 20px;
                 notyf.success(`check task successfully!`);
             }
         },
-        removeTodo(category, index) {
-            this.todoList[category].splice(index, 1);
-
-            // if (this.todoList[category].length === 0) {
-            //     delete this.todoList[category];
-            // }
-            this.saveTodos();
-            notyf.success("task successfully removed!");
+        removeTodo(category, index ,text) {
+            const userConfirmed = window.confirm(`Are you sure you want to delete '${text}'?`);
+            if (userConfirmed) {
+                this.todoList[category].splice(index, 1);
+                this.saveTodos();
+                notyf.success(`Successfully deleted '${text}' permanently.`);
+            }
+            setTimeout(() => {
+                if (this.todoList[category].length === 0) {
+                    const userConfirmed2 = window.confirm(`No tasks available. Do you want to delete '${category}'?`);
+                    if (userConfirmed2) {
+                        this.removeCategory(category);
+                    }
+                }
+            }, 2000);
         },
         toggleCategory(category) {
             const index = this.expandedCategories.indexOf(category);

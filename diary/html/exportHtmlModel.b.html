@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Diary Export</title>
+  <link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #e0e0e0;
+      transition: background .3s, color .3s
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+    }
+
+    .log-container {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-top: 10px;
+    }
+
+    .log-entry {
+      word-wrap: break-word;
+      padding: 15px;
+      border-radius: 50px;
+      box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+      white-space: pre-line;
+      color: #e0e0e0;
+      transition: background 1s, margin 1s, color .3s
+    }
+
+    .log-entry:hover {
+      background: #2C2C2C;
+      margin: 10px 0px;
+      box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    }
+
+    .log-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #fff
+    }
+
+    .timestamp {
+      font-size: 14px;
+      font-weight: 700;
+      color: #a0a0a0;
+      display: block;
+      margin-top: 5px
+    }
+
+    a {
+      color: #fff
+    }
+
+    .light-mode a {
+      color: #1e1e1e
+    }
+
+    .light-mode {
+      background-color: #414242;
+      color: #333;
+      margin-bottom: 10px
+    }
+
+    .light-mode .log-entry {
+      background: #fff;
+      color: #333;
+      border-left: 5px solid;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .1)
+    }
+
+    pre {
+      white-space: pre-wrap;
+      /* 保留換行並自動換行 */
+      word-wrap: break-word;
+      /* 讓長單詞換行 */
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container">
