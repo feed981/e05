@@ -84,8 +84,6 @@ const encryptionService = {
 createApp({
     data() {
         return {
-            isLoading1: false,
-            isLoading2: false,
             isLight: false,
             isCrypt: true,
             username: '',
@@ -95,6 +93,8 @@ createApp({
             success: '',
             successMessage: '',
             isSendEmail: false,
+            isLoading: false,
+            isLoading2: false,
             formData: {
                 to_email: '',
                 from_name: '',
@@ -235,13 +235,13 @@ createApp({
                 .catch(err => console.error("copy error！", err));
         },
         async encrypt() {
-            this.isLoading1 = true;
+            this.isLoading = true;
             this.errorMessage = '';
             this.successMessage = '';
             
             if (!this.itemname || !this.username || !this.password) {
                 notyf.error("Please complete all fields！");
-                this.isLoading1 = false;
+                this.isLoading = false;
                 return;
             }
 
@@ -253,7 +253,7 @@ createApp({
             
             const encryptedData = await encryptionService.encryptData(
                 sensitiveData, 
-                (state) => this.isLoading1 = state // 當失敗時，回調修改 isLoading1
+                (state) => this.isLoading = state // 當失敗時，回調修改 isLoading1
             );
             
             this.isLoading2 = true;
@@ -285,18 +285,18 @@ createApp({
                     console.error('Error', error.message);
                 }
             }).finally(() => { 
-                this.isLoading1 = false
+                this.isLoading = false
                 this.isLoading2 = false
             });
         },
         async decrypt() {
-            this.isLoading1 = true;
+            this.isLoading = true;
             this.errorMessage = '';
             this.successMessage = '';
             
             if (!this.itemname || !this.username || !this.password) {
                 notyf.error("Please complete all fields！");
-                this.isLoading1 = false;
+                this.isLoading = false;
                 return;
             }
 
@@ -308,7 +308,7 @@ createApp({
             
             const encryptedData = await encryptionService.encryptData(
                 sensitiveData, 
-                (state) => this.isLoading1 = state
+                (state) => this.isLoading = state
             );
 
             this.isLoading2 = true;
@@ -340,7 +340,7 @@ createApp({
                     console.error('Error', error.message);
                 }
             }).finally(() => { 
-                this.isLoading1 = false;
+                this.isLoading = false;
                 this.isLoading2 = false;
             });
         },
