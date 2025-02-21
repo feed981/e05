@@ -11,14 +11,16 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Glitch&family=Nabla&family=Butcherman&display=swap"
-    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Glitch&family=Nabla&family=Butcherman&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=BhuTuka+Expanded+One&family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "BhuTuka Expanded One", serif;
       background-color: #1E1E1E;
       display: flex;
       justify-content: center;
@@ -47,6 +49,7 @@
       color: #e0e0e0;
       padding: 20px;
       border-radius: 10px;
+      font-size: 12px;
       text-align: left;
       width: 400px;
       box-shadow: 0 4px 8px rgba(0.1, 0, 0, 0.1);
@@ -138,14 +141,6 @@
     }
 
 
-    input[type=checkbox] {
-      height: 0;
-      width: 0;
-      visibility: hidden;
-    }
-
-
-
     .button-container {
       display: flex;
       justify-content: space-between;
@@ -226,9 +221,31 @@
       color: #69affa;
       text-shadow: 2px 2px 4px rgba(95, 110, 192, 0.3);
     }
+    .light-mode .metamorphous-regular {
+  font-family: "Metamorphous", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #51b7f3;
+      text-shadow: 2px 2px 4px rgba(252, 252, 255, 0.842);
+  font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 20px;
+}
+
+.light-mode .vujahday-script-regular {
+  font-family: "Vujahday Script", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+  color: #1287ca;
+      text-shadow: 2px 2px 4px rgba(141, 141, 196, 0.3);
+}
+
 
 
     .date {
+      font-family: "BhuTuka Expanded One", serif;
+      font-size: 12px;
       padding: 8px 12px;
       border: 2px;
       border-radius: 5px;
@@ -246,6 +263,8 @@
     }
 
     select {
+      font-family: "BhuTuka Expanded One", serif;
+      font-size: 12px;
       padding: 8px 12px;
       border-radius: 5px;
       background: #39b2f8;
@@ -341,6 +360,7 @@
 
     .dropdown-menu li {
       padding: 10px;
+      font-size: 10px;
       cursor: pointer;
     }
 
@@ -371,6 +391,7 @@
     }
 
     .notyf__toast {
+      font-family: Arial, sans-serif;
       max-width: 300px;
       /* 設定最大寬度 */
       white-space: normal;
@@ -440,6 +461,57 @@
       transform: translateX(-50%) translateY(-5px);
       /* Slight upward animation */
     }
+
+    .indie-flower-regular {
+  font-family: "Indie Flower", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2.5em;
+      text-align: center;
+      margin-bottom: 20px;
+}
+.wire-one-regular {
+  font-family: "Wire One", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #1287ca;
+      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+  font-size: 2.5em;
+      text-align: center;
+      margin-bottom: 20px;
+}
+
+.vujahday-script-regular {
+  font-family: "Vujahday Script", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+  color: #1287ca;
+      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+}
+
+
+.metamorphous-regular {
+  font-family: "Metamorphous", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #1287ca;
+      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+  font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 20px;
+}
+.bhutuka-expanded-one-regular {
+  font-family: "BhuTuka Expanded One", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1287ca;
+      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+}
+
 
     .heading-style1 {
       font-family: 'Creepster', cursive;
@@ -546,7 +618,7 @@
 
     <div v-if="isSendEmail" class="todo-container">
       <div class="card">
-        <h1 class="heading-style1">FEEDBACK!</h1>
+        <h1 class="bhutuka-expanded-one-regular">FEEDBACK!</h1>
         <form @submit.prevent="handleSubmit">
           <div class="input-container">
             <input type="email" v-model="formData.to_email" required placeholder="recipient@example.com">
@@ -569,7 +641,7 @@
 
     <div v-if="!isCategoryVisible && !isSendEmail" class="todo-container">
 
-      <h1 class="heading-style1">TODOLIST!</h1>
+      <h1 class="bhutuka-expanded-one-regular">TODOLIST!</h1>
 
       <div class="button-container">
         <div class="flex-container">
@@ -597,7 +669,7 @@
 
     <div v-if="isCategoryVisible && !isSendEmail" class="todo-container">
 
-      <h1 class="heading-style1">new CATEGORY!</h1>
+      <h1 class="bhutuka-expanded-one-regular">new CATEGORY!</h1>
       <div class="input-container">
         <input type="text" style="margin-right: 0px;" v-model="newCategory" placeholder="Enter a new category..."
           required>
@@ -630,7 +702,7 @@
             </div>
             <span class="text-content" @click="checkTodo(category, index)">　{{ todo.date }}　{{ todo.text }}</span>
             <div class="menu">
-              <i data-tooltip="copy todo" @click="copyTodo(todo.text)" class="font-awesome-i fa-solid fa-copy"></i>
+              <i data-tooltip="copy todo" @click="copyTodo(todo.text)" class="font-awesome-i fa-regular fa-copy"></i>
               <i data-tooltip="remove todo" @click="removeTodo(category, index, todo.text)"
                 class="font-awesome-i fa-solid fa-trash"></i>
             </div>

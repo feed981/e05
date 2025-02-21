@@ -13,14 +13,17 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Glitch&family=Nabla&family=Butcherman&display=swap"
-    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Glitch&family=Nabla&family=Butcherman&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Grechen+Fuemen&family=Piedra&family=Sigmar&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Piedra&family=Sigmar&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Indie Flower", serif;
       background-color: #1E1E1E;
       display: flex;
       justify-content: center;
@@ -86,6 +89,7 @@
     }
 
     .button2 {
+      font-family: "Indie Flower", serif;
       background: #28a745;
       color: white;
       padding: 10px;
@@ -95,6 +99,7 @@
       margin-top: 10px;
       box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
       transition: background-color 0.3s ease, color 0.3s ease;
+      font-size: 16px;
     }
 
     .button2:hover {
@@ -128,6 +133,7 @@
     }
 
     .day {
+      font-size: 16px;
       padding: 10px;
       background: #ddd;
       cursor: pointer;
@@ -217,6 +223,7 @@
     }
 
     .day-header {
+      font-size: 16px;
       padding: 10px;
       background: #ddd;
       cursor: auto;
@@ -296,6 +303,20 @@
       text-align: center;
       margin-bottom: 20px;
     }
+
+    
+    .light-mode  .grechen-fuemen-regular {
+  font-family: "Grechen Fuemen", serif;
+  filter: hue-rotate(75deg) brightness(60%) contrast(300%);
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #fff;
+  mix-blend-mode: multiply; /* 讓文字與背景有融合感 */
+  filter: '';
+
+}
 
     .light-mode .selectedDate {
       font-family: 'Nabla', cursive;
@@ -422,6 +443,45 @@
       color: #fff;
     }
 
+    .sigmar-regular {
+  font-family: "Sigmar", serif;
+  filter: hue-rotate(75deg) brightness(60%) contrast(300%);
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.grechen-fuemen-regular {
+  font-family: "Grechen Fuemen", serif;
+  filter: hue-rotate(75deg) brightness(60%) contrast(300%);
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #fff;
+  filter: brightness(70%) contrast(120%) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.8));
+}
+
+.indie-flower-regular {
+  font-family: "Indie Flower", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2.5em;
+      text-align: center;
+      margin-bottom: 20px;
+}
+.wire-one-regular {
+  font-family: "Wire One", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #d4faea;
+      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+  font-size: 2.5em;
+      text-align: center;
+      margin-bottom: 20px;
+}
+/*heading-style4 -> grechen-fuemen-regular*/
     .heading-style4 {
       font-family: 'Nabla', cursive;
       filter: hue-rotate(75deg) brightness(60%) contrast(300%);
@@ -431,8 +491,8 @@
     }
 
     .selectedDate {
-      font-family: 'Nabla', cursive;
-      filter: hue-rotate(75deg) brightness(60%) contrast(300%);
+      /* font-family: 'Nabla', cursive;
+      filter: hue-rotate(75deg) brightness(60%) contrast(300%); */
       font-size: 20px;
     }
 
@@ -462,6 +522,7 @@
     }
 
     .dropdown-menu li {
+      font-size: 16px;
       padding: 10px;
       cursor: pointer;
     }
@@ -586,7 +647,7 @@
 
     <div v-if="isSendEmail" class="auth-container">
       <div class="card">
-        <h1 class="heading-style4">FEEDBACK!</h1>
+        <h1 class="indie-flower-regular">FEEDBACK!</h1>
         <form @submit.prevent="handleSubmit">
           <div class="input-container">
             <input type="email" stlye="margin-right: 0px;" v-model="formData.to_email" required
@@ -609,7 +670,7 @@
     </div>
 
     <div v-if="!isCalendarVisible && !isSendEmail" class="auth-container">
-      <h1 class="heading-style4">DIARY!</h1>
+      <h1 class="indie-flower-regular">DIARY!</h1>
 
       <div class="input-container">
         <input type="text" v-model="username" placeholder="username..." required>
@@ -623,7 +684,7 @@
     </div>
 
     <div v-if="isCalendarVisible && !isDiaryVisible && !isSendEmail" class="calendar-container">
-      <h1 class="heading-style4">DIARY CALENDAR!</h1>
+      <h1 class="indie-flower-regular">DIARY CALENDAR!</h1>
 
       <div id="calendar-nav">
         <button class="button2" @click="prevYear">« Prev Year</button>
@@ -648,7 +709,7 @@
     <div v-if="isDiaryVisible && !isSendEmail" class="diary-container" :style="{ height: containerHeight + 'px' }">
       <div>
 
-        <h1 class="heading-style4" ref="diaryTitle">DIARY ENTRY!</h1>
+        <h1 class="indie-flower-regular" ref="diaryTitle">DIARY ENTRY!</h1>
         <span class="selectedDate" v-if="isDiaryVisible">{{ selectedDate }}</span>
       </div>
       <textarea v-model="diaryEntry" ref="diaryTextarea"></textarea>
