@@ -311,6 +311,81 @@
       cursor: pointer;
     }
 
+    .loading {
+  width: 50px;
+  perspective: 200px;
+}
+
+.loading:before,
+.loading:after {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  content: "";
+  animation: jumping 0.5s infinite alternate;
+  background: rgba(212, 200, 32, 0.11);
+}
+
+.loading:before {
+  left: 0;
+}
+
+.loading:after {
+  right: 0;
+  animation-delay: 0.15s;
+}
+
+@keyframes jumping {
+  0% {
+    transform: scale(1) translateY(0px) rotateX(0deg);
+    box-shadow: 0 0 0 rgb(255, 222, 34);
+  }
+
+  100% {
+    transform: scale(1.2) translateY(-25px) rotateX(45deg);
+    background: #ffee00e3;
+    box-shadow: 0 25px 40px #000;
+  }
+}
+
+.loading2 {
+  width: 50px;
+  perspective: 200px;
+}
+
+.loading2:before,
+.loading2:after {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  content: "";
+  animation: jumping 0.5s infinite alternate;
+  background: rgba(212, 200, 32, 0.11);
+}
+
+.loading2:before {
+  left: 0;
+}
+
+.loading2:after {
+  right: 0;
+  animation-delay: 0.15s;
+}
+
+@keyframes jumping2 {
+  0% {
+    transform: scale(1) translateY(0px) rotateX(0deg);
+    box-shadow: 0 0 0 rgb(255, 203, 34);
+  }
+
+  100% {
+    transform: scale(1.2) translateY(-25px) rotateX(45deg);
+    background: #ffd900;
+    box-shadow: 0 25px 40px #000;
+  }
+}
+
+
     @media screen and (max-width: 768px) {
       .converter-container {
         background: #1E1E1E;
@@ -414,15 +489,23 @@
         <input type="text" class="input-text" style="margin-right: 0px;" v-model="password" placeholder="ivSpec..."
           required>
       </div>
-      <div v-if="isLoading1" class="loader-container">
-        <div class="loader1">
+      <div class="loader-container">
+        <div  v-if="isLoading" class="loading">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div v-if="isLoading2" class="loading2">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </div>
 
-      <div v-if="isLoading2" class="loader-container">
-        <div class="loader2">
-        </div>
-      </div>
       <div class="menu menu2">
         <i v-if="isCrypt" data-tooltip="encrypt" @click="encrypt" class="font-awesome-i fa-solid fa-paper-plane"></i>
         <i data-tooltip="toggle_on encrypt" v-if="isCrypt" @click="isCrypt = false"

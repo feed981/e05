@@ -35,6 +35,7 @@ createApp({
             dropdownview: false,
             isLogin: false,
             isSendEmail: false,
+            isLoading: false,
             formData: {
                 to_email: '',
                 from_name: '',
@@ -44,7 +45,8 @@ createApp({
             },
             status: '',
             sending: false,
-            isError: false
+            isError: false,
+            calendarKey: 0
         };
     },
     watch: {
@@ -189,6 +191,74 @@ createApp({
             const today = new Date();
             return today.toISOString().split("T")[0]; // 轉成 YYYY-MM-DD 格式
         },
+        handleFileUpload(event){
+            const diaries = ([]);
+            const file = event.target.files[0];
+            if (!file) return;
+            this.isLoading = true;
+            
+            const fileName = file.name; // 獲取檔名
+            const match = fileName.match(/^diary_(\w+)_\d{4}-\d{2}-\d{2}\.json$/);
+/**
+ * 
+diary_bbb.json	 允許
+diary_ccc.json	 拒絕（user 不符）
+diary_bbb.txt	 拒絕（格式錯誤）
+random_file.json	 拒絕（檔名格式錯誤）
+diary_bbb_2025-02-21.json	 允許
+ */
+            if (!match) {
+                notyf.error("Failed to import ,please check your file format!");
+                this.isLoading = false;
+                return;
+            }
+
+            const fileUser = match[1]; // 取得 user
+            const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+            
+            if (fileUser !== this.currentUser) {
+                notyf.error(`Failed to import ${fileUser} ,is not ${this.currentUser}'s file!`);
+                this.isLoading = false;
+                return;
+            }
+
+            // 檔案格式必須為 json
+            if (extension !== "json") {
+                notyf.error(`Failed to import ${extension} file!`);
+                this.isLoading = false;
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    // 解析 JSON 並存入 localStorage
+                    diaries.value = Object.entries(json)
+                    .map(([key, text]) => {
+                        const date = key.split("_").slice(-1)[0]; // 提取日期
+                        this.importSaveDiary(fileUser, text, date); // 直接存入 localStorage
+                        return { date, text };
+                    })
+                    .sort((a, b) => new Date(b.date) - new Date(a.date)); // 按日期排序（新 → 舊）
+                } catch (error) {
+                    console.error('Import failed:', error);
+                    notyf.error("Failed to import！");
+                }
+            };
+            reader.readAsText(file);
+
+            diaries.value = []; // 清空
+            setTimeout(() => {
+                this.calendarKey += 1; // 改變 key 來強制 Vue 重新渲染
+                this.dropdownview = false;
+            }, 100);
+            setTimeout(() => {
+                this.isLoading = false;
+                notyf.success("LoadDiaries successfully!");
+            }, 3000);
+
+        },
         exportfile(template ,format ,type ,user){
             try {
                 const blob = new Blob([template], { type: type });
@@ -312,7 +382,17 @@ createApp({
             this.isDiaryVisible = true;
             
           },
-      
+          importSaveDiary(user, text, date) {
+            const key = `diary_${user}_${date}`;
+            const existing = localStorage.getItem(key);
+            if (text.trim()) {
+                if (existing) {
+                    localStorage.setItem(key, existing + "\n" + text); // 已有日記則追加
+                } else {
+                    localStorage.setItem(key, text);
+                }
+            }
+        },
           saveDiary() {
             if (this.diaryEntry.trim()) {
               localStorage.setItem(`diary_${this.currentUser}_${this.selectedDate}`, this.diaryEntry);

@@ -9,6 +9,21 @@ const notyf = new Notyf({
     }
 });
 
+const notyf2 = new Notyf({
+    duration: 3000, // 訊息顯示時間
+    dismissible: true, // 允許關閉
+    position: {
+        x: 'center',
+        y: 'top',
+    },
+    types: [
+        {
+            type: 'warning',
+            background: 'orange', // 背景顏色
+        }
+    ]
+});
+
 (function() {
     emailjs.init("un2nCxSnYlqZWdgMG");
 })();
@@ -36,7 +51,11 @@ createApp({
             },
             status: '',
             sending: false,
-            isError: false
+            isError: false,
+            isImport: false,
+            isLoading: false,
+            selectedFile: null, // 用來儲存選擇的檔案
+            categoryKey: 0
         };
     },
     computed: {
@@ -109,7 +128,7 @@ createApp({
         html(){
 
             let htmlContent = `
-               <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Todo List Export</title><link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Glitch&family=Nabla&family=Butcherman&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.todo-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:Creepster,cursive;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3);font-size:2.5em;text-align:center;margin-bottom:20px}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Todo List Export</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=BhuTuka+Expanded+One&family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:"BhuTuka Expanded One",serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.todo-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:"BhuTuka Expanded One",serif;font-weight:400;font-style:normal;font-size:1.5em;text-align:center;margin-bottom:20px;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3)}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
             `;
             // 整理所有待辦事項到一個陣列
             const allTodos = [];
@@ -188,11 +207,9 @@ sortedCategories.forEach(category => {
                     newTab.document.write(template);
                     newTab.document.close();
                 } else {
-                    notyf.open({
+                    notyf2.open({
                         type: 'warning',
-                        message: `請允許彈出視窗以顯示 ${text}!`,
-                        background: 'orange',
-                        duration: 5000 // 5 秒後消失
+                        message: '請允許彈出視窗以顯示 ${text}!'
                     });
                 }
             } catch (error) {
@@ -211,6 +228,70 @@ sortedCategories.forEach(category => {
                 let htmlContent = this.html();
                 this.viewopen(htmlContent ,format)
             }
+        },
+        handleFileChange(event) {
+            this.selectedFile = event.target.files[0]; // 存入 data
+        },
+        handleFileUpload(type){
+            const file = this.selectedFile;
+            if (!file){
+                notyf.error("Please select the file first!");
+                return;
+            }
+
+            const fileName = file.name; // 獲取檔名
+            const match = fileName.match(/^todo_\d{4}-\d{2}-\d{2}\.json$/);
+
+            if (!match) {
+                notyf.error("Failed to import ,please check your file format!");
+                return;
+            }
+
+            const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+            
+            // 檔案格式必須為 json
+            if (extension !== "json") {
+                notyf.error(`Failed to import ${extension} file!`);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if(type === 'overwrite'){
+                        localStorage.setItem("todos", JSON.stringify(json));
+                        notyf.success("Coverage completed and reorganizing in progress...");
+                        this.isLoading = true;
+                    }else if(type === 'append'){
+                        notyf2.open({
+                            type: 'warning',
+                            message: 'not working yet ,coming soon...'
+                        });
+                        // notyf.success("Adding completed Reorganizing in progress...");
+                        this.isLoading = true;
+                    }
+                } catch (error) {
+                    console.error('Import failed:', error);
+                    notyf.error("Failed to import！");
+                }
+            };
+            reader.readAsText(file);
+
+            setTimeout(() => {
+                this.isImport = false;
+                this.isLoading = false;
+                window.location.href = window.location.href;
+                // this.categoryKey.value += 1; // 改變 key 來強制 Vue 重新渲染
+                // this.dropdownview = false;
+            }, 3000);
+
+        },
+        importAs(format){
+            this.isImport = true;
+            setTimeout(() => {
+                this.dropdownview = false;
+            }, 100);
         },
         exportfile(template ,text ,type){
             try {
