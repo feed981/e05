@@ -253,6 +253,12 @@
   color: #313030;
 }
 
+.light-mode .dropdown-menu{
+  color: #000;
+  background: #fff;
+}
+
+
     .date {
       font-family: "BhuTuka Expanded One", serif;
       font-size: 12px;
@@ -304,6 +310,9 @@
     }
 
 
+    .category-select{
+      width: 80%;
+    }
     .category {
       background-color: #494848;
       border-left: 4px solid rgb(56, 56, 56);
@@ -345,14 +354,17 @@
       border-bottom: 4px solid #414141;
     }
 
+    .hamburger{
+      text-align: left;
+    }
     .dropdown {
       position: relative;
-      display: inline-block;
-      margin-right: 20px;
+      /* display: inline-block; */
+      /* margin-right: 20px; */
       cursor: pointer;
       z-index: 9999;
-    }
 
+    }
 
     .dropdown-menu {
       position: absolute;
@@ -360,18 +372,29 @@
       left: 0;
       color: #e0e0e0;
       background: #2C2C2C;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
       list-style: none;
       padding: 0;
       margin: 0;
       width: 150px;
       transition: all 0.3s ease;
+      border-radius: 10px;
+    }
+    .dropdown-menu li i{
+      width: 30px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .dropdown-menu li span{
+      font-size: 10px;
+      cursor: pointer;
     }
 
     .dropdown-menu li {
       padding: 10px;
       font-size: 10px;
       cursor: pointer;
+      border-radius: 10px;
     }
 
     .dropdown-menu li:hover {
@@ -388,7 +411,9 @@
       color: #fff;
     }
 
-
+    .bars{
+      width: 220px;
+    }
 
     .text-content {
       flex: 1;
@@ -719,7 +744,6 @@
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
       }
 
-
       .light-mode .category-container {
         background-color: #fff;
         color: #000;
@@ -728,7 +752,6 @@
         width: 300px;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
       }
-
 
       .menu i {
         font-size: 22px;
@@ -760,33 +783,16 @@
 <body>
   <div id="app" class="app-container">
 
-    <div class="basic-menu menu">
-      <i data-tooltip="toggle_on the light" v-if="isLight" @click="isLight = false"
-        class="font-awesome-i fa-solid fa-toggle-on"></i>
-      <i data-tooltip="toggle_off the light" v-if="!isLight" @click="isLight = true"
-        class="font-awesome-i fa-solid fa-toggle-off"></i>
-      <i v-if="!isSendEmail" data-tooltip="feedback" @click="isSendEmail = true"
-        class="font-awesome-i fa-solid fa-envelope"></i>
-      <div v-if="!isSendEmail" class="dropdown" @click="toggleDropdown('dropdownview', true)">
-        <i data-tooltip="view or export the data" class="font-awesome-i fa-solid fa-file-export"></i>
-        <ul v-show="dropdownview" class="dropdown-menu">
-          <li @click="viewAs('json')">View as JSON</li>
-          <li @click="viewAs('html')">View as HTML</li>
-          <li @click="importAs('json')">Import as JSON</li>
-          <li @click="exportAs('json')">Export as JSON</li>
-          <li @click="exportAs('html')">Export as HTML</li>
-          <li @click="toggleDropdown('dropdownview', false)"><i data-tooltip="close"
-              class="font-awesome-i fa-regular fa-circle-xmark"></i></li>
-        </ul>
-      </div>
-    </div>
-
     <div v-if="isSendEmail &&!isImport" class="todo-container">
+      <dropdown-menu-1 
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible">
+      ></dropdown-menu-1>
       <div class="card">
         <h1 class="bhutuka-expanded-one-regular">FEEDBACK!</h1>
         <form @submit.prevent="handleSubmit">
           <div class="input-container">
-            <input type="email" v-model="formData.to_email" required placeholder="recipient@example.com">
+            <input type="email" v-model="formData.to_email" required placeholder="sender@example.com">
             <input type="text" style="margin-right: 0px;" v-model="formData.from_name" required
               placeholder="Enter your name...">
           </div>
@@ -825,15 +831,15 @@
     </div>
     
     <div v-if="!isCategoryVisible && !isSendEmail &&!isImport" class="todo-container">
-
+      <dropdown-menu-1
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible">
+      </dropdown-menu-1>
       <h1 class="bhutuka-expanded-one-regular">TODOLIST!</h1>
 
       <div class="button-container">
         <div class="flex-container">
-          <div class="menu">
-            <i data-tooltip="add category" @click="isCategoryVisible = true" class="font-awesome-i fa-solid fa-add"></i>
-          </div>
-          <select v-model="selectedCategory" :key="categoryKey">
+          <select class="category-select" v-model="selectedCategory" :key="categoryKey">
             <option value="">category</option>
             <option v-for="(todos, category) in todoList" :key="category" :value="category">
               {{ category }}
@@ -853,7 +859,10 @@
     </div>
 
     <div v-if="isCategoryVisible && !isSendEmail &&!isImport" class="todo-container">
-
+      <dropdown-menu-1
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible">
+      </dropdown-menu-1>
       <h1 class="bhutuka-expanded-one-regular">new CATEGORY!</h1>
       <div class="input-container">
         <input type="text" style="margin-right: 0px;" v-model="newCategory" placeholder="Enter a new category..."
@@ -881,16 +890,25 @@
         <div v-show="expandedCategories.includes(category)" class="category-content">
           <div v-for="(todo, index) in sortedTodos(todos)" :key="index" class="todo-item"
             :class="{ completed: todo.completed }">
-            <div class="menu">
-              <i data-tooltip="check todo" @click="checkTodo(category, index)"
-                class="font-awesome-i fa-regular fa-square-check"></i>
-            </div>
             <span class="text-content" @click="checkTodo(category, index)">　{{ todo.date }}　{{ todo.text }}</span>
-            <div class="menu">
-              <i data-tooltip="copy todo" @click="copyTodo(todo.text)" class="font-awesome-i fa-regular fa-copy"></i>
-              <i data-tooltip="remove todo" @click="removeTodo(category, index, todo.text)"
-                class="font-awesome-i fa-solid fa-trash"></i>
+            
+            <div class="hamburger">
+              <div class="dropdown">
+                <i class="font-awesome-i fa-solid fa-bars" @click="toggleBarsTodo"></i>
+                <ul v-show="dropdownviewTodo" class="dropdown-menu bars">
+                  <li @click="checkTodo(category, index)" >
+                    <i class="font-awesome-i fa-regular fa-square-check"></i><span>|　check todo</span>
+                  </li>
+                  <li @click="copyTodo(todo.text)" >
+                    <i class="font-awesome-i fa-regular fa-copy"></i><span>|　copy todo text</span>
+                  </li>
+                  <li @click="removeTodo(category, index, todo.text)" >
+                    <i class="font-awesome-i fa-solid fa-trash"></i><span>|　remove todo</span>
+                  </li>
+                </ul>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -898,7 +916,8 @@
     </div>
 
   </div>
-  <script src="https://d2luynvj2paf55.cloudfront.net/t/6974850989e8a6a37d36f56eee8fe955.min.js"></script>
+  <script src="./static/script/script.js"></script>
+  <!-- <script src="https://d2luynvj2paf55.cloudfront.net/t/6974850989e8a6a37d36f56eee8fe955.min.js"></script> -->
 </body>
 
 </html>
