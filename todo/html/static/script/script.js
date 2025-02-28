@@ -1,4 +1,4 @@
-const { createApp } = Vue;
+const { createApp, ref ,watch } = Vue;
 
 const notyf = new Notyf({
     duration: 3000, // 顯示 3 秒
@@ -24,6 +24,86 @@ const notyf2 = new Notyf({
     ]
 });
 
+
+const DropdownMenu1 = {
+    props: ['isSendEmail','isCategoryVisible'],  // 接收父组件的值
+    emits: ['update:isSendEmail','update:isCategoryVisible'],  // 允许子组件更新父组件
+
+    template: `<div class="hamburger">
+        <div class="dropdown">
+            <i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>
+            <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
+                <li v-if="isLight" @click="isLight = false">
+                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　toggle light-mode</span>
+                </li>
+                <li v-if="!isLight" @click="isLight = true">
+                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　toggle dark-mode</span>
+                </li>
+                <li v-if="!isSendEmail" @click="$emit('update:isSendEmail', true)">
+                    <i class="font-awesome-i fa-solid fa-envelope"></i><span>|　feedback</span>
+                </li>
+                <li v-if="isSendEmail" @click="$emit('update:isSendEmail', false)">
+                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
+                </li>
+                <li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown">
+                    <i class="font-awesome-i fa-solid fa-file-export"></i><span>|　view / import / export</span>
+                    <ul v-show="dropdownview" class="dropdown-menu">
+                    <li @click="viewAs('json')">View as JSON</li>
+                    <li @click="viewAs('html')">View as HTML</li>
+                    <li @click="importAs('json')">Import as JSON</li>
+                    <li @click="exportAs('json')">Export as JSON</li>
+                    <li @click="exportAs('html')">Export as HTML</li>
+                    </ul>
+                </li>
+                <li v-if="!isSendEmail"  @click="$emit('update:isCategoryVisible', true)">
+                    <i class="font-awesome-i fa-solid fa-add"></i><span>|　add new category</span>
+                </li>
+                <li v-if="!isSendEmail && isCategoryVisible" @click="$emit('update:isCategoryVisible', false)">
+                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
+                </li>
+            </ul>
+        </div>
+        </div>
+    `,
+    setup() {
+        // 切換 isBars 狀態
+        const dropdownviewHeader = Vue.ref(false);
+        
+        const toggleBars = () => {
+            dropdownviewHeader.value = !dropdownviewHeader.value; // true <-> false
+        };
+        
+        const isLight = Vue.ref(false);
+
+        Vue.watch(isLight, (newVal) => {
+            toggleBars();
+            if (newVal) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+
+        // view , import ,export start
+        const dropdownview = Vue.ref(false);
+        
+        const toggleDropdown = () => {
+            dropdownview.value = !dropdownview.value; // true <-> false
+        };
+        // view , import ,export end
+
+
+        return { 
+            toggleBars, dropdownviewHeader, 
+            isLight,
+            toggleDropdown, dropdownview
+        };
+    }
+};
+
 (function() {
     emailjs.init("un2nCxSnYlqZWdgMG");
 })();
@@ -31,17 +111,46 @@ let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><me
 let template_e = `</div></body></html>`;
 
 createApp({
+    components: { 'dropdown-menu-1': DropdownMenu1 
+    },
+    setup() {
+        
+        const isSendEmail = ref(false);
+        const formData = ref({
+            to_email: '',
+            from_name: '',
+            message: '',
+            pageTitle: '',
+            currentURL: '',
+        });
+
+        watch(isSendEmail, (newVal) => {
+            // console.log("isSendEmail 变更为:", newVal);
+           if (!newVal) {
+                formData.value = {  // 不能用 `this.formData`，要用 `formData.value`
+                    pageTitle: '',
+                    currentURL: '',
+                    to_email: '',
+                    from_name: '',
+                    message: ''
+                };
+            }
+        });
+
+        const isCategoryVisible = ref(false);
+        watch(isCategoryVisible, (newVal) => {
+            // console.log("isCategoryVisible 变更为:", newVal);
+        });
+
+        return { isSendEmail ,formData ,isCategoryVisible};
+    },
     data() {
         return {
-            isLight: false,
-            isCategoryVisible: false,
             newCategory: "",
             selectedCategory: "",
             newTodo: { text: "", date: this.getTodayDate() },
             todoList: JSON.parse(localStorage.getItem("todos")) || {},
             expandedCategories: [],
-            dropdownview: false,
-            isSendEmail: false,
             formData: {
                 to_email: '',
                 from_name: '',
@@ -55,7 +164,8 @@ createApp({
             isImport: false,
             isLoading: false,
             selectedFile: null, // 用來儲存選擇的檔案
-            categoryKey: 0
+            categoryKey: 0,
+            dropdownviewTodo: false,
         };
     },
     computed: {
@@ -63,29 +173,10 @@ createApp({
             return Object.keys(this.todoList).length > 0; 
         }
     },
-    watch: {
-        isSendEmail(newVal){
-            if (!newVal) {
-                this.formData = {
-                    pageTitle: '',
-                    currentURL: '',
-                    to_email: '',
-                    from_name: '',
-                    message: ''
-                };
-            }
-        },
-        isLight(newVal) {
-            if (newVal) {
-                document.body.classList.add('light-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('light-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        },
-    },
     methods: {
+        toggleBarsTodo(){
+          this.dropdownviewTodo = !this.dropdownviewTodo;  
+        },
         handleSubmit() {
             this.sending = true;
             this.status = 'Sending...';
@@ -116,14 +207,6 @@ createApp({
                     console.error('error:', error);
                 }
             );
-        },
-        toggleDropdown(type ,value) {
-            this[type] = value;
-            if(value === false){
-                setTimeout(() => {
-                    this.dropdownview = false;
-                }, 100);
-            }
         },
         html(){
 
@@ -346,11 +429,13 @@ sortedCategories.forEach(category => {
             notyf.success("add task successfully!");
         },
         copyTodo(text) {
+            this.toggleBarsTodo();
             navigator.clipboard.writeText(text.trim())
                 .then(() => notyf.success("copy success！"))
                 .catch(err => console.error("copy error！", err));
         },
         checkTodo(category, index) {
+            this.toggleBarsTodo();
             this.todoList[category][index].completed = !this.todoList[category][index].completed;
             this.saveTodos();
             if(this.todoList[category][index].completed){
@@ -358,6 +443,7 @@ sortedCategories.forEach(category => {
             }
         },
         removeTodo(category, index ,text) {
+            this.toggleBarsTodo();
             const userConfirmed = window.confirm(`Are you sure you want to delete '${text}'?`);
             if (userConfirmed) {
                 this.todoList[category].splice(index, 1);
