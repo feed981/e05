@@ -786,8 +786,9 @@
     <div v-if="isSendEmail &&!isImport" class="todo-container">
       <dropdown-menu-1 
         v-model:is-send-email="isSendEmail"
-        v-model:is-category-visible="isCategoryVisible">
-      ></dropdown-menu-1>
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport">
+      </dropdown-menu-1>
       <div class="card">
         <h1 class="bhutuka-expanded-one-regular">FEEDBACK!</h1>
         <form @submit.prevent="handleSubmit">
@@ -811,6 +812,12 @@
     </div>
 
     <div v-if="isImport" class="todo-container">
+      <dropdown-menu-1
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport">
+      </dropdown-menu-1>
+      
       <div class="loading-container">
         <div v-if="isLoading" class="loading">
           <div></div>
@@ -833,7 +840,8 @@
     <div v-if="!isCategoryVisible && !isSendEmail &&!isImport" class="todo-container">
       <dropdown-menu-1
         v-model:is-send-email="isSendEmail"
-        v-model:is-category-visible="isCategoryVisible">
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport">
       </dropdown-menu-1>
       <h1 class="bhutuka-expanded-one-regular">TODOLIST!</h1>
 
