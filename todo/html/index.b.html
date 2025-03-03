@@ -230,33 +230,40 @@
       text-shadow: 2px 2px 4px rgba(95, 110, 192, 0.3);
     }
     .light-mode .metamorphous-regular {
-  font-family: "Metamorphous", serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #51b7f3;
-      text-shadow: 2px 2px 4px rgba(252, 252, 255, 0.842);
-  font-size: 1.5em;
+      font-family: "Metamorphous", serif;
+      font-weight: 400;
+      font-style: normal;
+      color: #51b7f3;
+          text-shadow: 2px 2px 4px rgba(252, 252, 255, 0.842);
+      font-size: 1.5em;
+          text-align: center;
+          margin-bottom: 20px;
+    }
+
+    .light-mode .vujahday-script-regular {
+      font-family: "Vujahday Script", serif;
+      font-weight: 400;
+      font-style: normal;
       text-align: center;
-      margin-bottom: 20px;
-}
+      color: #1287ca;
+          text-shadow: 2px 2px 4px rgba(141, 141, 196, 0.3);
+    }
 
-.light-mode .vujahday-script-regular {
-  font-family: "Vujahday Script", serif;
-  font-weight: 400;
-  font-style: normal;
-  text-align: center;
-  color: #1287ca;
-      text-shadow: 2px 2px 4px rgba(141, 141, 196, 0.3);
-}
+    .light-mode  .loading {
+      color: #313030;
+    }
 
-.light-mode  .loading {
-  color: #313030;
-}
+    .light-mode .dropdown-menu{
+      color: #000;
+      background: #fff;
+    }
 
-.light-mode .dropdown-menu{
-  color: #000;
-  background: #fff;
-}
+
+    .light-mode .urgent {
+      border-left: 4px solid #d64d35;
+      border-bottom: 4px solid #b32a00;
+      background-color: #cf472e;
+    }
 
 
     .date {
@@ -313,6 +320,7 @@
     .category-select{
       width: 80%;
     }
+
     .category {
       background-color: #494848;
       border-left: 4px solid rgb(56, 56, 56);
@@ -347,6 +355,12 @@
 
     }
 
+    .urgent {
+      border-left: 4px solid #d64d35;
+      border-bottom: 4px solid #b32a00;
+      background-color: #cf472e;
+    }
+
     .completed {
       color: #fff;
       background: #6e6e6e;
@@ -354,9 +368,22 @@
       border-bottom: 4px solid #414141;
     }
 
+    .header-container{
+      display: flex;
+      justify-content: space-between;
+    }
     .hamburger{
       text-align: left;
     }
+    .hamburger-todo{
+      text-align: left;
+      padding: 5px 10px 1px 10px;
+      font-size: 18px;
+    }
+    .closeicon{
+      text-align: right;
+    }
+
     .dropdown {
       position: relative;
       /* display: inline-block; */
@@ -365,6 +392,7 @@
       z-index: 9999;
 
     }
+
 
     .dropdown-menu {
       position: absolute;
@@ -375,10 +403,11 @@
       list-style: none;
       padding: 0;
       margin: 0;
-      width: 150px;
+      width: 180px;
       transition: all 0.3s ease;
       border-radius: 10px;
     }
+
     .dropdown-menu li i{
       width: 30px;
       font-size: 15px;
@@ -391,6 +420,7 @@
     }
 
     .dropdown-menu li {
+      border-bottom: 1px solid;
       padding: 10px;
       font-size: 10px;
       cursor: pointer;
@@ -401,6 +431,17 @@
       background: #6a7075;
     }
 
+    .dropdown-menu-sub {
+      top: 36px;
+      left: 65px;
+    }
+
+    .dropdown-menu-todo {
+      top: -65px;
+      left: revert-layer;
+      right: -30px;
+    }
+   
     .dropdown span {
       font-size: 24px;
       cursor: pointer;
@@ -498,54 +539,54 @@
     }
 
     .indie-flower-regular {
-  font-family: "Indie Flower", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 2.5em;
-      text-align: center;
-      margin-bottom: 20px;
-}
-.wire-one-regular {
-  font-family: "Wire One", serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #1287ca;
-      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-  font-size: 2.5em;
-      text-align: center;
-      margin-bottom: 20px;
-}
+      font-family: "Indie Flower", serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 2.5em;
+          text-align: center;
+          margin-bottom: 20px;
+    }
+    .wire-one-regular {
+      font-family: "Wire One", serif;
+      font-weight: 400;
+      font-style: normal;
+      color: #1287ca;
+          text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+      font-size: 2.5em;
+          text-align: center;
+          margin-bottom: 20px;
+    }
 
-.vujahday-script-regular {
-  font-family: "Vujahday Script", serif;
-  font-weight: 400;
-  font-style: normal;
-  text-align: center;
-  color: #1287ca;
-      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-}
-
-
-.metamorphous-regular {
-  font-family: "Metamorphous", serif;
-  font-weight: 400;
-  font-style: normal;
-  color: #1287ca;
-      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-  font-size: 1.5em;
+    .vujahday-script-regular {
+      font-family: "Vujahday Script", serif;
+      font-weight: 400;
+      font-style: normal;
       text-align: center;
-      margin-bottom: 20px;
-}
-.bhutuka-expanded-one-regular {
-  font-family: "BhuTuka Expanded One", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 1.5em;
-      text-align: center;
-      margin-bottom: 20px;
       color: #1287ca;
       text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-}
+    }
+
+
+    .metamorphous-regular {
+      font-family: "Metamorphous", serif;
+      font-weight: 400;
+      font-style: normal;
+      color: #1287ca;
+      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+      font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .bhutuka-expanded-one-regular {
+      font-family: "BhuTuka Expanded One", serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 1.5em;
+          text-align: center;
+          margin-bottom: 20px;
+          color: #1287ca;
+          text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+    }
 
 
     .heading-style1 {
@@ -726,7 +767,7 @@
         background: #2b2b2b;
         color: #E0E0E0;
         border-radius: 10px;
-        text-align: center;
+        text-align: left;
         width: 300px;
         box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
       }
@@ -748,7 +789,7 @@
         background-color: #fff;
         color: #000;
         border-radius: 10px;
-        text-align: center;
+        text-align: left;
         width: 300px;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
       }
@@ -784,13 +825,16 @@
   <div id="app" class="app-container">
 
     <div v-if="isSendEmail &&!isImport" class="todo-container">
-      <dropdown-menu-1 
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport">
-      </dropdown-menu-1>
+      </dropdown-menu-header>
+
       <div class="card">
-        <h1 class="bhutuka-expanded-one-regular">FEEDBACK!</h1>
+        <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-envelope"></i> FEEDBACK!</h1>
         <form @submit.prevent="handleSubmit">
           <div class="input-container">
             <input type="email" v-model="formData.to_email" required placeholder="sender@example.com">
@@ -804,7 +848,6 @@
             <button class="font-awesome-i-inbutton" type="submit">
               <i data-tooltip="send email" class="font-awesome-i fa-solid fa-paper-plane"></i>
             </button>
-            <i data-tooltip="back" @click="isSendEmail = false" class="font-awesome-i fa-regular fa-circle-xmark"></i>
           </div>
           <div class="status" :class="{ error: isError }" v-if="status">{{ status }}</div>
         </form>
@@ -812,12 +855,14 @@
     </div>
 
     <div v-if="isImport" class="todo-container">
-      <dropdown-menu-1
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport">
-      </dropdown-menu-1>
-      
+      </dropdown-menu-header>
+
       <div class="loading-container">
         <div v-if="isLoading" class="loading">
           <div></div>
@@ -827,22 +872,25 @@
           <div></div>
         </div>
       </div>
+      <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-file-import"></i> Import as JSON!</h1>
 
       <input type="file" @change="handleFileChange" accept=".json">
       
       <div class="menu">
         <i data-tooltip="overwrite" @click="handleFileUpload('overwrite')" class="font-awesome-i fa-solid fa-feather"></i>
         <i data-tooltip="append ,Will keep the original" @click="handleFileUpload('append')" class="font-awesome-i fa-solid fa-feather-pointed"></i>
-        <i data-tooltip="cancel" @click="isImport = false" class="font-awesome-i fa-regular fa-circle-xmark"></i>
       </div>
     </div>
     
     <div v-if="!isCategoryVisible && !isSendEmail &&!isImport" class="todo-container">
-      <dropdown-menu-1
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport">
-      </dropdown-menu-1>
+      </dropdown-menu-header>
+
       <h1 class="bhutuka-expanded-one-regular">TODOLIST!</h1>
 
       <div class="button-container">
@@ -866,19 +914,22 @@
       </div>
     </div>
 
-    <div v-if="isCategoryVisible && !isSendEmail &&!isImport" class="todo-container">
-      <dropdown-menu-1
+    <div v-if="isCategoryVisible" class="todo-container">
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
-        v-model:is-category-visible="isCategoryVisible">
-      </dropdown-menu-1>
-      <h1 class="bhutuka-expanded-one-regular">new CATEGORY!</h1>
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport">
+      </dropdown-menu-header>
+
+      <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-icons"></i> new CATEGORY!</h1>
       <div class="input-container">
         <input type="text" style="margin-right: 0px;" v-model="newCategory" placeholder="Enter a new category..."
           required>
       </div>
       <div class="menu">
         <i data-tooltip="send" @click="saveCategory" class="font-awesome-i fa-solid fa-paper-plane"></i>
-        <i data-tooltip="back" @click="isCategoryVisible = false" class="font-awesome-i fa-regular fa-circle-xmark"></i>
       </div>
     </div>
     <br>
@@ -897,21 +948,29 @@
 
         <div v-show="expandedCategories.includes(category)" class="category-content">
           <div v-for="(todo, index) in sortedTodos(todos)" :key="index" class="todo-item"
-            :class="{ completed: todo.completed }">
+            :class="{ completed: todo.completed , urgent: todo.urgent }">
             <span class="text-content" @click="checkTodo(category, index)">　{{ todo.date }}　{{ todo.text }}</span>
-            
-            <div class="hamburger">
+            <div class="hamburger-todo" @click="toggleTodobars(category, index)">
               <div class="dropdown">
-                <i class="font-awesome-i fa-solid fa-bars" @click="toggleBarsTodo"></i>
-                <ul v-show="dropdownviewTodo" class="dropdown-menu bars">
-                  <li @click="checkTodo(category, index)" >
-                    <i class="font-awesome-i fa-regular fa-square-check"></i><span>|　check todo</span>
+                <i class="font-awesome-i fa-solid fa-bars"></i>
+                <ul v-show="dropdownviewTodo[index]" class="dropdown-menu dropdown-menu-todo">
+                  <li @click="archiveTodo(category, index, todo.date, todo.text, todo.completed ,todo.urgent)" >
+                    <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive todo</span>
                   </li>
-                  <li @click="copyTodo(todo.text)" >
-                    <i class="font-awesome-i fa-regular fa-copy"></i><span>|　copy todo text</span>
+                  <li @click="setUrgentTodo(category, index)">
+                    <i class="font-awesome-i fa-solid fa-jug-detergent"></i><span>|　Set urgent todo</span>
+                  </li>
+                  <li @click="checkTodo(category, index)">
+                    <i class="font-awesome-i fa-regular fa-square-check"></i><span>|　Check todo</span>
+                  </li>
+                  <li @click="copyTodo(todo.text)">
+                    <i class="font-awesome-i fa-solid fa-clone"></i><span>|　Copy todo text</span>
                   </li>
                   <li @click="removeTodo(category, index, todo.text)" >
-                    <i class="font-awesome-i fa-solid fa-trash"></i><span>|　remove todo</span>
+                    <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove todo</span>
+                  </li>
+                  <li @click="toggleTodobars(category, index)" >
+                    <i class="font-awesome-i fa-solid fa-xmark"></i><span>|　Close the menu</span>
                   </li>
                 </ul>
               </div>
