@@ -96,22 +96,22 @@ const DropdownMenuHeader = {
     `,
     data() {
         return {
-            todoList: JSON.parse(localStorage.getItem("todos")) || {},
+            taskList: JSON.parse(localStorage.getItem("tasks")) || {},
         };
     },
     methods:{
         html(){
 
             let htmlContent = `
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Todo List Export</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=BhuTuka+Expanded+One&family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:"BhuTuka Expanded One",serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.todo-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:"BhuTuka Expanded One",serif;font-weight:400;font-style:normal;font-size:1.5em;text-align:center;margin-bottom:20px;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3)}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Task List Export</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=BhuTuka+Expanded+One&family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:"BhuTuka Expanded One",serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.task-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:"BhuTuka Expanded One",serif;font-weight:400;font-style:normal;font-size:1.5em;text-align:center;margin-bottom:20px;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3)}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
             `;
             // 整理所有待辦事項到一個陣列
-            const allTodos = [];
+            const allTasks = [];
         
             // 遍歷每個分類並整理資料
-            Object.entries(this.todoList).forEach(([category, items]) => {
+            Object.entries(this.taskList).forEach(([category, items]) => {
                 items.forEach(item => {
-                    allTodos.push({
+                    allTasks.push({
                         ...item,
                         category
                     });
@@ -119,49 +119,49 @@ const DropdownMenuHeader = {
             });
             
             // 按日期降序排序
-            allTodos.sort((a, b) => new Date(b.date) - new Date(a.date));
+            allTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             // 按 category 和 date 分組
-        const groupedTodos = {};
+        const groupedTasks = {};
 
         // 依類別與日期與完成狀態分組
-        allTodos.forEach(todo => {
+        allTasks.forEach(task => {
             // 確保 completed 是字串形式的 "true" 或 "false"
-            const completedStatus = String(todo.completed);
+            const completedStatus = String(task.completed);
 
-            if (!groupedTodos[todo.category]) {
-                groupedTodos[todo.category] = {};
+            if (!groupedTasks[task.category]) {
+                groupedTasks[task.category] = {};
             }
-            if (!groupedTodos[todo.category][todo.date]) {
-                groupedTodos[todo.category][todo.date] = { true: [], false: [] };
+            if (!groupedTasks[task.category][task.date]) {
+                groupedTasks[task.category][task.date] = { true: [], false: [] };
             }
 
             // 檢查是否存在對應的陣列
-            if (!groupedTodos[todo.category][todo.date][completedStatus]) {
-                groupedTodos[todo.category][todo.date][completedStatus] = [];
+            if (!groupedTasks[task.category][task.date][completedStatus]) {
+                groupedTasks[task.category][task.date][completedStatus] = [];
             }
 
-            groupedTodos[todo.category][todo.date][completedStatus].push(todo.text);
+            groupedTasks[task.category][task.date][completedStatus].push(task.text);
         });
 
         // 依照類別與日期排序
-        const sortedCategories = Object.keys(groupedTodos).sort(); // 類別排序
+        const sortedCategories = Object.keys(groupedTasks).sort(); // 類別排序
 
         sortedCategories.forEach(category => {
             htmlContent += `<h1 class="heading-style1">${category}</h1>`;
 
             // 日期排序（由新到舊）
-            const sortedDates = Object.keys(groupedTodos[category]).sort((a, b) => new Date(b) - new Date(a));
+            const sortedDates = Object.keys(groupedTasks[category]).sort((a, b) => new Date(b) - new Date(a));
 
             sortedDates.forEach(date => {
                 htmlContent += `<div class="log-entry">`;
 
                 // 遍歷 `true`（完成） 和 `false`（未完成）
-                Object.keys(groupedTodos[category][date]).forEach(status => {
+                Object.keys(groupedTasks[category][date]).forEach(status => {
                     let isCompleted = status === "true"; // 轉換為布林值
                     let itemClass = isCompleted ? "completed" : "pending"; // 設定不同的 CSS 類別
 
-                    groupedTodos[category][date][status].forEach((task, index) => {
+                    groupedTasks[category][date][status].forEach((task, index) => {
                         htmlContent += `<div class="text-content ${itemClass}">${index + 1}. ${task}</div>`;
                     });
                 });
@@ -195,7 +195,7 @@ const DropdownMenuHeader = {
         viewAs(format) {
             notyf.success(`Viewing as ${format.toUpperCase()}`);
             if(format === 'json'){
-                const jsonString = JSON.stringify(this.todoList, null, 2);
+                const jsonString = JSON.stringify(this.taskList, null, 2);
                 const template = `${template_s}<pre>${jsonString}</pre>${template_e}`;
                 this.viewopen(template ,format)
             }else if (format === 'html') {
@@ -209,7 +209,7 @@ const DropdownMenuHeader = {
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = url;
-                link.download = `todo_${Common.getTodayDate()}.${text}`;
+                link.download = `task_${Common.getTodayDate()}.${text}`;
                 link.click();
                 setTimeout(() => {
                     URL.revokeObjectURL(url);
@@ -223,7 +223,7 @@ const DropdownMenuHeader = {
             notyf.success(`Exporting as ${format.toUpperCase()}`);
             
             if(format === 'json'){
-                const jsonString = JSON.stringify(this.todoList, null, 2);
+                const jsonString = JSON.stringify(this.taskList, null, 2);
                 this.exportfile(jsonString ,format , "application/json");
 
             }else if (format === 'html') {
@@ -256,7 +256,7 @@ const DropdownMenuHeader = {
 (function() {
     emailjs.init("un2nCxSnYlqZWdgMG");
 })();
-let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Todo List Export</title><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container">`;
+let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Task List Export</title><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container">`;
 let template_e = `</div></body></html>`;
 
 createApp({
@@ -313,9 +313,9 @@ createApp({
         return {
             newCategory: "",
             selectedCategory: "",
-            newTodo: { text: "", date: Common.getTodayDate() },
-            todoList: JSON.parse(localStorage.getItem("todos")) || {},
-            todoListArchive: JSON.parse(localStorage.getItem("todosArchive")) || {},
+            newTask: { text: "", date: Common.getTodayDate() },
+            taskList: JSON.parse(localStorage.getItem("tasks")) || {},
+            taskListArchive: JSON.parse(localStorage.getItem("tasksArchive")) || {},
             expandedCategories: [],
             formData: {
                 to_email: '',
@@ -331,17 +331,20 @@ createApp({
             selectedFile: null, // 用來儲存選擇的檔案
             categoryKey: 0,
             isLight: false,
-            dropdownviewTodo: false,
+            dropdownviewTask: false,
             isSendEmail: false,
             isCategoryVisible: false,
             isImport: false,
-            dropdownviewTodo: {},
-            newTodoArchive: { text: "", date: "", completed: "",urgent: "" },
+            dropdownviewTask: {},
+            newTaskArchive: { text: "", date: "", completed: "",urgent: "" },
         };
+    },
+    mounted() {
+        this.resetAllTaskbars();
     },
     computed: {
         isListVisible() {
-            return Object.keys(this.todoList).length > 0; 
+            return Object.keys(this.taskList).length > 0; 
         }
     },
     methods: {
@@ -393,7 +396,7 @@ createApp({
             }
 
             const fileName = file.name; // 獲取檔名
-            const match = fileName.match(/^todo_\d{4}-\d{2}-\d{2}\.json$/);
+            const match = fileName.match(/^task_\d{4}-\d{2}-\d{2}\.json$/);
 
             if (!match) {
                 notyf.error("Failed to import ,please check your file format!");
@@ -413,7 +416,7 @@ createApp({
                 try {
                     const json = JSON.parse(e.target.result);
                     if(type === 'overwrite'){
-                        localStorage.setItem("todos", JSON.stringify(json));
+                        localStorage.setItem("tasks", JSON.stringify(json));
                         notyf.success("Coverage completed and reorganizing in progress...");
                         this.isLoading = true;
                     }else if(type === 'append'){
@@ -441,13 +444,13 @@ createApp({
         },
         //Category
         saveCategory() {
-            if (this.newCategory.trim() && !this.todoList[this.newCategory]) {
-                this.todoList[this.newCategory] = []; // Vue 3 不需要 $set
-                this.newCategory = "";
-                this.saveTodos();
-            }
-            if(this.todoList[this.newCategory]){
+            if(this.taskList[this.newCategory]){
                 notyf.error("category is repeat！");
+            }
+            if (this.newCategory.trim() && !this.taskList[this.newCategory]) {
+                this.taskList[this.newCategory] = []; // Vue 3 不需要 $set
+                this.newCategory = "";
+                this.saveTasks();
             }
         },
         toggleCategory(category) {
@@ -457,111 +460,140 @@ createApp({
             } else {
                 this.expandedCategories.splice(index, 1);
             }
+            console.log('expandedCategories:'+this.expandedCategories)
         },
         removeCategory(category) {
-            if (this.todoList[category] && this.todoList[category].length > 0) {
+            if (this.taskList[category] && this.taskList[category].length > 0) {
                 notyf.error(`Cannot delete '${category}' because it still has tasks!`);
                 return;
             }
             const userConfirmed = window.confirm(`Are you sure you want to delete '${category}'?`);
             if (userConfirmed) {
-                delete this.todoList[category];
+                delete this.taskList[category];
                 this.expandedCategories = this.expandedCategories.filter(c => c !== category);
-                this.saveTodos();
+                this.saveTasks();
                 notyf.success(`Successfully deleted '${category}' permanently.`);
             }
         },
+        archiveCategory(category){ //task
 
+        },
         //archive
-        archiveTodo(category, index, date, text, completed, urgent)  {
-            if(!this.todoListArchive[category]){
-                this.saveCategoryArchive(category);
+        archiveTask(category, index, date, text, completed, urgent)  {
+            if (!this.taskListArchive) {
+                this.taskListArchive = {}; // 確保它是物件
             }
-            if (!category || !text.trim() || !date) return;
-            this.todoList[category][index].archived = true;
-            this.newTodoArchive.text = text;
-            this.newTodoArchive.date = date;
-            this.newTodoArchive.completed = completed;
-            this.newTodoArchive.urgent = urgent;
+            if (!category) {
+                console.error("Error: category is undefined or empty!");
+                return;
+            }
+            if (!this.taskListArchive[category]) {
+                this.taskListArchive[category] = []; // 只初始化一次，避免覆蓋舊資料
+            }
+        
+            if (!text.trim() || !date) return;
+        
+            // 設置任務為已歸檔
+            this.taskList[category][index].archived = true;
+        
+            // 創建新的待辦事項
+            const newArchivedTask = {
+                text,
+                date,
+                completed,
+                urgent
+            };
+        
+            // 新增到 `this.taskListArchive`
+            this.taskListArchive[category].push(newArchivedTask);
+            this.saveTasksArchive(); // 儲存到 localStorage
+        
+            // 移除原來的 `task`
+            this.removeCauseTaskArchive(category, index);
+        
+            notyf.success(`Archive task successfully!`);
+        },
+        saveTasksArchive() {
+            localStorage.setItem("tasksArchive", JSON.stringify(this.taskListArchive));
+        },
+        addTaskArchive(category, text) {
+            if (!category || !this.taskListArchive[category] || !text.trim()) return;
 
-            this.addTodoArchive(category, index);
-            this.removeCauseTodoArchive(category, index);
-            this.saveTodosArchive();
-            if(this.todoList[category][index].archived){
-                notyf.success(`archive task successfully!`);
-            }
+            const newArchivedTask = { text };
+            this.taskListArchive[category].push(newArchivedTask);
+            this.saveTasksArchive();
+            notyf.success(`Added archive '${category}' '${text}' successfully!`);
         },
-        saveCategoryArchive(category) {
-            if (category.trim() && !this.todoListArchive[category]) {
-                this.todoListArchive[category] = []; // Vue 3 不需要 $set
-                this.saveTodosArchive();
-            }
-        },
-        saveTodosArchive() {
-            localStorage.setItem("todosArchive", JSON.stringify(this.todoListArchive));
-        },
-        addTodoArchive(category, index, text) {
-            if (!category || !text.trim()) return;
-            this.todoListArchive[category][index].push({ ...this.newTodoArchive });
-            this.saveTodosArchive();
-            notyf.success(`add archive '${category}' '${text}' successfully!`);
-        },
-        removeCauseTodoArchive(category, index) {
-            this.todoList[category].splice(index, 1);
-            this.saveTodos();
+        removeCauseTaskArchive(category, index) {
+            this.taskList[category].splice(index, 1);
+            this.saveTasks();
         },
         //archive end
-        //todo
-        toggleTodobars(category, index) {
-            this.todoList[category][index].opend = !this.todoList[category][index].opend;
-            this.saveTodos();
-            if(this.todoList[category][index].opend){
-                notyf.success(`toggle open successfully!`);
-            }
-            this.dropdownviewTodo[index] = this.todoList[category][index].opend;  
+        //task
+        toggleTaskbars(category, index) {
+            // 只開啟當前點擊的 task
+            this.taskList[category][index].opend = !this.taskList[category][index].opend;
+            this.saveTasks();
+            // 更新 dropdownviewTask 狀態
+            this.dropdownviewTask[index] = this.taskList[category][index].opend;
         },
-        setUrgentTodo(category, index) {
-            this.todoList[category][index].urgent = !this.todoList[category][index].urgent;
-            this.saveTodos();
-            if(this.todoList[category][index].urgent){
+        resetAllTaskbars() {
+            Object.keys(this.taskList).forEach(category => {
+                this.taskList[category].forEach(task => {
+                    task.opend = false;
+                });
+            });
+            this.saveTasks();
+        },
+        setUrgentTask(category, index) {
+            this.taskList[category][index].urgent = !this.taskList[category][index].urgent;
+            this.saveTasks();
+            if(this.taskList[category][index].urgent){
                 notyf.success(`urgent set successfully!`);
             }
         },
-        saveTodos() {
-            localStorage.setItem("todos", JSON.stringify(this.todoList));
+        saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(this.taskList));
         },
-        addTodo() {
-            if (!this.selectedCategory){
-                notyf.error('select your category<br>or<br>add a new category!');
+        addTask() {
+            if (!this.selectedCategory) {
+                notyf.error('Select your category<br>or<br>add a new category!');
             }
-            if (!this.selectedCategory || !this.newTodo.text.trim() || !this.newTodo.date) return;
-            this.todoList[this.selectedCategory].push({ ...this.newTodo });
-            this.newTodo.text = "";
-            this.saveTodos();
-            notyf.success("add task successfully!");
+            if (!this.selectedCategory || !this.newTask.text.trim() || !this.newTask.date) return;
+        
+            // 加入 timestamp 確保唯一性
+            const newTask = {
+                ...this.newTask,
+                timestamp: Date.now() // 加上唯一時間戳
+            };
+        
+            this.taskList[this.selectedCategory].push(newTask);
+            this.newTask.text = "";
+            this.saveTasks();
+            notyf.success("Add task successfully!");
         },
-        copyTodo(text) {
+        copyTask(text) {
             navigator.clipboard.writeText(text.trim())
                 .then(() => notyf.success("copy success！"))
                 .catch(err => console.error("copy error！", err));
         },
-        checkTodo(category, index) {
-            this.todoList[category][index].completed = !this.todoList[category][index].completed;
-            this.saveTodos();
-            if(this.todoList[category][index].completed){
+        checkTask(category, index) {
+            this.taskList[category][index].completed = !this.taskList[category][index].completed;
+            this.saveTasks();
+            if(this.taskList[category][index].completed){
                 notyf.success(`finish task!`);
-                this.todoList[category][index].urgent = false;
+                this.taskList[category][index].urgent = false;
             }
         },
-        removeTodo(category, index ,text) {
+        removeTask(category, index ,text) {
             const userConfirmed = window.confirm(`Are you sure you want to delete '${text}'?`);
             if (userConfirmed) {
-                this.todoList[category].splice(index, 1);
-                this.saveTodos();
+                this.taskList[category].splice(index, 1);
+                this.saveTasks();
                 notyf.success(`Successfully deleted '${text}' permanently.`);
             }
             setTimeout(() => {
-                if (this.todoList[category].length === 0) {
+                if (this.taskList[category].length === 0) {
                     const userConfirmed2 = window.confirm(`No tasks available. Do you want to delete '${category}'?`);
                     if (userConfirmed2) {
                         this.removeCategory(category);
@@ -569,8 +601,11 @@ createApp({
                 }
             }, 2000);
         },
-        sortedTodos(todos) {
-            return todos.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+        sortedTasksASC(tasks) {
+            return tasks.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+        },
+        sortedTasksDESC(tasks) {
+            return tasks.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
         },
     }
 }).mount('#app');
