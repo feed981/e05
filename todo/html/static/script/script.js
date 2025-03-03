@@ -25,19 +25,26 @@ const notyf2 = new Notyf({
 });
 
 
+const Common = {
+    getTodayDate() {
+        const today = new Date();
+        return today.toISOString().split("T")[0]; // 轉成 YYYY-MM-DD 格式
+    },
+};
+
 const DropdownMenu1 = {
-    props: ['isSendEmail','isCategoryVisible'],  // 接收父组件的值
-    emits: ['update:isSendEmail','update:isCategoryVisible'],  // 允许子组件更新父组件
+    props: ['isSendEmail','isCategoryVisible','isImport'],  // 接收父组件的值
+    emits: ['update:isSendEmail','update:isCategoryVisible','update:isImport'],  // 允许子组件更新父组件
 
     template: `<div class="hamburger">
         <div class="dropdown">
             <i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>
             <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
                 <li v-if="isLight" @click="isLight = false">
-                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　toggle light-mode</span>
+                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　toggle dark-mode</span>
                 </li>
                 <li v-if="!isLight" @click="isLight = true">
-                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　toggle dark-mode</span>
+                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　toggle light-mode</span>
                 </li>
                 <li v-if="!isSendEmail" @click="$emit('update:isSendEmail', true)">
                     <i class="font-awesome-i fa-solid fa-envelope"></i><span>|　feedback</span>
@@ -50,21 +57,162 @@ const DropdownMenu1 = {
                     <ul v-show="dropdownview" class="dropdown-menu">
                     <li @click="viewAs('json')">View as JSON</li>
                     <li @click="viewAs('html')">View as HTML</li>
-                    <li @click="importAs('json')">Import as JSON</li>
+                    <li @click="$emit('update:isImport', true)">Import as JSON</li>
                     <li @click="exportAs('json')">Export as JSON</li>
                     <li @click="exportAs('html')">Export as HTML</li>
                     </ul>
                 </li>
-                <li v-if="!isSendEmail"  @click="$emit('update:isCategoryVisible', true)">
+                <li v-if="!isSendEmail && !isImport"  @click="$emit('update:isCategoryVisible', true)">
                     <i class="font-awesome-i fa-solid fa-add"></i><span>|　add new category</span>
                 </li>
                 <li v-if="!isSendEmail && isCategoryVisible" @click="$emit('update:isCategoryVisible', false)">
+                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
+                </li>
+                <li v-if="!isSendEmail && isImport" @click="$emit('update:isImport', false)">
                     <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
                 </li>
             </ul>
         </div>
         </div>
     `,
+    data() {
+        return {
+            todoList: JSON.parse(localStorage.getItem("todos")) || {},
+        };
+    },
+    methods:{
+        html(){
+
+            let htmlContent = `
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Todo List Export</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=BhuTuka+Expanded+One&family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:"BhuTuka Expanded One",serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.todo-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:"BhuTuka Expanded One",serif;font-weight:400;font-style:normal;font-size:1.5em;text-align:center;margin-bottom:20px;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3)}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
+            `;
+            // 整理所有待辦事項到一個陣列
+            const allTodos = [];
+        
+            // 遍歷每個分類並整理資料
+            Object.entries(this.todoList).forEach(([category, items]) => {
+                items.forEach(item => {
+                    allTodos.push({
+                        ...item,
+                        category
+                    });
+                });
+            });
+            
+            // 按日期降序排序
+            allTodos.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // 按 category 和 date 分組
+        const groupedTodos = {};
+
+        // 依類別與日期與完成狀態分組
+        allTodos.forEach(todo => {
+            // 確保 completed 是字串形式的 "true" 或 "false"
+            const completedStatus = String(todo.completed);
+
+            if (!groupedTodos[todo.category]) {
+                groupedTodos[todo.category] = {};
+            }
+            if (!groupedTodos[todo.category][todo.date]) {
+                groupedTodos[todo.category][todo.date] = { true: [], false: [] };
+            }
+
+            // 檢查是否存在對應的陣列
+            if (!groupedTodos[todo.category][todo.date][completedStatus]) {
+                groupedTodos[todo.category][todo.date][completedStatus] = [];
+            }
+
+            groupedTodos[todo.category][todo.date][completedStatus].push(todo.text);
+        });
+
+        // 依照類別與日期排序
+        const sortedCategories = Object.keys(groupedTodos).sort(); // 類別排序
+
+        sortedCategories.forEach(category => {
+            htmlContent += `<h1 class="heading-style1">${category}</h1>`;
+
+            // 日期排序（由新到舊）
+            const sortedDates = Object.keys(groupedTodos[category]).sort((a, b) => new Date(b) - new Date(a));
+
+            sortedDates.forEach(date => {
+                htmlContent += `<div class="log-entry">`;
+
+                // 遍歷 `true`（完成） 和 `false`（未完成）
+                Object.keys(groupedTodos[category][date]).forEach(status => {
+                    let isCompleted = status === "true"; // 轉換為布林值
+                    let itemClass = isCompleted ? "completed" : "pending"; // 設定不同的 CSS 類別
+
+                    groupedTodos[category][date][status].forEach((task, index) => {
+                        htmlContent += `<div class="text-content ${itemClass}">${index + 1}. ${task}</div>`;
+                    });
+                });
+
+                htmlContent += `<div class="date-title">${date}</div>`;
+                htmlContent += `</div>`;
+            });
+        });
+                
+            htmlContent += `</div></div></body></html>`;
+            return htmlContent;
+
+        },
+        viewopen(template ,text){
+            try{
+                const newTab = window.open();
+                if (newTab) {
+                    newTab.document.write(template);
+                    newTab.document.close();
+                } else {
+                    notyf2.open({
+                        type: 'warning',
+                        message: '請允許彈出視窗以顯示 ${text}!'
+                    });
+                }
+            } catch (error) {
+                console.error('View failed:', error);
+                notyf.error(`Failed to view ${text} file`);
+            }
+        },
+        viewAs(format) {
+            notyf.success(`Viewing as ${format.toUpperCase()}`);
+            if(format === 'json'){
+                const jsonString = JSON.stringify(this.todoList, null, 2);
+                const template = `${template_s}<pre>${jsonString}</pre>${template_e}`;
+                this.viewopen(template ,format)
+            }else if (format === 'html') {
+                let htmlContent = this.html();
+                this.viewopen(htmlContent ,format)
+            }
+        },
+        exportfile(template ,text ,type){
+            try {
+                const blob = new Blob([template], { type: type });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `todo_${Common.getTodayDate()}.${text}`;
+                link.click();
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 1000);
+            } catch (error) {
+                console.error('Export failed:', error);
+                notyf.error(`Failed to export ${text} file`);
+            }
+        },
+        exportAs(format) {
+            notyf.success(`Exporting as ${format.toUpperCase()}`);
+            
+            if(format === 'json'){
+                const jsonString = JSON.stringify(this.todoList, null, 2);
+                this.exportfile(jsonString ,format , "application/json");
+
+            }else if (format === 'html') {
+                let htmlContent = this.html();
+                this.exportfile(htmlContent ,format , "text/html");
+            }
+        },
+    },
     setup() {
         // 切換 isBars 狀態
         const dropdownviewHeader = Vue.ref(false);
@@ -142,13 +290,18 @@ createApp({
             // console.log("isCategoryVisible 变更为:", newVal);
         });
 
-        return { isSendEmail ,formData ,isCategoryVisible};
+        const isImport = ref(false);
+        watch(isImport, (newVal) => {
+            // console.log("isCategoryVisible 变更为:", newVal);
+        });
+
+        return { isSendEmail ,formData ,isCategoryVisible ,isImport};
     },
     data() {
         return {
             newCategory: "",
             selectedCategory: "",
-            newTodo: { text: "", date: this.getTodayDate() },
+            newTodo: { text: "", date: Common.getTodayDate() },
             todoList: JSON.parse(localStorage.getItem("todos")) || {},
             expandedCategories: [],
             formData: {
@@ -161,7 +314,6 @@ createApp({
             status: '',
             sending: false,
             isError: false,
-            isImport: false,
             isLoading: false,
             selectedFile: null, // 用來儲存選擇的檔案
             categoryKey: 0,
@@ -207,110 +359,6 @@ createApp({
                     console.error('error:', error);
                 }
             );
-        },
-        html(){
-
-            let htmlContent = `
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Todo List Export</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=BhuTuka+Expanded+One&family=Indie+Flower&family=Metamorphous&family=Smooch+Sans:wght@100..900&family=Vujahday+Script&family=Wire+One&display=swap" rel="stylesheet"><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:"BhuTuka Expanded One",serif;background-color:#1e1e1e;display:flex;justify-content:center;align-items:center}.container{width:100%;flex-direction:column;height:90vh}.log-container{overflow-y:auto;overflow-x:hidden;flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{justify-content:center;word-wrap:break-word;padding:15px;border-radius:10px;box-shadow:rgba(0,0,0,.17) 0 -23px 25px 0 inset,rgba(0,0,0,.15) 0 -36px 30px 0 inset,rgba(0,0,0,.1) 0 -79px 40px 0 inset,rgba(0,0,0,.06) 0 2px 1px,rgba(0,0,0,.09) 0 4px 2px,rgba(0,0,0,.09) 0 8px 4px,rgba(0,0,0,.09) 0 16px 8px,rgba(0,0,0,.09) 0 32px 16px;white-space:pre-line;color:#e0e0e0;transition:background 1s,margin 1s,color .3s}.log-entry:hover{background:#2c2c2c;margin:10px 0;box-shadow:rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px}.todo-item{box-shadow:rgba(0,0,0,.4) 0 2px 4px,rgba(0,0,0,.3) 0 7px 13px -3px,rgba(0,0,0,.2) 0 -3px 0 inset;border-bottom:1px solid #000;padding:10px;display:flex;align-items:center}.date-title{margin-top:10px;color:#e0e0e0;margin-right:15px}h1{font-size:1.5em;margin-bottom:20px}.heading-style1{font-family:"BhuTuka Expanded One",serif;font-weight:400;font-style:normal;font-size:1.5em;text-align:center;margin-bottom:20px;color:#1287ca;text-shadow:2px 2px 4px rgba(1,1,32,.3)}.completed{text-decoration:line-through;color:#999}.text-content{padding:5px;flex:1;word-wrap:break-word;min-width:0}.category-container{background-color:#1e1e1e;color:#e0e0e0;padding:20px;border-radius:10px;text-align:left;width:400px;box-shadow:0 4px 8px rgba(.1,0,0,.1)}@media screen and (max-width:768px){.container{max-width:100%}}</style></head><body><div class="container"><div class="log-container">
-            `;
-            // 整理所有待辦事項到一個陣列
-            const allTodos = [];
-        
-            // 遍歷每個分類並整理資料
-            Object.entries(this.todoList).forEach(([category, items]) => {
-                items.forEach(item => {
-                    allTodos.push({
-                        ...item,
-                        category
-                    });
-                });
-            });
-            
-            // 按日期降序排序
-            allTodos.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            // 按 category 和 date 分組
-const groupedTodos = {};
-
-// 依類別與日期與完成狀態分組
-allTodos.forEach(todo => {
-    // 確保 completed 是字串形式的 "true" 或 "false"
-    const completedStatus = String(todo.completed);
-
-    if (!groupedTodos[todo.category]) {
-        groupedTodos[todo.category] = {};
-    }
-    if (!groupedTodos[todo.category][todo.date]) {
-        groupedTodos[todo.category][todo.date] = { true: [], false: [] };
-    }
-
-    // 檢查是否存在對應的陣列
-    if (!groupedTodos[todo.category][todo.date][completedStatus]) {
-        groupedTodos[todo.category][todo.date][completedStatus] = [];
-    }
-
-    groupedTodos[todo.category][todo.date][completedStatus].push(todo.text);
-});
-
-// 依照類別與日期排序
-const sortedCategories = Object.keys(groupedTodos).sort(); // 類別排序
-
-sortedCategories.forEach(category => {
-    htmlContent += `<h1 class="heading-style1">${category}</h1>`;
-
-    // 日期排序（由新到舊）
-    const sortedDates = Object.keys(groupedTodos[category]).sort((a, b) => new Date(b) - new Date(a));
-
-    sortedDates.forEach(date => {
-        htmlContent += `<div class="log-entry">`;
-
-        // 遍歷 `true`（完成） 和 `false`（未完成）
-        Object.keys(groupedTodos[category][date]).forEach(status => {
-            let isCompleted = status === "true"; // 轉換為布林值
-            let itemClass = isCompleted ? "completed" : "pending"; // 設定不同的 CSS 類別
-
-            groupedTodos[category][date][status].forEach((task, index) => {
-                htmlContent += `<div class="text-content ${itemClass}">${index + 1}. ${task}</div>`;
-            });
-        });
-
-        htmlContent += `<div class="date-title">${date}</div>`;
-        htmlContent += `</div>`;
-    });
-});
-                
-            htmlContent += `</div></div></body></html>`;
-            return htmlContent;
-
-        },
-        viewopen(template ,text){
-            try{
-                const newTab = window.open();
-                if (newTab) {
-                    newTab.document.write(template);
-                    newTab.document.close();
-                } else {
-                    notyf2.open({
-                        type: 'warning',
-                        message: '請允許彈出視窗以顯示 ${text}!'
-                    });
-                }
-            } catch (error) {
-                console.error('View failed:', error);
-                notyf.error(`Failed to view ${text} file`);
-            }
-        },
-        viewAs(format) {
-            notyf.success(`Viewing as ${format.toUpperCase()}`);
-            this.dropdownview = false; // 關閉選單
-            if(format === 'json'){
-                const jsonString = JSON.stringify(this.todoList, null, 2);
-                const template = `${template_s}<pre>${jsonString}</pre>${template_e}`;
-                this.viewopen(template ,format)
-            }else if (format === 'html') {
-                let htmlContent = this.html();
-                this.viewopen(htmlContent ,format)
-            }
         },
         handleFileChange(event) {
             this.selectedFile = event.target.files[0]; // 存入 data
@@ -366,57 +414,44 @@ sortedCategories.forEach(category => {
                 this.isLoading = false;
                 window.location.href = window.location.href;
                 // this.categoryKey.value += 1; // 改變 key 來強制 Vue 重新渲染
-                // this.dropdownview = false;
             }, 3000);
 
         },
-        importAs(format){
-            this.isImport = true;
-            setTimeout(() => {
-                this.dropdownview = false;
-            }, 100);
-        },
-        exportfile(template ,text ,type){
-            try {
-                const blob = new Blob([template], { type: type });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = `todo_${this.getTodayDate()}.${text}`;
-                link.click();
-                setTimeout(() => {
-                    URL.revokeObjectURL(url);
-                }, 1000);
-            } catch (error) {
-                console.error('Export failed:', error);
-                notyf.error(`Failed to export ${text} file`);
-            }
-        },
-        exportAs(format) {
-            notyf.success(`Exporting as ${format.toUpperCase()}`);
-            
-            if(format === 'json'){
-                const jsonString = JSON.stringify(this.todoList, null, 2);
-                this.exportfile(jsonString ,format , "application/json");
-
-            }else if (format === 'html') {
-                let htmlContent = this.html();
-                this.exportfile(htmlContent ,format , "text/html");
-            }
-        },
-        getTodayDate() {
-            const today = new Date();
-            return today.toISOString().split("T")[0]; // 轉成 YYYY-MM-DD 格式
-        },
-        saveTodos() {
-            localStorage.setItem("todos", JSON.stringify(this.todoList));
-        },
+        //Category
         saveCategory() {
             if (this.newCategory.trim() && !this.todoList[this.newCategory]) {
                 this.todoList[this.newCategory] = []; // Vue 3 不需要 $set
                 this.newCategory = "";
                 this.saveTodos();
             }
+            if(this.todoList[this.newCategory]){
+                notyf.error("category is repeat！");
+            }
+        },
+        toggleCategory(category) {
+            const index = this.expandedCategories.indexOf(category);
+            if (index === -1) {
+                this.expandedCategories.push(category);
+            } else {
+                this.expandedCategories.splice(index, 1);
+            }
+        },
+        removeCategory(category) {
+            if (this.todoList[category] && this.todoList[category].length > 0) {
+                notyf.error(`Cannot delete '${category}' because it still has tasks!`);
+                return;
+            }
+            const userConfirmed = window.confirm(`Are you sure you want to delete '${category}'?`);
+            if (userConfirmed) {
+                delete this.todoList[category];
+                this.expandedCategories = this.expandedCategories.filter(c => c !== category);
+                this.saveTodos();
+                notyf.success(`Successfully deleted '${category}' permanently.`);
+            }
+        },
+        //todo
+        saveTodos() {
+            localStorage.setItem("todos", JSON.stringify(this.todoList));
         },
         addTodo() {
             if (!this.selectedCategory){
@@ -459,30 +494,8 @@ sortedCategories.forEach(category => {
                 }
             }, 2000);
         },
-        toggleCategory(category) {
-            const index = this.expandedCategories.indexOf(category);
-            if (index === -1) {
-                this.expandedCategories.push(category);
-            } else {
-                this.expandedCategories.splice(index, 1);
-            }
-        },
         sortedTodos(todos) {
             return todos.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
         },
-        removeCategory(category) {
-            if (this.todoList[category] && this.todoList[category].length > 0) {
-                notyf.error(`Cannot delete '${category}' because it still has tasks!`);
-                return;
-            }
-            const userConfirmed = window.confirm(`Are you sure you want to delete '${category}'?`);
-            if (userConfirmed) {
-                delete this.todoList[category];
-                this.expandedCategories = this.expandedCategories.filter(c => c !== category);
-                this.saveTodos();
-                notyf.success(`Successfully deleted '${category}' permanently.`);
-            }
-        },
-
     }
 }).mount('#app');
