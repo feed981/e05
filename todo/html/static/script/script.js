@@ -32,48 +32,67 @@ const Common = {
     },
 };
 
-const DropdownMenu1 = {
-    props: ['isSendEmail','isCategoryVisible','isImport'],  // 接收父组件的值
-    emits: ['update:isSendEmail','update:isCategoryVisible','update:isImport'],  // 允许子组件更新父组件
+const DropdownMenuHeader = {
+    props: ['isLight','isSendEmail','isCategoryVisible','isImport','formData'],  // 接收父组件的值
+    emits: ['update:isLight','update:isSendEmail','update:isCategoryVisible','update:isImport','update:formData'],  // 允许子组件更新父组件
 
-    template: `<div class="hamburger">
+    template: `
+    <div class="header-container">
+        <div class="hamburger">
         <div class="dropdown">
             <i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>
             <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
-                <li v-if="isLight" @click="isLight = false">
-                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　toggle dark-mode</span>
+            
+                <li v-if="isLight" @click="$emit('update:isLight', false )">
+                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span>
                 </li>
-                <li v-if="!isLight" @click="isLight = true">
-                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　toggle light-mode</span>
+                <li v-if="!isLight" @click="$emit('update:isLight', true )">
+                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span>
                 </li>
-                <li v-if="!isSendEmail" @click="$emit('update:isSendEmail', true)">
-                    <i class="font-awesome-i fa-solid fa-envelope"></i><span>|　feedback</span>
-                </li>
-                <li v-if="isSendEmail" @click="$emit('update:isSendEmail', false)">
-                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
+                <!-- todo: close other div-->
+                <li v-if="!isSendEmail" @click="$emit('update:formData', { isSendEmail: true, isCategoryVisible: false, isImport: false })">
+                    <i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span>
                 </li>
                 <li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown">
-                    <i class="font-awesome-i fa-solid fa-file-export"></i><span>|　view / import / export</span>
-                    <ul v-show="dropdownview" class="dropdown-menu">
-                    <li @click="viewAs('json')">View as JSON</li>
-                    <li @click="viewAs('html')">View as HTML</li>
-                    <li @click="$emit('update:isImport', true)">Import as JSON</li>
-                    <li @click="exportAs('json')">Export as JSON</li>
-                    <li @click="exportAs('html')">Export as HTML</li>
+                    <i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span>
+                    <ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub">
+                    <li @click="viewAs('json')"><i class="fa-solid fa-eye"></i>|　View as JSON</li>
+                    <li @click="viewAs('html')"><i class="fa-solid fa-eye"></i>|　View as HTML</li>
+                    <li @click="$emit('update:formData', { isSendEmail: false, isCategoryVisible: false, isImport: true })"><i class="fa-solid fa-file-import"></i>|　Import as JSON</li>
+                    <li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li>
+                    <li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li>
+                    <li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
                     </ul>
                 </li>
-                <li v-if="!isSendEmail && !isImport"  @click="$emit('update:isCategoryVisible', true)">
-                    <i class="font-awesome-i fa-solid fa-add"></i><span>|　add new category</span>
+                <li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', { isSendEmail: false, isCategoryVisible: true, isImport: false })">
+                    <i class="font-awesome-i fa-solid fa-add"></i><span>|　Add new category</span>
                 </li>
-                <li v-if="!isSendEmail && isCategoryVisible" @click="$emit('update:isCategoryVisible', false)">
-                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
+
+                <li v-if="isSendEmail" @click="$emit('update:isSendEmail', false)">
+                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
                 </li>
-                <li v-if="!isSendEmail && isImport" @click="$emit('update:isImport', false)">
-                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　pre page</span>
+                <li v-if="isCategoryVisible" @click="$emit('update:isCategoryVisible', false)">
+                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
+                </li>
+                <li v-if="isImport" @click="$emit('update:isImport', false)">
+                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
+                </li>
+                <li @click="toggleBars">
+                    <i class="font-awesome-i fa-solid fa-xmark"></i><span>|　Close the menu</span>
                 </li>
             </ul>
         </div>
         </div>
+        <div v-if="isSendEmail" class="closeicon">
+            <i @click="$emit('update:isSendEmail', false)" class="font-awesome-i fa-regular fa-circle-xmark"></i>
+        </div>
+        <div v-if="isCategoryVisible" class="closeicon">
+            <i @click="$emit('update:isCategoryVisible', false)" class="font-awesome-i fa-regular fa-circle-xmark"></i>
+        </div>
+        <div v-if="isImport" class="closeicon">
+            <i @click="$emit('update:isImport', false)" class="font-awesome-i fa-regular fa-circle-xmark"></i>
+        </div>
+    </div>
     `,
     data() {
         return {
@@ -221,33 +240,15 @@ const DropdownMenu1 = {
             dropdownviewHeader.value = !dropdownviewHeader.value; // true <-> false
         };
         
-        const isLight = Vue.ref(false);
-
-        Vue.watch(isLight, (newVal) => {
-            toggleBars();
-            if (newVal) {
-                document.body.classList.add('light-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('light-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-        
-
-        // view , import ,export start
-        const dropdownview = Vue.ref(false);
+        const dropdownviewExport = Vue.ref(false);
         
         const toggleDropdown = () => {
-            dropdownview.value = !dropdownview.value; // true <-> false
+            dropdownviewExport.value = !dropdownviewExport.value; // true <-> false
         };
-        // view , import ,export end
-
 
         return { 
             toggleBars, dropdownviewHeader, 
-            isLight,
-            toggleDropdown, dropdownview
+            toggleDropdown, dropdownviewExport
         };
     }
 };
@@ -259,10 +260,21 @@ let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><me
 let template_e = `</div></body></html>`;
 
 createApp({
-    components: { 'dropdown-menu-1': DropdownMenu1 
+    components: { 'dropdown-menu-header': DropdownMenuHeader 
     },
     setup() {
-        
+
+        const isLight = ref(true);
+        watch(isLight, (newVal) => {
+            if (!newVal) {
+               document.body.classList.add('light-mode');
+               localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
         const isSendEmail = ref(false);
         const formData = ref({
             to_email: '',
@@ -295,7 +307,7 @@ createApp({
             // console.log("isCategoryVisible 变更为:", newVal);
         });
 
-        return { isSendEmail ,formData ,isCategoryVisible ,isImport};
+        return { isLight, isSendEmail ,formData ,isCategoryVisible ,isImport};
     },
     data() {
         return {
@@ -303,6 +315,7 @@ createApp({
             selectedCategory: "",
             newTodo: { text: "", date: Common.getTodayDate() },
             todoList: JSON.parse(localStorage.getItem("todos")) || {},
+            todoListArchive: JSON.parse(localStorage.getItem("todosArchive")) || {},
             expandedCategories: [],
             formData: {
                 to_email: '',
@@ -317,7 +330,13 @@ createApp({
             isLoading: false,
             selectedFile: null, // 用來儲存選擇的檔案
             categoryKey: 0,
+            isLight: false,
             dropdownviewTodo: false,
+            isSendEmail: false,
+            isCategoryVisible: false,
+            isImport: false,
+            dropdownviewTodo: {},
+            newTodoArchive: { text: "", date: "", completed: "",urgent: "" },
         };
     },
     computed: {
@@ -326,8 +345,11 @@ createApp({
         }
     },
     methods: {
-        toggleBarsTodo(){
-          this.dropdownviewTodo = !this.dropdownviewTodo;  
+        handleUpdate(newData) {
+            // console.log(newData)
+            this.isSendEmail = newData.isSendEmail;
+            this.isCategoryVisible = newData.isCategoryVisible;
+            this.isImport = newData.isImport;
         },
         handleSubmit() {
             this.sending = true;
@@ -449,13 +471,68 @@ createApp({
                 notyf.success(`Successfully deleted '${category}' permanently.`);
             }
         },
+
+        //archive
+        archiveTodo(category, index, date, text, completed, urgent)  {
+            if(!this.todoListArchive[category]){
+                this.saveCategoryArchive(category);
+            }
+            if (!category || !text.trim() || !date) return;
+            this.todoList[category][index].archived = true;
+            this.newTodoArchive.text = text;
+            this.newTodoArchive.date = date;
+            this.newTodoArchive.completed = completed;
+            this.newTodoArchive.urgent = urgent;
+
+            this.addTodoArchive(category, index);
+            this.removeCauseTodoArchive(category, index);
+            this.saveTodosArchive();
+            if(this.todoList[category][index].archived){
+                notyf.success(`archive task successfully!`);
+            }
+        },
+        saveCategoryArchive(category) {
+            if (category.trim() && !this.todoListArchive[category]) {
+                this.todoListArchive[category] = []; // Vue 3 不需要 $set
+                this.saveTodosArchive();
+            }
+        },
+        saveTodosArchive() {
+            localStorage.setItem("todosArchive", JSON.stringify(this.todoListArchive));
+        },
+        addTodoArchive(category, index, text) {
+            if (!category || !text.trim()) return;
+            this.todoListArchive[category][index].push({ ...this.newTodoArchive });
+            this.saveTodosArchive();
+            notyf.success(`add archive '${category}' '${text}' successfully!`);
+        },
+        removeCauseTodoArchive(category, index) {
+            this.todoList[category].splice(index, 1);
+            this.saveTodos();
+        },
+        //archive end
         //todo
+        toggleTodobars(category, index) {
+            this.todoList[category][index].opend = !this.todoList[category][index].opend;
+            this.saveTodos();
+            if(this.todoList[category][index].opend){
+                notyf.success(`toggle open successfully!`);
+            }
+            this.dropdownviewTodo[index] = this.todoList[category][index].opend;  
+        },
+        setUrgentTodo(category, index) {
+            this.todoList[category][index].urgent = !this.todoList[category][index].urgent;
+            this.saveTodos();
+            if(this.todoList[category][index].urgent){
+                notyf.success(`urgent set successfully!`);
+            }
+        },
         saveTodos() {
             localStorage.setItem("todos", JSON.stringify(this.todoList));
         },
         addTodo() {
             if (!this.selectedCategory){
-                notyf.error('select your category! or click <i class="font-awesome-i fa-solid fa-add"></i> add your category first');
+                notyf.error('select your category<br>or<br>add a new category!');
             }
             if (!this.selectedCategory || !this.newTodo.text.trim() || !this.newTodo.date) return;
             this.todoList[this.selectedCategory].push({ ...this.newTodo });
@@ -464,21 +541,19 @@ createApp({
             notyf.success("add task successfully!");
         },
         copyTodo(text) {
-            this.toggleBarsTodo();
             navigator.clipboard.writeText(text.trim())
                 .then(() => notyf.success("copy success！"))
                 .catch(err => console.error("copy error！", err));
         },
         checkTodo(category, index) {
-            this.toggleBarsTodo();
             this.todoList[category][index].completed = !this.todoList[category][index].completed;
             this.saveTodos();
             if(this.todoList[category][index].completed){
-                notyf.success(`check task successfully!`);
+                notyf.success(`finish task!`);
+                this.todoList[category][index].urgent = false;
             }
         },
         removeTodo(category, index ,text) {
-            this.toggleBarsTodo();
             const userConfirmed = window.confirm(`Are you sure you want to delete '${text}'?`);
             if (userConfirmed) {
                 this.todoList[category].splice(index, 1);
