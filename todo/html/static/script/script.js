@@ -40,7 +40,12 @@ const DropdownMenuHeader = {
     <div class="header-container">
         <div class="hamburger">
         <div class="dropdown">
-            <i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>
+            <svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }">
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
+              </svg>
+            <!--<i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>-->
             <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
             
                 <li v-if="isLight" @click="$emit('update:isLight', false )">
@@ -77,9 +82,6 @@ const DropdownMenuHeader = {
                 <li v-if="isImport" @click="$emit('update:isImport', false)">
                     <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
                 </li>
-                <li @click="toggleBars">
-                    <i class="font-awesome-i fa-solid fa-xmark"></i><span>|　Close the menu</span>
-                </li>
             </ul>
         </div>
         </div>
@@ -96,6 +98,7 @@ const DropdownMenuHeader = {
     `,
     data() {
         return {
+            dropdownviewHeader: false,
             taskList: JSON.parse(localStorage.getItem("tasks")) || {},
         };
     },
