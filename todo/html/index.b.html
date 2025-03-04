@@ -327,7 +327,8 @@
       background-color: #494848;
       border-left: 4px solid rgb(56, 56, 56);
       border-bottom: 4px solid #1d1e1f;
-      padding: 10px 12px;
+      /* padding: 10px 12px; */
+      padding: 5px;
       border-radius: 5px;
       cursor: pointer;
       margin-bottom: 5px;
@@ -363,13 +364,13 @@
 
     }
 
-    .urgent {
+    .task-urgent {
       border-left: 4px solid #d64d35;
       border-bottom: 4px solid #b32a00;
       background-color: #cf472e;
     }
 
-    .completed {
+    .task-completed {
       color: #fff;
       background: #6e6e6e;
       border-left: 4px solid #2C2C2C;
@@ -447,13 +448,13 @@
     .dropdown-menu-task {
       top: -65px;
       left: revert-layer;
-      right: 10px;
+      right: 30px;
     }
 
     .dropdown-menu-category {
-      top: -65px;
+      top: -15px;
       left: revert-layer;
-      right: 10px;
+      right: 25px;
       width: 230px;
     }
 
@@ -472,6 +473,7 @@
     }
 
     .text-content {
+      width: 80%;
       flex: 1;
       /* 讓文字內容占用剩餘空間 */
       word-wrap: break-word;
@@ -627,6 +629,153 @@
       margin-bottom: 20px;
     }
 
+/*burger svg start*/
+.vbp-header-menu-button__svg {
+  width: 30px;
+  height: 15px;
+  cursor: pointer;
+  transform: scaleX(-1);
+}
+
+.vbp-header-menu-button__svg line {
+  stroke: #faf6f6;
+  /* stroke-dasharray: 100%; */
+  stroke-dashoffset: 0%;
+  transition: transform .8s, stroke-dashoffset .4s;
+  /* transform-origin: center; */
+  stroke-width: 3px;
+}
+
+.vbp-header-menu-button__svg .top {
+  transform: translateY(-35%);
+  -webkit-transform: translateY(-35%);
+  -moz-transform: translateY(35%);
+  -ms-transform: translateY(35%);
+  -o-transform: translateY(35%);
+}
+
+.vbp-header-menu-button__svg .middle {
+  transform: scaleX(1);
+  -webkit-transform: scaleX(1);
+  -moz-transform: scaleX(1);
+  -ms-transform: scaleX(1);
+  -o-transform: scaleX(1);
+  transition: opacity .3s, transform .3s;
+  -webkit-transition: opacity .3s, transform .3s;
+  -moz-transition: opacity .3s, transform .3s;
+  -ms-transition: opacity .3s, transform .3s;
+  -o-transition: opacity .3s, transform .3s;
+
+}
+
+.vbp-header-menu-button__svg .bottom {
+  transform: translateY(33%);
+  -webkit-transform: translateY(33%);
+  -moz-transform: translateY(33%);
+  -ms-transform: translateY(33%);
+  -o-transform: translateY(33%);
+  stroke-dasharray: 100%;
+  stroke-dashoffset: 9px;
+}
+.vbp-header-menu-button__svg:hover .bottom {
+  stroke-dashoffset: 0%;
+}
+/*** Mode Croix ***/
+.header-opend .top {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  stroke-linecap: square;
+}
+
+.header-opend .middle {
+  transform: scaleX(0.1);
+  -webkit-transform: scaleX(0.1);
+  -moz-transform: scaleX(0.1);
+  -ms-transform: scaleX(0.1);
+  -o-transform: scaleX(0.1);
+  opacity: 0;
+}
+
+.header-opend .bottom {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  stroke-linecap: square;
+  stroke-dashoffset: 0%;
+  transform: rotate(-45deg) translate(-50%, 20%);
+  /* transform: rotate(-85deg) translate(-50%, -0%); */
+}
+
+.category-opend .top {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  stroke-linecap: square;
+  transform: rotate(45deg) translate(10%, -50%);
+}
+
+.category-opend .middle {
+  transform: scaleX(0.1);
+  -webkit-transform: scaleX(0.1);
+  -moz-transform: scaleX(0.1);
+  -ms-transform: scaleX(0.1);
+  -o-transform: scaleX(0.1);
+  opacity: 0;
+}
+
+.category-opend .bottom {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  stroke-linecap: square;
+  stroke-dashoffset: 0%;
+  transform: rotate(-22deg) translate(-36%, 13%);
+}
+
+.task-opend .top {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  stroke-linecap: square;
+  transform: rotate(45deg) translate(10%, -50%);
+  /* transform: rotate(55deg) translate(10%, -60%); */
+}
+
+.task-opend .middle {
+  transform: scaleX(0.1);
+  -webkit-transform: scaleX(0.1);
+  -moz-transform: scaleX(0.1);
+  -ms-transform: scaleX(0.1);
+  -o-transform: scaleX(0.1);
+  opacity: 0;
+}
+
+.task-opend .bottom {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  stroke-linecap: square;
+  stroke-dashoffset: 0%;
+  /* transform: rotate(-45deg) translate(-50%, 20%); */
+  /* transform: rotate(-85deg) translate(-50%, -0%); */
+  transform: rotate(-22deg) translate(-36%, 13%);
+}
+/*burger svg end*/
+
+
     .loading,
 .loading > div {
   position: relative;
@@ -737,6 +886,8 @@
   height: 30px;
   margin-left: -75px;
 }
+
+
 
 @keyframes ball-running-dots-animate {
   0%,
@@ -957,7 +1108,12 @@
 
           <div class="hamburger-task">
             <div class="dropdown">
-              <i class="font-awesome-i fa-solid fa-bars" @click="toggleCategory(category)"></i>
+              <svg class="vbp-header-menu-button__svg" @click="toggleCategory(category)" :class="{ 'category-opend': expandedCategories.includes(category) }">
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
+              </svg>
+              <!-- <i class="font-awesome-i fa-solid fa-bars" @click="toggleCategory(category)"></i> -->
               <ul v-show="expandedCategories.includes(category)" class="dropdown-menu dropdown-menu-category ">
                 <li @click="archiveCategory(category)" >
                   <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive category</span>
@@ -965,9 +1121,6 @@
                 <li v-if="isCategoryVisible" @click.stop="removeCategory(category)">
                   <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove category</span>
                 </li> 
-                <li @click="toggleCategory(category)">
-                  <i class="font-awesome-i fa-solid fa-xmark"></i><span>|　Close category task</span>
-                </li>
               </ul>
             </div>
           </div>
@@ -976,11 +1129,16 @@
 
         <div v-show="expandedCategories.includes(category)" class="category-content">
           <div v-for="(task, index) in sortedTasksDESC(tasks)" :key="index" class="task-item"
-            :class="{ completed: task.completed , urgent: task.urgent }">
+            :class="{ 'task-completed': task.completed , 'task-urgent': task.urgent }">
             <span class="text-content" @click="checkTask(category, index)">　{{ task.date }}　{{ task.text }}</span>
             <div class="hamburger-task">
               <div class="dropdown">
-                <i class="font-awesome-i fa-solid fa-bars" @click="toggleTaskbars(category, index)"></i>
+                <svg class="vbp-header-menu-button__svg" @click="toggleTaskbars(category, index)" :class="{ 'task-opend': task.opend }">
+                  <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
+                  <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
+                  <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
+                </svg>
+                <!-- <i class="font-awesome-i fa-solid fa-bars" @click="toggleTaskbars(category, index)"></i> -->
                 <ul v-show="dropdownviewTask[index]" class="dropdown-menu dropdown-menu-task">
                   <li @click="archiveTask(category, index, task.date, task.text, task.completed ,task.urgent)" >
                     <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive task</span>
@@ -996,9 +1154,6 @@
                   </li>
                   <li @click="removeTask(category, index, task.text)" >
                     <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove task</span>
-                  </li>
-                  <li @click="toggleTaskbars(category, index)">
-                    <i class="font-awesome-i fa-solid fa-xmark"></i><span>|　Close the menu</span>
                   </li>
                 </ul>
               </div>
