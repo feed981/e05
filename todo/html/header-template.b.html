@@ -15,9 +15,12 @@
             <li v-if="!isLight" @click="$emit('update:isLight', true )">
                 <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span>
             </li>
-            <!-- todo: close other div-->
             <li v-if="!isSendEmail" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false })">
                 <i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span>
+            </li>
+            <!-- todo: close other div-->
+            <li v-if="!isSendEmail" @click="resetdata()">
+                <i class="font-awesome-i fa-solid fa-toilet-paper"></i><span>|　Clear all data</span>
             </li>
             <li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown">
                 <i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span>

@@ -37,16 +37,26 @@ const DropdownMenuHeader = {
     emits: ['update:isLight','update:isAllTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:formData'],  // 允许子组件更新父组件
 
     template: `
-<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible" @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div v-if="isSendEmail || isCategoryVisible || isImport || isTaskVisible" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
+<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" @click="resetdata()"><i class="font-awesome-i fa-solid fa-toilet-paper"></i><span>|　Clear all data</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible" @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div v-if="isSendEmail || isCategoryVisible || isImport || isTaskVisible" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
     `,
     data() {
         return {
+            resetKey: 0,
             selectedCategory: "",
             dropdownviewHeader: false,
             taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
         };
     },
     methods:{
+        resetdata(){
+            const userConfirmed = window.confirm(`Are you sure you want to clear all the data ?`);
+            if (userConfirmed) {
+                localStorage.setItem("tasks" ,'{"default":[]}')
+                // this.resetKey.value += 1;
+                window.location.reload();
+                notyf.success(`Successfully clear permanently.`);
+            }
+        },
         html(){
 
             let htmlContent = `
@@ -652,8 +662,11 @@ createApp({
         sortedTasksASC(tasks) {
             return tasks.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
         },
+        // sortedTasksDESC(tasks) {
+        //     return tasks.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        // },
         sortedTasksDESC(tasks) {
-            return tasks.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            return tasks.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
         },
     }
 }).mount('#app');
