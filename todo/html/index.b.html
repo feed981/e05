@@ -163,7 +163,7 @@
 
     .light-mode .task-container {
       background-color: #fff;
-      color: #000;
+      /* color: #000; */
     }
 
     .light-mode .category-container {
@@ -203,7 +203,7 @@
     }
 
 
-    .light-mode .completed {
+    .light-mode .task-completed {
       background: #5f6161;
       border-left: 4px solid rgb(199, 199, 199);
       border-bottom: 4px solid #575656;
@@ -220,8 +220,12 @@
       color: #000;
     }
 
+    .light-mode .menu .font-awesome-i {
+      color: #dadada;
+    }
+
     .light-mode .font-awesome-i {
-      color: #000;
+      color: #f6f6f6;
     }
 
     .light-mode .heading-style1 {
@@ -259,7 +263,7 @@
     }
 
 
-    .light-mode .urgent {
+    .light-mode .task-urgent {
       border-left: 4px solid #d64d35;
       border-bottom: 4px solid #b32a00;
       background-color: #cf472e;
@@ -349,6 +353,11 @@
       padding-left: 15px;
     }
 
+    .selected-category-sub{
+      font-size: 12px;
+      text-align: left;
+    }
+
     .task-item {
       border-left: 4px solid #359bd6;
       border-bottom: 4px solid #0056b3;
@@ -388,6 +397,10 @@
       text-align: left;
       padding: 5px 10px 1px 10px;
       font-size: 18px;
+    }
+    
+    .hamburger-task svg{
+      width: 15px;
     }
     
     .closeicon{
@@ -452,7 +465,7 @@
     }
 
     .dropdown-menu-category {
-      top: -15px;
+      top: -55px;
       left: revert-layer;
       right: 25px;
       width: 230px;
@@ -968,18 +981,6 @@
         font-size: 14px;
       }
 
-      .input-container2 {
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        width: 100%;
-      }
-
-      .input-container2 .input-text {
-        border-radius: 0px 5px 5px 0px;
-        margin: 0px 0px 10px -20px;
-      }
-
       .container {
         max-width: 100%;
       }
@@ -1090,6 +1091,7 @@
       </dropdown-menu-header>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-icons"></i> new CATEGORY!</h1>
+      <div v-if="this.selectedCategory" class="selected-category-sub">{{this.selectedCategory}} - sub</div>
       <div class="button-container">
         <input type="text" v-model="newCategory" placeholder="Enter a new category..."
         required>
@@ -1133,26 +1135,26 @@
             <span class="text-content" @click="checkTask(category, index)">　{{ task.date }}　{{ task.text }}</span>
             <div class="hamburger-task">
               <div class="dropdown">
-                <svg class="vbp-header-menu-button__svg" @click="toggleTaskbars(category, index)" :class="{ 'task-opend': task.opend }">
+                <svg class="vbp-header-menu-button__svg" @click="toggleTaskbars(category, task.timestamp)" :class="{ 'task-opend': task.opend }">
                   <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
                   <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
                   <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
                 </svg>
                 <!-- <i class="font-awesome-i fa-solid fa-bars" @click="toggleTaskbars(category, index)"></i> -->
                 <ul v-show="dropdownviewTask[index]" class="dropdown-menu dropdown-menu-task">
-                  <li @click="archiveTask(category, index, task.date, task.text, task.completed ,task.urgent)" >
+                  <li @click="archiveTask(category, task)" >
                     <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive task</span>
                   </li>
-                  <li @click="setUrgentTask(category, index)">
+                  <li @click="setUrgentTask(category, task.timestamp)">
                     <i class="font-awesome-i fa-solid fa-jug-detergent"></i><span>|　Set urgent task</span>
                   </li>
-                  <li @click="checkTask(category, index)">
+                  <li @click="checkTask(category, task.timestamp)">
                     <i class="font-awesome-i fa-regular fa-square-check"></i><span>|　Check task</span>
                   </li>
                   <li @click="copyTask(task.text)">
                     <i class="font-awesome-i fa-solid fa-clone"></i><span>|　Copy task text</span>
                   </li>
-                  <li @click="removeTask(category, index, task.text)" >
+                  <li @click="removeTask(category, task.timestamp, task.text)" >
                     <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove task</span>
                   </li>
                 </ul>
