@@ -33,74 +33,17 @@ const Common = {
 };
 
 const DropdownMenuHeader = {
-    props: ['isLight','isSendEmail','isCategoryVisible','isImport','formData'],  // 接收父组件的值
-    emits: ['update:isLight','update:isSendEmail','update:isCategoryVisible','update:isImport','update:formData'],  // 允许子组件更新父组件
+    props: ['isLight','isAllTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','formData'],  // 接收父组件的值
+    emits: ['update:isLight','update:isAllTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:formData'],  // 允许子组件更新父组件
 
     template: `
-    <div class="header-container">
-        <div class="hamburger">
-        <div class="dropdown">
-            <svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }">
-                <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
-                <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
-                <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
-              </svg>
-            <!--<i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>-->
-            <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
-            
-                <li v-if="isLight" @click="$emit('update:isLight', false )">
-                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span>
-                </li>
-                <li v-if="!isLight" @click="$emit('update:isLight', true )">
-                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span>
-                </li>
-                <!-- todo: close other div-->
-                <li v-if="!isSendEmail" @click="$emit('update:formData', { isSendEmail: true, isCategoryVisible: false, isImport: false })">
-                    <i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span>
-                </li>
-                <li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown">
-                    <i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span>
-                    <ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub">
-                    <li @click="viewAs('json')"><i class="fa-solid fa-eye"></i>|　View as JSON</li>
-                    <li @click="viewAs('html')"><i class="fa-solid fa-eye"></i>|　View as HTML</li>
-                    <li @click="$emit('update:formData', { isSendEmail: false, isCategoryVisible: false, isImport: true })"><i class="fa-solid fa-file-import"></i>|　Import as JSON</li>
-                    <li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li>
-                    <li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li>
-                    <li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
-                    </ul>
-                </li>
-                <li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', { isSendEmail: false, isCategoryVisible: true, isImport: false })">
-                    <i class="font-awesome-i fa-solid fa-add"></i><span>|　Add new category</span>
-                </li>
-
-                <li v-if="isSendEmail" @click="$emit('update:isSendEmail', false)">
-                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
-                </li>
-                <li v-if="isCategoryVisible" @click="$emit('update:isCategoryVisible', false)">
-                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
-                </li>
-                <li v-if="isImport" @click="$emit('update:isImport', false)">
-                    <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
-                </li>
-            </ul>
-        </div>
-        </div>
-        <div v-if="isSendEmail" class="closeicon">
-            <i @click="$emit('update:isSendEmail', false)" class="font-awesome-i fa-regular fa-circle-xmark"></i>
-        </div>
-        <div v-if="isCategoryVisible" class="closeicon">
-            <i @click="$emit('update:isCategoryVisible', false)" class="font-awesome-i fa-regular fa-circle-xmark"></i>
-        </div>
-        <div v-if="isImport" class="closeicon">
-            <i @click="$emit('update:isImport', false)" class="font-awesome-i fa-regular fa-circle-xmark"></i>
-        </div>
-    </div>
+<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible" @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div v-if="isSendEmail || isCategoryVisible || isImport || isTaskVisible" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
     `,
     data() {
         return {
             selectedCategory: "",
             dropdownviewHeader: false,
-            taskList: JSON.parse(localStorage.getItem("tasks")) || {},
+            taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
         };
     },
     methods:{
@@ -279,6 +222,11 @@ createApp({
             }
         });
 
+        const isAllTasklist = ref(true);
+        watch(isAllTasklist, (newVal) => {
+            // console.log("isAllTasklist 变更为:", newVal);
+        });
+
         const isSendEmail = ref(false);
         const formData = ref({
             to_email: '',
@@ -308,18 +256,23 @@ createApp({
 
         const isImport = ref(false);
         watch(isImport, (newVal) => {
-            // console.log("isCategoryVisible 变更为:", newVal);
+            // console.log("isImport 变更为:", newVal);
         });
 
-        return { isLight, isSendEmail ,formData ,isCategoryVisible ,isImport};
+        const isTaskVisible = ref(false);
+        watch(isTaskVisible, (newVal) => {
+            // console.log("isTaskVisible 变更为:", newVal);
+        });
+
+        return { isLight, isAllTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible};
     },
     data() {
         return {
             newCategory: "",
             selectedCategory: "",
-            newTask: { text: "", date: Common.getTodayDate() },
-            taskList: JSON.parse(localStorage.getItem("tasks")) || {},
-            taskListArchive: JSON.parse(localStorage.getItem("tasksArchive")) || {},
+            newTask: { text: "", date: Common.getTodayDate()},
+            taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
+            taskListArchive: JSON.parse(localStorage.getItem("tasksArchive")) || {"default":[]},
             expandedCategories: [],
             formData: {
                 to_email: '',
@@ -335,12 +288,14 @@ createApp({
             selectedFile: null, // 用來儲存選擇的檔案
             categoryKey: 0,
             isLight: false,
+            isAllTasklist: false,
             dropdownviewTask: false,
             isSendEmail: false,
             isCategoryVisible: false,
             isImport: false,
+            isTaskVisible: false,
             dropdownviewTask: {},
-            newTaskArchive: { text: "", date: "", completed: "",urgent: "" },
+            isEdit: false,
         };
     },
     mounted() {
@@ -354,9 +309,11 @@ createApp({
     methods: {
         handleUpdate(newData) {
             // console.log(newData)
+            this.isAllTasklist = newData.isAllTasklist;
             this.isSendEmail = newData.isSendEmail;
             this.isCategoryVisible = newData.isCategoryVisible;
             this.isImport = newData.isImport;
+            this.isTaskVisible = newData.isTaskVisible;
         },
         handleSubmit() {
             this.sending = true;
@@ -453,9 +410,16 @@ createApp({
                     notyf.error("Category is repeat！");
                 }
                 if (this.newCategory.trim() && !this.taskList[this.newCategory]) {
-                    this.taskList[this.newCategory] = []; // Vue 3 不需要 $set
+                    /*
+                    this.taskList[this.newCategory] = {
+                        "_items": {}  // 預設 _items 為空物件（或空陣列 [] 取決於你的需求）
+                    }; // Vue 3 不需要 $set
+                    */
+                    this.taskList[this.newCategory] = [];
                     this.newCategory = "";
                     this.saveTasks();
+                    this.isCategoryVisible = false;
+                    this.isAllTasklist = true;
                 }
                 // 子項目
             }else{
@@ -473,13 +437,13 @@ createApp({
                 }
 
                 // T1現在是陣列，可以新增一個帶有category標記的項目
-                this.taskList[this.selectedCategory].push({
-                    text: this.newCategory,
-                    parentCategory: this.selectedCategory,
-                    date: Common.getTodayDate(),
-                    timestamp: Date.now(),
-                    opend: false
-                });
+                // this.taskList[this.selectedCategory].push({
+                //     text: this.newCategory,
+                //     parentCategory: this.selectedCategory,
+                //     date: Common.getTodayDate(),
+                //     timestamp: Date.now(),
+                //     opend: false
+                // });
 
                 // Check if subcategory already exists
                 if (this.taskList[this.selectedCategory][this.newCategory]) {
@@ -575,7 +539,10 @@ createApp({
         //archive end
         //task
         toggleTaskbars(category, timestamp) {
+            // console.log('category,',category,' ,newTask.timestamp',timestamp)
+            
             const taskIndex = this.taskIndex(category, timestamp);
+            // console.log('taskIndex,',taskIndex)
             // 只開啟當前點擊的 task
             this.taskList[category][taskIndex].opend = !this.taskList[category][taskIndex].opend;
             this.saveTasks();
@@ -602,21 +569,54 @@ createApp({
             localStorage.setItem("tasks", JSON.stringify(this.taskList));
         },
         addTask() {
-            if (!this.selectedCategory) {
+            const category = this.selectedCategory;
+            if (!category) {
                 notyf.error('Select your category<br>or<br>add a new category!');
             }
-            if (!this.selectedCategory || !this.newTask.text.trim() || !this.newTask.date) return;
+            if (!category || !this.newTask.text.trim() || !this.newTask.date) return;
         
-            // 加入 timestamp 確保唯一性
-            const newTask = {
-                ...this.newTask,
-                timestamp: Date.now() // 加上唯一時間戳
-            };
+            if(this.isEdit){
+                try{
+                    const taskIndex = this.taskIndex(category, this.newTask.timestamp);
+                    this.taskList[category][taskIndex].text = this.newTask.text;
+                    this.taskList[category][taskIndex].date = this.newTask.date;
+                    this.taskList[category][taskIndex].updatetimestamp = Date.now();
+                    this.newTask.text = "";
+                    this.saveTasks();
+                    notyf.success("Edit task successfully!");
+                    this.isEdit = false;
+                    this.isAllTasklist = true;
+                }catch{
+                    notyf.error("Edit task error!");
+                }
+            }else{
+                // 加入 timestamp 確保唯一性
+                const newTask = {
+                    ...this.newTask,
+                    timestamp: Date.now(), // 加上唯一時間戳
+                    updatetimestamp: Date.now(), 
+                };
+                this.taskList[category].push(newTask);
+                this.newTask.text = "";
+                this.saveTasks();
+                notyf.success("Add task successfully!");
+                this.isTaskVisible = false;
+                this.isAllTasklist = true;
+                // 展開
+                this.toggleCategory(category) ;
+                this.toggleTaskbars(category, newTask.timestamp);
+            }
         
-            this.taskList[this.selectedCategory].push(newTask);
-            this.newTask.text = "";
-            this.saveTasks();
-            notyf.success("Add task successfully!");
+        },
+        editTask(category, task) {
+            this.isAllTasklist = false;
+            this.isEdit = true;
+            this.selectedCategory = category;
+            this.newTask.date = task.date;
+            this.newTask.text = task.text;
+            this.newTask.timestamp = task.timestamp;
+            this.toggleTaskbars(category, task.timestamp);
+            notyf.success("Start Edit task!");
         },
         copyTask(text) {
             navigator.clipboard.writeText(text.trim())
@@ -653,7 +653,7 @@ createApp({
             return tasks.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
         },
         sortedTasksDESC(tasks) {
-            return tasks.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+            return tasks.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         },
     }
 }).mount('#app');
