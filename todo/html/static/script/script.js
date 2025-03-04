@@ -98,6 +98,7 @@ const DropdownMenuHeader = {
     `,
     data() {
         return {
+            selectedCategory: "",
             dropdownviewHeader: false,
             taskList: JSON.parse(localStorage.getItem("tasks")) || {},
         };
@@ -447,11 +448,49 @@ createApp({
         },
         //Category
         saveCategory() {
-            if(this.taskList[this.newCategory]){
-                notyf.error("category is repeat！");
-            }
-            if (this.newCategory.trim() && !this.taskList[this.newCategory]) {
-                this.taskList[this.newCategory] = []; // Vue 3 不需要 $set
+            if(!this.selectedCategory){
+                if(this.taskList[this.newCategory]){
+                    notyf.error("Category is repeat！");
+                }
+                if (this.newCategory.trim() && !this.taskList[this.newCategory]) {
+                    this.taskList[this.newCategory] = []; // Vue 3 不需要 $set
+                    this.newCategory = "";
+                    this.saveTasks();
+                }
+                // 子項目
+            }else{
+                console.log('Adding subcategory:', this.newCategory, 'to category:', this.selectedCategory);
+                console.log('Current taskList:', JSON.stringify(this.taskList));
+
+                // Ensure taskList is an object
+                if (typeof this.taskList !== 'object' || this.taskList === null) {
+                    this.taskList = {};
+                }
+
+                // Ensure the selected category exists and is an object
+                if (!this.taskList[this.selectedCategory] || typeof this.taskList[this.selectedCategory] !== 'object') {
+                    this.taskList[this.selectedCategory] = {};
+                }
+
+                // T1現在是陣列，可以新增一個帶有category標記的項目
+                this.taskList[this.selectedCategory].push({
+                    text: this.newCategory,
+                    parentCategory: this.selectedCategory,
+                    date: Common.getTodayDate(),
+                    timestamp: Date.now(),
+                    opend: false
+                });
+
+                // Check if subcategory already exists
+                if (this.taskList[this.selectedCategory][this.newCategory]) {
+                    notyf.error("Sub category is repeat！");
+                    return; // Exit the function to prevent further execution
+                }
+
+                // Add the new subcategory
+                console.log("Updated taskList:", JSON.stringify(this.taskList));
+
+                // Reset and save
                 this.newCategory = "";
                 this.saveTasks();
             }
@@ -463,7 +502,7 @@ createApp({
             } else {
                 this.expandedCategories.splice(index, 1);
             }
-            console.log('expandedCategories:'+this.expandedCategories)
+            // console.log('expandedCategories:'+this.expandedCategories)
         },
         removeCategory(category) {
             if (this.taskList[category] && this.taskList[category].length > 0) {
@@ -481,8 +520,15 @@ createApp({
         archiveCategory(category){ //task
 
         },
+        taskIndex(category, timestamp){
+            const taskIndex = this.taskList[category].findIndex(task => task.timestamp === timestamp);
+            if (taskIndex === -1) return; // 如果找不到，直接 return
+            return taskIndex;
+        },
         //archive
-        archiveTask(category, index, date, text, completed, urgent)  {
+        archiveTask(category, task)  {
+            const taskIndex = this.taskIndex(category, task.timestamp);
+
             if (!this.taskListArchive) {
                 this.taskListArchive = {}; // 確保它是物件
             }
@@ -494,25 +540,20 @@ createApp({
                 this.taskListArchive[category] = []; // 只初始化一次，避免覆蓋舊資料
             }
         
-            if (!text.trim() || !date) return;
+            if (!task.text.trim() || !task.date) return;
         
             // 設置任務為已歸檔
-            this.taskList[category][index].archived = true;
+            this.taskList[category][taskIndex].archived = true;
         
             // 創建新的待辦事項
-            const newArchivedTask = {
-                text,
-                date,
-                completed,
-                urgent
-            };
+            const newArchivedTask = {};
         
             // 新增到 `this.taskListArchive`
             this.taskListArchive[category].push(newArchivedTask);
             this.saveTasksArchive(); // 儲存到 localStorage
         
             // 移除原來的 `task`
-            this.removeCauseTaskArchive(category, index);
+            this.removeCauseTaskArchive(category, task.timestamp);
         
             notyf.success(`Archive task successfully!`);
         },
@@ -527,18 +568,19 @@ createApp({
             this.saveTasksArchive();
             notyf.success(`Added archive '${category}' '${text}' successfully!`);
         },
-        removeCauseTaskArchive(category, index) {
-            this.taskList[category].splice(index, 1);
+        removeCauseTaskArchive(category, timestamp) {
+            this.taskList[category] = this.taskList[category].filter(task => task.timestamp !== timestamp);
             this.saveTasks();
         },
         //archive end
         //task
-        toggleTaskbars(category, index) {
+        toggleTaskbars(category, timestamp) {
+            const taskIndex = this.taskIndex(category, timestamp);
             // 只開啟當前點擊的 task
-            this.taskList[category][index].opend = !this.taskList[category][index].opend;
+            this.taskList[category][taskIndex].opend = !this.taskList[category][taskIndex].opend;
             this.saveTasks();
             // 更新 dropdownviewTask 狀態
-            this.dropdownviewTask[index] = this.taskList[category][index].opend;
+            this.dropdownviewTask[taskIndex] = this.taskList[category][taskIndex].opend;
         },
         resetAllTaskbars() {
             Object.keys(this.taskList).forEach(category => {
@@ -548,10 +590,11 @@ createApp({
             });
             this.saveTasks();
         },
-        setUrgentTask(category, index) {
-            this.taskList[category][index].urgent = !this.taskList[category][index].urgent;
+        setUrgentTask(category, timestamp) {
+            const taskIndex = this.taskIndex(category, timestamp);
+            this.taskList[category][taskIndex].urgent = !this.taskList[category][taskIndex].urgent;
             this.saveTasks();
-            if(this.taskList[category][index].urgent){
+            if(this.taskList[category][taskIndex].urgent){
                 notyf.success(`urgent set successfully!`);
             }
         },
@@ -580,29 +623,31 @@ createApp({
                 .then(() => notyf.success("copy success！"))
                 .catch(err => console.error("copy error！", err));
         },
-        checkTask(category, index) {
-            this.taskList[category][index].completed = !this.taskList[category][index].completed;
+        checkTask(category, timestamp) {
+            const taskIndex = this.taskIndex(category, timestamp);
+            this.taskList[category][taskIndex].completed = !this.taskList[category][taskIndex].completed;
             this.saveTasks();
-            if(this.taskList[category][index].completed){
-                notyf.success(`finish task!`);
-                this.taskList[category][index].urgent = false;
+            if(this.taskList[category][taskIndex].completed){
+                notyf.success(`Finish task!`);
+                this.taskList[category][taskIndex].urgent = false;
             }
         },
-        removeTask(category, index ,text) {
+        removeTask(category, timestamp, text) {
             const userConfirmed = window.confirm(`Are you sure you want to delete '${text}'?`);
             if (userConfirmed) {
-                this.taskList[category].splice(index, 1);
+                this.toggleTaskbars(category, timestamp);
+                this.taskList[category] = this.taskList[category].filter(task => task.timestamp !== timestamp);
                 this.saveTasks();
                 notyf.success(`Successfully deleted '${text}' permanently.`);
             }
-            setTimeout(() => {
-                if (this.taskList[category].length === 0) {
-                    const userConfirmed2 = window.confirm(`No tasks available. Do you want to delete '${category}'?`);
-                    if (userConfirmed2) {
-                        this.removeCategory(category);
-                    }
-                }
-            }, 2000);
+            // setTimeout(() => {
+            //     if (this.taskList[category].length === 0) {
+            //         const userConfirmed2 = window.confirm(`No tasks available. Do you want to delete '${category}'?`);
+            //         if (userConfirmed2) {
+            //             this.removeCategory(category);
+            //         }
+            //     }
+            // }, 2000);
         },
         sortedTasksASC(tasks) {
             return tasks.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
