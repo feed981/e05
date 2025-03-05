@@ -1,4 +1,4 @@
-const { createApp, ref ,watch } = Vue;
+const { createApp, ref, watch, reactive } = Vue;
 
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
@@ -39,6 +39,9 @@ const notyf_info = new Notyf({
     ]
 });
 
+const store = reactive({
+    language: 1
+});
 
 const Common = {
     getTodayDate() {
@@ -48,25 +51,39 @@ const Common = {
 };
 
 const DropdownMenuHeader = {
-    props: ['isLight','isAllTasklist','isCategoryTasklist','isCategoryArchiveTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','isEdit','formData'],  // 接收父组件的值
-    emits: ['update:isLight','update:isAllTasklist','update:isCategoryTasklist','update:isCategoryArchiveTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:isEdit','update:formData'],  // 允许子组件更新父组件
+    props: ['isNeedSpeak','isLight','isAllTasklist','isCategoryTasklist','isCategoryArchiveTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','isEdit','formData'],  // 接收父组件的值
+    emits: ['update:isNeedSpeak','update:isLight','update:isAllTasklist','update:isCategoryTasklist','update:isCategoryArchiveTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:isEdit','update:formData'],  // 允许子组件更新父组件
 
     template: `
-<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" @click="resetdata()"><i class="font-awesome-i fa-solid fa-toilet-paper"></i><span>|　Clear all data</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true, isEdit: false })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isCategoryArchiveTasklist || isCategoryTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" @click="$emit('update:formData', { isAllTasklist: true, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div title="Close this page and go back to alltasklist!" v-if="isCategoryTasklist || isCategoryArchiveTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
+<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="!isNeedSpeak" @click="$emit('update:isNeedSpeak', true )"><i class="font-awesome-i fa-solid fa-headset"></i><span>|　Voice reminder</span></li><li v-if="isNeedSpeak" @click="$emit('update:isNeedSpeak', false )"><i class="font-awesome-i fa-solid fa-microphone-slash"></i><span>|　Slash sound speak</span></li><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" @click="resetdata()"><i class="font-awesome-i fa-solid fa-toilet-paper"></i><span>|　Clear all data</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true, isEdit: false })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isCategoryArchiveTasklist || isCategoryTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" @click="$emit('update:formData', { isAllTasklist: true, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div title="Close this page and go back to alltasklist!" v-if="isCategoryTasklist || isCategoryArchiveTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
     `,
     data() {
         return {
+            language: store.language,
             selectedCategory: "",
             dropdownviewHeader: false,
             taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
         };
     },
     methods:{
+        speechSynthesisSpeak(text){
+            if(this.isNeedSpeak){
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(text);
+                synth.speak(utterance);
+            }
+        },
         resetdata(){
-            const userConfirmed = window.confirm(`Are you sure you want to clear all the data ?`);
+            const message = [`Are you sure you want to clear all the data ?`,`你確定要刪除所有數據嗎?`];
+            this.speechSynthesisSpeak(message[this.language]);
+            const userConfirmed = window.confirm(message[this.language]);
+            
             if (userConfirmed) {
                 localStorage.setItem("tasks" ,'{"default":[]}')
                 window.location.reload();
+
+                const message = [`Successfully clear permanently.`,`永久刪除所有數據`];
+                this.speechSynthesisSpeak(message[this.language]);
                 notyf.success(`Successfully clear permanently.`);
             }
         },
@@ -233,6 +250,11 @@ createApp({
     components: { 'dropdown-menu-header': DropdownMenuHeader 
     },
     setup() {
+        const isNeedSpeak = ref(true);
+        watch(isNeedSpeak, (newVal) => {
+            // console.log("isNeedSpeak 变更为:", newVal);
+        });
+
         const isLight = ref(true);
         watch(isLight, (newVal) => {
             if (!newVal) {
@@ -301,7 +323,7 @@ createApp({
             // console.log("isEdit 变更为:", newVal);
         });
 
-        return { isLight, isAllTasklist, isCategoryTasklist, isCategoryArchiveTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible, isEdit };
+        return { isNeedSpeak, isLight, isAllTasklist, isCategoryTasklist, isCategoryArchiveTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible, isEdit };
     },
     data() {
         return {
@@ -310,7 +332,6 @@ createApp({
             selectedCategory: "",
             newTask: { text: "", date: Common.getTodayDate(), opend: false, urgent: false, archive: false},
             taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
-            taskListArchive: JSON.parse(localStorage.getItem("tasksArchive")) || {"default":[]},
             expandedCategories: [],
             formData: {
                 to_email: '',
@@ -336,6 +357,8 @@ createApp({
             isCategoryArchiveTasklist: false,
             dropdownviewTask: {},
             isEdit: false,
+            isNeedSpeak: true,
+            language: store.language,
         };
     },
     mounted() {
@@ -405,9 +428,11 @@ createApp({
         handleFileUpload(type){
             const file = this.selectedFile;
             if (!file){
+                const message = [`Please select the file first!`,`請選擇要匯入的檔案!`];
+                this.speechSynthesisSpeak(message[this.language]);
                 notyf_warning.open({
                     type: 'warning',
-                    message: 'Please select the file first!'
+                    message: message[this.language]
                 });
                 return;
             }
@@ -416,7 +441,9 @@ createApp({
             const match = fileName.match(/^task_\d{4}-\d{2}-\d{2}\.json$/);
 
             if (!match) {
-                notyf.error("Failed to import ,please check your file format!");
+                const message = [`Failed to import ,please check your file format!`,`可能是檔名或是檔案內容格式有誤!`];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.error(message[this.language]);
                 return;
             }
 
@@ -424,7 +451,9 @@ createApp({
             
             // 檔案格式必須為 json
             if (extension !== "json") {
-                notyf.error(`Failed to import ${extension} file!`);
+                const message = [`Failed to import ${extension} file!`,`不是 ${extension} 格式的檔案!`];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.error(message[this.language]);
                 return;
             }
 
@@ -434,15 +463,20 @@ createApp({
                     const json = JSON.parse(e.target.result);
                     if(type === 'overwrite'){
                         localStorage.setItem("tasks", JSON.stringify(json));
-                        notyf.success("Coverage completed and reorganizing in progress...");
+                        const message = [`Coverage completed and reorganizing in progress...`,`資料覆蓋已完成，重組中請稍等...`];
+                        this.speechSynthesisSpeak(message[this.language]);
+                        notyf.success(message[this.language]);
                         this.isLoading = true;
                     }else if(type === 'append'){
+                        const message = ['Not Working yet!','這個功能還沒搞!'];
+                        this.speechSynthesisSpeak(message[this.language]);
                         notyf_warning.open({
                             type: 'warning',
-                            message: 'Not working yet ,coming soon...'
+                            message: message[this.language]
                         });
+                        return;
                         // notyf.success("Adding completed Reorganizing in progress...");
-                        this.isLoading = true;
+                        // this.isLoading = true;
                     }
                 } catch (error) {
                     console.error('Import failed:', error);
@@ -459,17 +493,32 @@ createApp({
             }, 3000);
 
         },
+        playClickSound(path) {
+            const sound = new Audio(path);
+            sound.play();
+        },
+        speechSynthesisSpeak(text){
+            if(this.isNeedSpeak){
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(text);
+                synth.speak(utterance);
+            }
+        },
         //Category
         saveCategory() {
             if(!this.selectedCategory){
                 if(this.taskList[this.newCategory]){
-                    notyf.error("Category is repeat!");
+                    const message = [`'${this.newCategory}' this category is repeat!`,`'${this.newCategory}' 這個類別重複!`];
+                    this.speechSynthesisSpeak(message[this.language]);
+                    notyf.error(message[this.language]);
                 }
 
                 if (!this.newCategory.trim()) {
+                    const message = [`Please input your category name!`,`請輸入你的類別名稱!`];
+                    this.speechSynthesisSpeak(message[this.language]);
                     notyf_warning.open({
                         type: 'warning',
-                        message: 'Please input your category name!'
+                        message: message[this.language]
                     });
                 }
 
@@ -528,10 +577,13 @@ createApp({
             const archive = this.taskList[category].filter(task => task.archive).length;
             // todo: alltask - archive = 0 jump to add task div
             if(this.taskList[category].length - archive === 0 && !this.isCategoryVisible){
-
-                const userConfirmed = window.confirm(`No tasks available. Do you want to add a new task in '${category}'?`);
+                const message = [`No tasks available. Do you want to add a new task in '${category}'?`,`沒有可用任務，你想要新增任務到 '${category}' 這個類別中嗎?`];
+                this.speechSynthesisSpeak(message[this.language]);
+                const userConfirmed = window.confirm(message[this.language]);
                 if (userConfirmed) {
-                    notyf.success("No tasks available.<br>Please add a new task!");
+                    const message = [`Please add a new task!`,`請新增一則新的任務!`];
+                    this.speechSynthesisSpeak(message[this.language]);
+                    notyf.success(message[this.language]);
                     this.isAllTasklist = false;
                     this.isTaskVisible = true;
                     this.selectedCategory = category;
@@ -548,29 +600,39 @@ createApp({
         },
         removeCategory(category) {
             if (this.taskList[category] && this.taskList[category].length > 0) {
-                notyf.error(`Cannot delete '${category}' because it still has tasks.`);
+                const message = [`Cannot delete '${category}' because it still has tasks.`,`你無法刪除 '${category}' 這個類別，因為裡面還有任務`];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.error(message[this.language]);
                 return;
             }
+            const message = [`Are you sure you want to delete '${category}'?`,`你確定要刪除 '${category}' 這個類別嗎?`];
+            this.speechSynthesisSpeak(message[this.language]);
             // todo: check bf remove
-            const userConfirmed = window.confirm(`Are you sure you want to delete '${category}'?`);
+            const userConfirmed = window.confirm(message[this.language]);
             if (userConfirmed) {
                 delete this.taskList[category];
                 this.expandedCategories = this.expandedCategories.filter(c => c !== category);
                 this.saveTasks();
-                notyf.success(`Successfully deleted '${category}' permanently.`);
+                const message = [`Successfully deleted '${category}' permanently.`,`已經永久刪除 '${category}'`];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
             }
         },
         archiveCategory(category){
+            const message = ['Not Working yet!','這個功能還沒搞!'];
+            this.speechSynthesisSpeak(message[this.language]);
             notyf_warning.open({
                 type: 'warning',
-                message: 'Not Working yet!'
+                message: message[this.language]
             });
             return;
         },
         renameCategory(category){
+            const message = ['Not Working yet!','這個功能還沒搞!'];
+            this.speechSynthesisSpeak(message[this.language]);
             notyf_warning.open({
                 type: 'warning',
-                message: 'Not Working yet!'
+                message: message[this.language]
             });
             return;
         },
@@ -619,19 +681,25 @@ createApp({
         addTask() {
             const category = this.selectedCategory;
             if (!category) {
+                const message = ['Please select your category!','請先選擇類別!'];
+                this.speechSynthesisSpeak(message[this.language]);
                 notyf_warning.open({
                     type: 'warning',
-                    message: 'Please select your category!'
+                    message: message[this.language]
                 });
             }else if (!this.newTask.date) {
+                const message = ['Please select your date!','請選擇日期!'];
+                this.speechSynthesisSpeak(message[this.language]);
                 notyf_warning.open({
                     type: 'warning',
-                    message: 'Please select your date!'
+                    message: message[this.language]
                 });
             }else if (!this.newTask.text.trim()) {
+                const message = ['Please input your task content!','請輸入任務內容!'];
+                this.speechSynthesisSpeak(message[this.language]);
                 notyf_warning.open({
                     type: 'warning',
-                    message: 'Please input your task content!'
+                    message: message[this.language]
                 });
             }
 
@@ -646,7 +714,9 @@ createApp({
                     this.taskList[category][taskIndex].updatetime = Date.now();
                     this.newTask.text = "";
                     this.saveTasks();
-                    notyf.success("Edit task successfully!");
+                    const message = ['Edit task successfully!','已修改任務內容!'];
+                    this.speechSynthesisSpeak(message[this.language]);
+                    notyf.success(message[this.language]);
                     this.isEdit = false;
                     this.isAllTasklist = true;
                 }catch{
@@ -662,7 +732,9 @@ createApp({
                 this.taskList[category].push(newTask);
                 this.newTask.text = "";
                 this.saveTasks();
-                notyf.success("Add task successfully!");
+                const message = ['Add task successfully!','已新增一項任務!'];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
                 this.isTaskVisible = false;
                 this.isAllTasklist = true;
                 // 展開
@@ -680,6 +752,8 @@ createApp({
             this.newTask.text = task.text;
             this.newTask.timestamp = task.timestamp;
             this.toggleTaskbars(category, task.timestamp);
+            const message = ['Edit your task content!','請修改任務內容!'];
+            this.speechSynthesisSpeak(message[this.language]);
         },
         copyTask(text) {
             navigator.clipboard.writeText(text.trim())
@@ -692,9 +766,14 @@ createApp({
             this.taskList[category][taskIndex].urgent = false;
             this.saveTasks();
             if(this.taskList[category][taskIndex].completed){
-                notyf.success(`Finish task successfully!`);
+                // this.playClickSound('../soundtrack/684986__supersouper__1.mp3');
+                const message = ['Finish task successfully 777!','順利完成任務777!'];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
             }else{
-                notyf.success(`Cancel finish task successfully!`);
+                const message = ['Cancel finish task successfully!','重啟任務!'];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
             }
         },
         archiveTask(category, timestamp)  {
@@ -703,9 +782,13 @@ createApp({
             this.taskList[category][taskIndex].archive = !this.taskList[category][taskIndex].archive;
             this.saveTasks();
             if(this.taskList[category][taskIndex].archive){
-                notyf.success(`Archive task successfully!`);
+                const message = ['Archive task successfully!','已將任務封存!'];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
             }else{
-                notyf.success(`Cancel archive task successfully!`);
+                const message = ['Cancel archive task successfully!','取消任務封存!'];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
             }
         },
         setUrgentTask(category, timestamp) {
@@ -714,22 +797,32 @@ createApp({
                 this.taskList[category][taskIndex].urgent = !this.taskList[category][taskIndex].urgent;
                 this.saveTasks();
                 if(this.taskList[category][taskIndex].urgent){
-                    notyf.success(`Urgent task successfully!`);
+                    const message = ['Urgent task successfully!','已將任務狀態設置為緊急!'];
+                    this.speechSynthesisSpeak(message[this.language]);
+                    notyf.success(message[this.language]);
                 }
             }else{
+                const message = ['You cannot set urgent cause this task is already finish!','無法將任務設置為緊急因為任務已經結束!'];
+                this.speechSynthesisSpeak(message[this.language]);
                 notyf_warning.open({
                     type: 'warning',
-                    message: 'You cannot set urgent cause this task is already finish!'
+                    message: message[this.language]
                 });
             }
         },
         removeTask(category, timestamp, text) {
-            const userConfirmed = window.confirm(`Are you sure you want to delete '${text}'?`);
+            const message = [`Are you sure you want to delete '${text}'?`,`你確定要刪除'${text}'嗎?`];
+            this.speechSynthesisSpeak(message[this.language]);
+
+            const userConfirmed = window.confirm(message[this.language]);
             if (userConfirmed) {
                 this.toggleTaskbars(category, timestamp);
                 this.taskList[category] = this.taskList[category].filter(task => task.timestamp !== timestamp);
                 this.saveTasks();
-                notyf.success(`Successfully deleted '${text}' permanently.`);
+
+                const message = [`Successfully deleted '${text}' permanently.`,`已經永久刪除 '${text}'`];
+                this.speechSynthesisSpeak(message[this.language]);
+                notyf.success(message[this.language]);
             }
             // setTimeout(() => {
             //     if (this.taskList[category].length === 0) {
