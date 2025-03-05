@@ -48,11 +48,11 @@ const Common = {
 };
 
 const DropdownMenuHeader = {
-    props: ['isLight','isAllTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','formData'],  // 接收父组件的值
-    emits: ['update:isLight','update:isAllTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:formData'],  // 允许子组件更新父组件
+    props: ['isLight','isAllTasklist','isCategoryTasklist','isCategoryArchiveTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','isEdit','formData'],  // 接收父组件的值
+    emits: ['update:isLight','update:isAllTasklist','update:isCategoryTasklist','update:isCategoryArchiveTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:isEdit','update:formData'],  // 允许子组件更新父组件
 
     template: `
-<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" @click="resetdata()"><i class="font-awesome-i fa-solid fa-toilet-paper"></i><span>|　Clear all data</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', { isAllTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible" @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div v-if="isSendEmail || isCategoryVisible || isImport || isTaskVisible" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
+<div class="header-container"><div class="hamburger"><div class="dropdown"><svg class="vbp-header-menu-button__svg" @click="toggleBars" :class="{ 'header-opend': this.dropdownviewHeader }"><line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges"/><line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges"/></svg><ul v-show="dropdownviewHeader" class="dropdown-menu bars"><li v-if="isLight" @click="$emit('update:isLight', false )"><i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span></li><li v-if="!isLight" @click="$emit('update:isLight', true )"><i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span></li><li v-if="!isSendEmail" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: true, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-envelope"></i><span>|　Feedback</span></li><li v-if="!isSendEmail" @click="resetdata()"><i class="font-awesome-i fa-solid fa-toilet-paper"></i><span>|　Clear all data</span></li><li v-if="!isSendEmail" class="dropdown" @click="toggleDropdown"><i class="font-awesome-i fa-solid fa-file-export"></i><span>|　View / Import / Export</span><ul v-show="dropdownviewExport" class="dropdown-menu dropdown-menu-sub"><li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li><li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li><li @click="$emit('update:formData', { isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: true, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li><li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li><li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li><li @click="dropdownviewExport = true"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li></ul></li><li v-if="!isSendEmail && !isCategoryVisible && !isImport" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: true, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-icons"></i><span>|　Add new category</span></li><li v-if="!isSendEmail && !isImport && !isTaskVisible" @click="$emit('update:formData', {  isAllTasklist: false, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: true, isEdit: false })"><i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span></li><li v-if="isAllTasklist || isCategoryArchiveTasklist || isCategoryTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" @click="$emit('update:formData', { isAllTasklist: true, isCategoryTasklist: false, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })"><i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span></li></ul></div></div><div title="Close this page and go back to alltasklist!" v-if="isCategoryTasklist || isCategoryArchiveTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" class="closeicon"><i @click="$emit('update:formData', { isAllTasklist: true, isCategoryArchiveTasklist: false, isSendEmail: false, isCategoryVisible: false, isImport: false, isTaskVisible: false, isEdit: false })" class="font-awesome-i fa-regular fa-circle-xmark"></i></div></div>
     `,
     data() {
         return {
@@ -249,6 +249,16 @@ createApp({
             // console.log("isAllTasklist 变更为:", newVal);
         });
 
+        const isCategoryTasklist = ref(false);
+        watch(isCategoryTasklist, (newVal) => {
+            // console.log("isCategoryTasklist 变更为:", newVal);
+        });
+
+        const isCategoryArchiveTasklist = ref(false);
+        watch(isCategoryArchiveTasklist, (newVal) => {
+            // console.log("isCategoryArchiveTasklist 变更为:", newVal);
+        });
+
         const isSendEmail = ref(false);
         const formData = ref({
             to_email: '',
@@ -286,10 +296,16 @@ createApp({
             // console.log("isTaskVisible 变更为:", newVal);
         });
 
-        return { isLight, isAllTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible};
+        const isEdit = ref(false);
+        watch(isEdit, (newVal) => {
+            // console.log("isEdit 变更为:", newVal);
+        });
+
+        return { isLight, isAllTasklist, isCategoryTasklist, isCategoryArchiveTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible, isEdit };
     },
     data() {
         return {
+            viewCategory: "",
             newCategory: "",
             selectedCategory: "",
             newTask: { text: "", date: Common.getTodayDate(), opend: false, urgent: false, archive: false},
@@ -316,13 +332,15 @@ createApp({
             isCategoryVisible: false,
             isImport: false,
             isTaskVisible: false,
+            isCategoryTasklist: false,
+            isCategoryArchiveTasklist: false,
             dropdownviewTask: {},
             isEdit: false,
         };
     },
-    // mounted() {
-    //     this.resetAllTaskbars();
-    // },
+    mounted() {
+        this.resetAllTaskbars();
+    },
     computed: {
         isListVisible() {
             return Object.keys(this.taskList).length > 0; 
@@ -342,10 +360,13 @@ createApp({
         handleUpdate(newData) {
             // console.log(newData)
             this.isAllTasklist = newData.isAllTasklist;
+            this.isCategoryTasklist = newData.isCategoryTasklist;
+            this.isCategoryArchiveTasklist = newData.isCategoryArchiveTasklist;
             this.isSendEmail = newData.isSendEmail;
             this.isCategoryVisible = newData.isCategoryVisible;
             this.isImport = newData.isImport;
             this.isTaskVisible = newData.isTaskVisible;
+            this.isEdit = newData.isEdit;
         },
         handleSubmit() {
             this.sending = true;
@@ -507,10 +528,15 @@ createApp({
             const archive = this.taskList[category].filter(task => task.archive).length;
             // todo: alltask - archive = 0 jump to add task div
             if(this.taskList[category].length - archive === 0 && !this.isCategoryVisible){
-                notyf.success("No tasks available.<br>Please add a new task!");
-                this.isAllTasklist = false;
-                this.isTaskVisible = true;
-                this.selectedCategory = category;
+
+                const userConfirmed = window.confirm(`No tasks available. Do you want to add a new task in '${category}'?`);
+                if (userConfirmed) {
+                    notyf.success("No tasks available.<br>Please add a new task!");
+                    this.isAllTasklist = false;
+                    this.isTaskVisible = true;
+                    this.selectedCategory = category;
+                }
+
             }
             const index = this.expandedCategories.indexOf(category);
             if (index === -1) {
@@ -548,12 +574,19 @@ createApp({
             });
             return;
         },
-        viewCategory(category){
-            notyf_warning.open({
-                type: 'warning',
-                message: 'Not Working yet!'
-            });
-            return;
+        viewCategoryTasklist(category){
+            this.isCategoryVisible = false;
+            this.isCategoryArchiveTasklist = false;
+            this.isAllTasklist = false;
+            this.viewCategory = category;
+            this.isCategoryTasklist = true;
+        },
+        viewCategoryArchiveTasklist(category){
+            this.isCategoryVisible = false;
+            this.isAllTasklist = false;
+            this.isCategoryTasklist = false;
+            this.viewCategory = category;
+            this.isCategoryArchiveTasklist = true;
         },
         //task
         taskIndex(category, timestamp){
@@ -640,6 +673,7 @@ createApp({
         },
         editTask(category, task) {
             this.isAllTasklist = false;
+            this.isCategoryTasklist = false;
             this.isEdit = true;
             this.selectedCategory = category;
             this.newTask.date = task.date;
@@ -655,11 +689,12 @@ createApp({
         checkTask(category, timestamp) {
             const taskIndex = this.taskIndex(category, timestamp);
             this.taskList[category][taskIndex].completed = !this.taskList[category][taskIndex].completed;
+            this.taskList[category][taskIndex].urgent = false;
             this.saveTasks();
             if(this.taskList[category][taskIndex].completed){
                 notyf.success(`Finish task successfully!`);
             }else{
-                notyf.success(`Reset task successfully!`);
+                notyf.success(`Cancel finish task successfully!`);
             }
         },
         archiveTask(category, timestamp)  {
@@ -669,6 +704,8 @@ createApp({
             this.saveTasks();
             if(this.taskList[category][taskIndex].archive){
                 notyf.success(`Archive task successfully!`);
+            }else{
+                notyf.success(`Cancel archive task successfully!`);
             }
         },
         setUrgentTask(category, timestamp) {
@@ -708,6 +745,14 @@ createApp({
         },
         sortedTasksDESC(tasks) {
             return tasks.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+        },
+        sortedTasksDESCategory(tasks) {
+            try {
+                if (!tasks) return [];
+                return tasks.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+            } catch (error) {
+                console.error(error);
+            }
         },
     }
 }).mount('#app');
