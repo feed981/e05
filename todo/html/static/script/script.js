@@ -41,7 +41,6 @@ const DropdownMenuHeader = {
     `,
     data() {
         return {
-            resetKey: 0,
             selectedCategory: "",
             dropdownviewHeader: false,
             taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
@@ -52,7 +51,6 @@ const DropdownMenuHeader = {
             const userConfirmed = window.confirm(`Are you sure you want to clear all the data ?`);
             if (userConfirmed) {
                 localStorage.setItem("tasks" ,'{"default":[]}')
-                // this.resetKey.value += 1;
                 window.location.reload();
                 notyf.success(`Successfully clear permanently.`);
             }
@@ -220,7 +218,6 @@ createApp({
     components: { 'dropdown-menu-header': DropdownMenuHeader 
     },
     setup() {
-
         const isLight = ref(true);
         watch(isLight, (newVal) => {
             if (!newVal) {
@@ -280,7 +277,7 @@ createApp({
         return {
             newCategory: "",
             selectedCategory: "",
-            newTask: { text: "", date: Common.getTodayDate()},
+            newTask: { text: "", date: Common.getTodayDate(), opend: false, urgent: false, archive: false},
             taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
             taskListArchive: JSON.parse(localStorage.getItem("tasksArchive")) || {"default":[]},
             expandedCategories: [],
@@ -308,12 +305,22 @@ createApp({
             isEdit: false,
         };
     },
-    mounted() {
-        this.resetAllTaskbars();
-    },
+    // mounted() {
+    //     this.resetAllTaskbars();
+    // },
     computed: {
         isListVisible() {
             return Object.keys(this.taskList).length > 0; 
+        },
+        archivedTaskCount() {
+            return (category) => {
+            return this.taskList[category].filter(task => task.archive).length;
+            };
+        },
+        urgentTaskCount() {
+            return (category) => {
+            return this.taskList[category].filter(task => task.urgent).length;
+            };
         }
     },
     methods: {
@@ -393,14 +400,14 @@ createApp({
                     }else if(type === 'append'){
                         notyf2.open({
                             type: 'warning',
-                            message: 'not working yet ,coming soon...'
+                            message: 'Not working yet ,coming soon...'
                         });
                         // notyf.success("Adding completed Reorganizing in progress...");
                         this.isLoading = true;
                     }
                 } catch (error) {
                     console.error('Import failed:', error);
-                    notyf.error("Failed to import！");
+                    notyf.error("Failed to import!");
                 }
             };
             reader.readAsText(file);
@@ -417,7 +424,7 @@ createApp({
         saveCategory() {
             if(!this.selectedCategory){
                 if(this.taskList[this.newCategory]){
-                    notyf.error("Category is repeat！");
+                    notyf.error("Category is repeat!");
                 }
                 if (this.newCategory.trim() && !this.taskList[this.newCategory]) {
                     /*
@@ -433,8 +440,8 @@ createApp({
                 }
                 // 子項目
             }else{
-                console.log('Adding subcategory:', this.newCategory, 'to category:', this.selectedCategory);
-                console.log('Current taskList:', JSON.stringify(this.taskList));
+                // console.log('Adding subcategory:', this.newCategory, 'to category:', this.selectedCategory);
+                // console.log('Current taskList:', JSON.stringify(this.taskList));
 
                 // Ensure taskList is an object
                 if (typeof this.taskList !== 'object' || this.taskList === null) {
@@ -457,12 +464,12 @@ createApp({
 
                 // Check if subcategory already exists
                 if (this.taskList[this.selectedCategory][this.newCategory]) {
-                    notyf.error("Sub category is repeat！");
+                    notyf.error("Sub category is repeat!");
                     return; // Exit the function to prevent further execution
                 }
 
                 // Add the new subcategory
-                console.log("Updated taskList:", JSON.stringify(this.taskList));
+                // console.log("Updated taskList:", JSON.stringify(this.taskList));
 
                 // Reset and save
                 this.newCategory = "";
@@ -470,6 +477,15 @@ createApp({
             }
         },
         toggleCategory(category) {
+            // console.log('(this.taskList[category].length,'+this.taskList[category].length);
+            const archive = this.taskList[category].filter(task => task.archive).length;
+            // todo: alltask - archive = 0 jump to add task div
+            if(this.taskList[category].length - archive === 0 && !this.isCategoryVisible){
+                notyf.success("No tasks available.<br>Please add a new task!");
+                this.isAllTasklist = false;
+                this.isTaskVisible = true;
+                this.selectedCategory = category;
+            }
             const index = this.expandedCategories.indexOf(category);
             if (index === -1) {
                 this.expandedCategories.push(category);
@@ -480,9 +496,10 @@ createApp({
         },
         removeCategory(category) {
             if (this.taskList[category] && this.taskList[category].length > 0) {
-                notyf.error(`Cannot delete '${category}' because it still has tasks!`);
+                notyf.error(`Cannot delete '${category}' because it still has tasks.`);
                 return;
             }
+            // todo: check bf remove
             const userConfirmed = window.confirm(`Are you sure you want to delete '${category}'?`);
             if (userConfirmed) {
                 delete this.taskList[category];
@@ -491,63 +508,21 @@ createApp({
                 notyf.success(`Successfully deleted '${category}' permanently.`);
             }
         },
-        archiveCategory(category){ //task
+        archiveCategory(category){
 
         },
+        renameCategory(category){
+
+        },
+        viewCategory(category){
+
+        },
+        //task
         taskIndex(category, timestamp){
             const taskIndex = this.taskList[category].findIndex(task => task.timestamp === timestamp);
             if (taskIndex === -1) return; // 如果找不到，直接 return
             return taskIndex;
         },
-        //archive
-        archiveTask(category, task)  {
-            const taskIndex = this.taskIndex(category, task.timestamp);
-
-            if (!this.taskListArchive) {
-                this.taskListArchive = {}; // 確保它是物件
-            }
-            if (!category) {
-                console.error("Error: category is undefined or empty!");
-                return;
-            }
-            if (!this.taskListArchive[category]) {
-                this.taskListArchive[category] = []; // 只初始化一次，避免覆蓋舊資料
-            }
-        
-            if (!task.text.trim() || !task.date) return;
-        
-            // 設置任務為已歸檔
-            this.taskList[category][taskIndex].archived = true;
-        
-            // 創建新的待辦事項
-            const newArchivedTask = {};
-        
-            // 新增到 `this.taskListArchive`
-            this.taskListArchive[category].push(newArchivedTask);
-            this.saveTasksArchive(); // 儲存到 localStorage
-        
-            // 移除原來的 `task`
-            this.removeCauseTaskArchive(category, task.timestamp);
-        
-            notyf.success(`Archive task successfully!`);
-        },
-        saveTasksArchive() {
-            localStorage.setItem("tasksArchive", JSON.stringify(this.taskListArchive));
-        },
-        addTaskArchive(category, text) {
-            if (!category || !this.taskListArchive[category] || !text.trim()) return;
-
-            const newArchivedTask = { text };
-            this.taskListArchive[category].push(newArchivedTask);
-            this.saveTasksArchive();
-            notyf.success(`Added archive '${category}' '${text}' successfully!`);
-        },
-        removeCauseTaskArchive(category, timestamp) {
-            this.taskList[category] = this.taskList[category].filter(task => task.timestamp !== timestamp);
-            this.saveTasks();
-        },
-        //archive end
-        //task
         toggleTaskbars(category, timestamp) {
             // console.log('category,',category,' ,newTask.timestamp',timestamp)
             
@@ -567,14 +542,6 @@ createApp({
             });
             this.saveTasks();
         },
-        setUrgentTask(category, timestamp) {
-            const taskIndex = this.taskIndex(category, timestamp);
-            this.taskList[category][taskIndex].urgent = !this.taskList[category][taskIndex].urgent;
-            this.saveTasks();
-            if(this.taskList[category][taskIndex].urgent){
-                notyf.success(`urgent set successfully!`);
-            }
-        },
         saveTasks() {
             localStorage.setItem("tasks", JSON.stringify(this.taskList));
         },
@@ -590,7 +557,7 @@ createApp({
                     const taskIndex = this.taskIndex(category, this.newTask.timestamp);
                     this.taskList[category][taskIndex].text = this.newTask.text;
                     this.taskList[category][taskIndex].date = this.newTask.date;
-                    this.taskList[category][taskIndex].updatetimestamp = Date.now();
+                    this.taskList[category][taskIndex].updatetime = Date.now();
                     this.newTask.text = "";
                     this.saveTasks();
                     notyf.success("Edit task successfully!");
@@ -604,7 +571,7 @@ createApp({
                 const newTask = {
                     ...this.newTask,
                     timestamp: Date.now(), // 加上唯一時間戳
-                    updatetimestamp: Date.now(), 
+                    updatetime: Date.now(), 
                 };
                 this.taskList[category].push(newTask);
                 this.newTask.text = "";
@@ -626,20 +593,44 @@ createApp({
             this.newTask.text = task.text;
             this.newTask.timestamp = task.timestamp;
             this.toggleTaskbars(category, task.timestamp);
-            notyf.success("Start Edit task!");
         },
         copyTask(text) {
             navigator.clipboard.writeText(text.trim())
-                .then(() => notyf.success("copy success！"))
-                .catch(err => console.error("copy error！", err));
+                .then(() => notyf.success("Copy success task text successfully!"))
+                .catch(err => console.error("Copy error!", err));
         },
         checkTask(category, timestamp) {
             const taskIndex = this.taskIndex(category, timestamp);
             this.taskList[category][taskIndex].completed = !this.taskList[category][taskIndex].completed;
             this.saveTasks();
             if(this.taskList[category][taskIndex].completed){
-                notyf.success(`Finish task!`);
-                this.taskList[category][taskIndex].urgent = false;
+                notyf.success(`Finish task successfully!`);
+            }else{
+                notyf.success(`Reset task successfully!`);
+            }
+        },
+        archiveTask(category, timestamp)  {
+            const taskIndex = this.taskIndex(category, timestamp);
+            // console.log('taskIndex,',taskIndex)
+            this.taskList[category][taskIndex].archive = !this.taskList[category][taskIndex].archive;
+            this.saveTasks();
+            if(this.taskList[category][taskIndex].archive){
+                notyf.success(`Archive task successfully!`);
+            }
+        },
+        setUrgentTask(category, timestamp) {
+            const taskIndex = this.taskIndex(category, timestamp);
+            if(!this.taskList[category][taskIndex].completed){
+                this.taskList[category][taskIndex].urgent = !this.taskList[category][taskIndex].urgent;
+                this.saveTasks();
+                if(this.taskList[category][taskIndex].urgent){
+                    notyf.success(`Urgent task successfully!`);
+                }
+            }else{
+                notyf2.open({
+                    type: 'warning',
+                    message: 'You cannot set urgent cause this task is already finish!'
+                });
             }
         },
         removeTask(category, timestamp, text) {
@@ -662,9 +653,6 @@ createApp({
         sortedTasksASC(tasks) {
             return tasks.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
         },
-        // sortedTasksDESC(tasks) {
-        //     return tasks.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        // },
         sortedTasksDESC(tasks) {
             return tasks.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
         },
