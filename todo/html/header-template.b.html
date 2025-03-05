@@ -9,6 +9,13 @@
         <!--<i class="font-awesome-i fa-solid fa-bars" @click="toggleBars"></i>-->
         <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
         
+            <li v-if="!isNeedSpeak" @click="$emit('update:isNeedSpeak', true )">
+                <i class="font-awesome-i fa-solid fa-headset"></i><span>|　Voice reminder</span>
+            </li>
+            <li v-if="isNeedSpeak" @click="$emit('update:isNeedSpeak', false )">
+                <i class="font-awesome-i fa-solid fa-microphone-slash"></i><span>|　Slash sound speak</span>
+            </li>
+
             <li v-if="isLight" @click="$emit('update:isLight', false )">
                 <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span>
             </li>

@@ -8,7 +8,6 @@
   <link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
   <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,9 +45,6 @@
       padding: 20px;
       width: 300px;
     }
-
-    
-
 
     h1 {
       font-size: 1.5em;
@@ -201,15 +197,6 @@
 
    
 
-
-    .light-mode .menu i {
-      color: #000;
-    }
-
-    .light-mode .menu .font-awesome-i {
-      color: #fff;
-    }
-    
     .light-mode .font-awesome-i ,.light-mode .task-menu .font-awesome-i  {
       color: #f6f6f6;
     }
@@ -218,25 +205,6 @@
       font-family: 'Creepster', cursive;
       color: #69affa;
       text-shadow: 2px 2px 4px rgba(95, 110, 192, 0.3);
-    }
-    .light-mode .metamorphous-regular {
-      font-family: "Metamorphous", serif;
-      font-weight: 400;
-      font-style: normal;
-      color: #51b7f3;
-          text-shadow: 2px 2px 4px rgba(252, 252, 255, 0.842);
-      font-size: 1.5em;
-          text-align: center;
-          margin-bottom: 20px;
-    }
-
-    .light-mode .vujahday-script-regular {
-      font-family: "Vujahday Script", serif;
-      font-weight: 400;
-      font-style: normal;
-      text-align: center;
-      color: #1287ca;
-          text-shadow: 2px 2px 4px rgba(141, 141, 196, 0.3);
     }
 
     .light-mode  .loading {
@@ -519,107 +487,6 @@
       /* 避免超出容器 */
     }
 
-    .basic-menu {
-      margin-bottom: 10px;
-    }
-
-    .menu {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .menu i {
-      border: none;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .menu i img {
-      width: 40px;
-      height: 40px;
-    }
-
-    .menu i:active {
-      transform: scale(0.95);
-    }
-
-    /* Tooltip Style */
-    .menu i::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 100%;
-      /* Move tooltip above the button */
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      white-space: nowrap;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, transform 0.2s ease;
-      z-index: 10;
-      /* Ensure it appears above everything */
-      pointer-events: none;
-      /* Prevent interaction */
-    }
-
-    .menu i:hover::after {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(-50%) translateY(-5px);
-      /* Slight upward animation */
-    }
-
-    .indie-flower-regular {
-      font-family: "Indie Flower", serif;
-      font-weight: 400;
-      font-style: normal;
-      font-size: 2.5em;
-          text-align: center;
-          margin-bottom: 20px;
-    }
-    .wire-one-regular {
-      font-family: "Wire One", serif;
-      font-weight: 400;
-      font-style: normal;
-      color: #1287ca;
-          text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-      font-size: 2.5em;
-          text-align: center;
-          margin-bottom: 20px;
-    }
-
-    .vujahday-script-regular {
-      font-family: "Vujahday Script", serif;
-      font-weight: 400;
-      font-style: normal;
-      text-align: center;
-      color: #1287ca;
-      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-    }
-
-
-    .metamorphous-regular {
-      font-family: "Metamorphous", serif;
-      font-weight: 400;
-      font-style: normal;
-      color: #1287ca;
-      text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
-      font-size: 1.5em;
-      text-align: center;
-      margin-bottom: 20px;
-    }
     .bhutuka-expanded-one-regular {
       font-family: "BhuTuka Expanded One", serif;
       font-weight: 400;
@@ -654,7 +521,7 @@
   align-items: center; /* 垂直置中 */
       margin-bottom: 20px;
     }
-
+    
 /*burger svg start*/
 .vbp-header-menu-button__svg {
   width: 30px;
@@ -945,6 +812,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -965,11 +833,9 @@ opacity: 0;
           <div class="input-container">
             <textarea v-model="formData.message" required placeholder="Enter your message here..."></textarea>
           </div>
-          <div class="menu">
             <button class="font-awesome-i-inbutton" type="submit">
               <i title="Send your feedback mail!" class="font-awesome-i fa-solid fa-paper-plane"></i>
             </button>
-          </div>
           <div class="status" :class="{ error: isError }" v-if="status">{{ status }}</div>
         </form>
       </div>
@@ -980,6 +846,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1002,7 +869,7 @@ opacity: 0;
 
       <input type="file" @change="handleFileChange" accept=".json">
       
-      <div class="menu">
+      <div>
         <i title="Overwrite, everything gone, careful!" @click="handleFileUpload('overwrite')" class="font-awesome-i fa-solid fa-feather"></i>
         <i title="Append, will keep the original, but still can work ha!" @click="handleFileUpload('append')" class="font-awesome-i fa-solid fa-feather-pointed"></i>
       </div>
@@ -1013,6 +880,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1041,7 +909,7 @@ opacity: 0;
      <div class="button-container">
 
        <input title="Task content bro!" type="text" v-model="newTask.text" placeholder="Enter a task..." required>
-       <div class="menu task-menu">
+       <div class="task-menu">
          
          <i v-if="isEdit" title="Edit this task content!" @click="addTask" class="font-awesome-i fa-solid fa-pen-to-square"></i>
          <i v-if="!isEdit" title="Let's do it bro!" @click="addTask" class="font-awesome-i fa-solid fa-paper-plane"></i>
@@ -1054,6 +922,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1067,7 +936,7 @@ opacity: 0;
       <!-- <div v-if="this.selectedCategory" class="selected-category-sub">{{this.selectedCategory}} - sub</div> -->
       <div class="button-container">
         <input type="text" v-model="newCategory" placeholder="Enter a new category..." required>
-        <div class="menu task-menu">
+        <div class="task-menu">
           <i title="As you see is add a new category!" @click="saveCategory" class="font-awesome-i fa-solid fa-paper-plane"></i>
         </div>
       </div>
@@ -1118,6 +987,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1199,6 +1069,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1255,6 +1126,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-need-speak="isNeedSpeak"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
