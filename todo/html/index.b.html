@@ -370,6 +370,12 @@
   display: none;
 }
 
+.category-task-archive{
+  border-left: 4px solid #a6d635;
+  border-bottom: 4px solid #a1b300;
+  background-color: #accf2e;
+}
+
     .task-urgent {
       border-left: 4px solid #d64d35;
       border-bottom: 4px solid #b32a00;
@@ -460,6 +466,12 @@
 
     .dropdown-menu-task {
       top: -65px;
+      left: revert-layer;
+      right: 30px;
+    }
+
+    .category-task-archive .dropdown-menu-task {
+      top: -5px;
       left: revert-layer;
       right: 30px;
     }
@@ -931,11 +943,14 @@ opacity: 0;
     <div v-if="isSendEmail &&!isImport" class="task-container">
       <dropdown-menu-header
         @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport"
         v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
 
@@ -952,7 +967,7 @@ opacity: 0;
           </div>
           <div class="menu">
             <button class="font-awesome-i-inbutton" type="submit">
-              <i data-tooltip="send email" class="font-awesome-i fa-solid fa-paper-plane"></i>
+              <i title="Send your feedback mail!" class="font-awesome-i fa-solid fa-paper-plane"></i>
             </button>
           </div>
           <div class="status" :class="{ error: isError }" v-if="status">{{ status }}</div>
@@ -962,14 +977,17 @@ opacity: 0;
 
     <div v-if="isImport" class="task-container">
       <dropdown-menu-header
-      @update:form-data="handleUpdate"
-      v-model:is-light="isLight"
-      v-model:is-send-email="isSendEmail"
-      v-model:is-category-visible="isCategoryVisible"
-      v-model:is-import="isImport"
-      v-model:is-task-visible="isTaskVisible"
-      >
-    </dropdown-menu-header>
+        @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-light="isLight"
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport"
+        v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
+        >
+      </dropdown-menu-header>
 
       <div class="loading-container">
         <div v-if="isLoading" class="loading">
@@ -985,19 +1003,22 @@ opacity: 0;
       <input type="file" @change="handleFileChange" accept=".json">
       
       <div class="menu">
-        <i data-tooltip="overwrite" @click="handleFileUpload('overwrite')" class="font-awesome-i fa-solid fa-feather"></i>
-        <i data-tooltip="append ,Will keep the original" @click="handleFileUpload('append')" class="font-awesome-i fa-solid fa-feather-pointed"></i>
+        <i title="Overwrite, everything gone, careful!" @click="handleFileUpload('overwrite')" class="font-awesome-i fa-solid fa-feather"></i>
+        <i title="Append, will keep the original, but still can work ha!" @click="handleFileUpload('append')" class="font-awesome-i fa-solid fa-feather-pointed"></i>
       </div>
     </div>
     
     <div v-if="isTaskVisible || isEdit" class="task-container">
       <dropdown-menu-header
         @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport"
         v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
 
@@ -1006,7 +1027,7 @@ opacity: 0;
       <div class="button-container">
         
         <div class="flex-container">
-          <select class="category-select" v-model="selectedCategory" :key="categoryKey">
+          <select title="You can choose your category for your task, if you don't have one you should add a new category first!" class="category-select" v-model="selectedCategory" :key="categoryKey">
             <option value="">category</option>
             <option v-for="(tasks, category) in taskList" :key="category" :value="category">
               {{ category }}
@@ -1014,16 +1035,16 @@ opacity: 0;
           </select>
         </div>
 
-        <input class="date" type="date" v-model="newTask.date">
+        <input title="Must set a date for this task!"  class="date" type="date" v-model="newTask.date">
         
       </div>
      <div class="button-container">
 
-       <input  type="text" v-model="newTask.text" placeholder="Enter a task..." required>
+       <input title="Task content bro!" type="text" v-model="newTask.text" placeholder="Enter a task..." required>
        <div class="menu task-menu">
          
-         <i v-if="isEdit" data-tooltip="edit" @click="addTask" class="font-awesome-i fa-solid fa-pen-to-square"></i>
-         <i v-if="!isEdit" data-tooltip="send" @click="addTask" class="font-awesome-i fa-solid fa-paper-plane"></i>
+         <i v-if="isEdit" title="Edit this task content!" @click="addTask" class="font-awesome-i fa-solid fa-pen-to-square"></i>
+         <i v-if="!isEdit" title="Let's do it bro!" @click="addTask" class="font-awesome-i fa-solid fa-paper-plane"></i>
         </div>   
       </div>
     </div>
@@ -1031,33 +1052,35 @@ opacity: 0;
     <div v-if="isCategoryVisible" class="task-container">
       <dropdown-menu-header
         @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport"
         v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-icons"></i> new CATEGORY!</h1>
       <!-- <div v-if="this.selectedCategory" class="selected-category-sub">{{this.selectedCategory}} - sub</div> -->
       <div class="button-container">
-        <input type="text" v-model="newCategory" placeholder="Enter a new category..."
-        required>
+        <input type="text" v-model="newCategory" placeholder="Enter a new category..." required>
         <div class="menu task-menu">
-          <i data-tooltip="send" @click="saveCategory" class="font-awesome-i fa-solid fa-paper-plane"></i>
+          <i title="As you see is add a new category!" @click="saveCategory" class="font-awesome-i fa-solid fa-paper-plane"></i>
         </div>
       </div>
         <br>
         <div v-for="(tasks, category) in taskList" :key="category">
           <div class="category" :key="categoryKey">
             <div class="category-name">
-              <span>{{ category }}</span>
+              <span title="Can gointo category task list!" @click="viewCategoryTasklist(category)">{{ category }}</span>
               <span v-if="tasks.length === 0">　(No tasks available.)</span>
               <span v-else> 
-                　<i class="font-awesome-i fa-solid fa-list-check"></i> : {{ tasks.length }}
-                  , <i class="font-awesome-i fa-solid fa-boxes-packing"></i> : {{ archivedTaskCount(category) }} 
-                  , <i class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(category) }}
+                　<i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ tasks.length }}
+                , <i title="This category archive task count!" class="font-awesome-i fa-solid fa-boxes-packing"></i> : {{ archivedTaskCount(category) }} 
+                , <i title="This category urgent task count!" class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(category) }}
                 </span>
             </div>
 
@@ -1076,8 +1099,8 @@ opacity: 0;
                   <li @click="renameCategory(category)">
                     <i class="font-awesome-i fa-solid fa-pen-to-square"></i><span>|　Rename category</span>
                   </li> 
-                  <li @click="viewCategory(category)">
-                    <i class="font-awesome-i fa-solid fa-eye"></i><span>|　View all task</span>
+                  <li @click="viewCategoryArchiveTasklist(category)">
+                    <i class="font-awesome-i fa-solid fa-folder-tree"></i><span>|　View archive task list</span>
                   </li> 
                   <li @click.stop="removeCategory(category)">
                     <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove category</span>
@@ -1088,16 +1111,19 @@ opacity: 0;
             
           </div>
         </div>
-    </div>
+    </div> <!-- isCategoryVisible end-->
 
     <div v-if="isAllTasklist" class="task-container">
       <dropdown-menu-header
         @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
         v-model:is-import="isImport"
         v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
 
@@ -1106,31 +1132,18 @@ opacity: 0;
       <div v-for="(tasks, category) in taskList" :key="category">
         <div class="category" :key="categoryKey">
           <div class="category-name">
-            <span>{{ category }}</span>
+            <span title="Can gointo category task list!" @click="viewCategoryTasklist(category)">{{ category }}</span>
             <span v-if="tasks.length === 0">　(No tasks available.)</span>
             <span v-else> 
-            　<i class="font-awesome-i fa-solid fa-list-check"></i> : {{ tasks.length }}
-              , <i class="font-awesome-i fa-solid fa-boxes-packing"></i> : {{ archivedTaskCount(category) }} 
-              , <i class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(category) }}
+              　<i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ tasks.length }}
+              , <i title="This category archive task count!" class="font-awesome-i fa-solid fa-boxes-packing"></i> : {{ archivedTaskCount(category) }} 
+              , <i title="This category urgent task count!" class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(category) }}
             </span>
           </div>
 
           <div class="hamburger-task">
             <div class="dropdown">
-              <!-- <svg class="vbp-header-menu-button__svg" @click="toggleCategory(category)" :class="{ 'task-opend': expandedCategories.includes(category) }">
-                <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
-                <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
-                <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
-              </svg> -->
-              <i class="font-awesome-i fa-solid fa-folder-open" @click="toggleCategory(category)"></i>
-              <ul v-if="isCategoryVisible" v-show="expandedCategories.includes(category)" class="dropdown-menu dropdown-menu-category ">
-                <li @click="archiveCategory(category)" >
-                  <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive category</span>
-                </li>
-                <li v-if="isCategoryVisible" @click.stop="removeCategory(category)">
-                  <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove category</span>
-                </li> 
-              </ul>
+              <i class="font-awesome-i fa-solid fa-caret-down" @click="toggleCategory(category)"></i>
             </div>
           </div>
           
@@ -1138,8 +1151,12 @@ opacity: 0;
 
         <div v-show="expandedCategories.includes(category)" class="category-content">
           <div v-for="(task, index) in sortedTasksDESC(tasks)" :key="index" class="task-item"
-            :class="{ 'task-completed': task.completed , 'task-urgent': task.urgent, 'task-archive': task.archive }">
-            <span v-if="!task.archive" class="text-content" @click="checkTask(category, index)">　{{ task.date }}　{{ task.text }}</span>
+            :class="{ 
+              'task-completed': task.completed , 
+              'task-urgent': task.urgent, 
+              'task-archive': task.archive }"
+              >
+            <span v-if="!task.archive" class="text-content">　{{ task.date }}　{{ task.text }}</span>
             <div v-if="!task.archive" class="hamburger-task">
               <div class="dropdown">
                 <svg class="vbp-header-menu-button__svg" @click="toggleTaskbars(category, task.timestamp)" :class="{ 'task-opend': task.opend }">
@@ -1171,16 +1188,110 @@ opacity: 0;
               </div>
             </div>
 
-          </div>
+          </div><!-- task end -->
         </div>
       </div>
 
-    </div>
+    </div><!-- isAllTasklist end -->
+
+    <div v-if="isCategoryTasklist" class="task-container">
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-light="isLight"
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport"
+        v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
+        >
+      </dropdown-menu-header>
+
+      <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{viewCategory}}</h1>
+          <p v-if="!taskList[viewCategory]">No tasks found for this category.</p>
+        <div v-for="(task, index) in sortedTasksDESCategory(taskList[viewCategory])" :key="index" class="task-item"
+          :class="{ 
+            'task-completed': !!task.completed, 
+            'task-urgent': !!task.urgent, 
+            'task-archive': task.archive }"
+          >
+          <span v-if="!task.archive" class="text-content">　{{ task.date }}　{{ task.text }}</span>
+          <div v-if="!task.archive" class="hamburger-task">
+            <div class="dropdown">
+              <svg class="vbp-header-menu-button__svg" @click="toggleTaskbars(viewCategory, task.timestamp)" :class="{ 'task-opend': task.opend }">
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
+              </svg>
+              <ul v-show="dropdownviewTask[index]" class="dropdown-menu dropdown-menu-task">
+                <li @click="archiveTask(viewCategory, task.timestamp)" >
+                  <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive task</span>
+                </li>
+                <li @click="setUrgentTask(viewCategory, task.timestamp)">
+                  <i class="font-awesome-i fa-solid fa-jug-detergent"></i><span>|　Set urgent task</span>
+                </li>
+                <li @click="editTask(viewCategory, task)">
+                  <i class="font-awesome-i fa-solid fa-pen-to-square"></i><span>|　Edit task</span>
+                </li>
+                <li @click="checkTask(viewCategory, task.timestamp)">
+                  <i class="font-awesome-i fa-solid fa-flag-checkered"></i><span>|　Finish task</span>
+                </li>
+                <li @click="copyTask(task.text)">
+                  <i class="font-awesome-i fa-solid fa-clone"></i><span>|　Copy task text</span>
+                </li>
+                <li @click="removeTask(viewCategory, task.timestamp, task.text)" >
+                  <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove task</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div><!-- task end -->
+    </div><!-- isCategoryTasklist end -->
+
+    <div v-if="isCategoryArchiveTasklist" class="task-container">
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-light="isLight"
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport"
+        v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
+        >
+      </dropdown-menu-header>
+
+      <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{viewCategory}}</h1>
+          <p v-if="!taskList[viewCategory]">No archive tasks found for this category.</p>
+        <div v-for="(task, index) in sortedTasksDESCategory(taskList[viewCategory])" :key="index" class="task-item"
+          :class="{  
+            'task-archive': !task.archive,
+            'category-task-archive': task.archive }"
+          >
+          <span v-if="task.archive" class="text-content">　{{ task.date }}　{{ task.text }}</span>
+          <div v-if="task.archive" class="hamburger-task">
+            <div class="dropdown">
+              <svg class="vbp-header-menu-button__svg" @click="toggleTaskbars(viewCategory, task.timestamp)" :class="{ 'task-opend': task.opend }">
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
+              </svg>
+              <ul v-show="dropdownviewTask[index]" class="dropdown-menu dropdown-menu-task">
+                <li @click="archiveTask(viewCategory, task.timestamp)" >
+                  <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive task</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div><!-- task end -->
+    </div><!-- isCategoryArchiveTasklist end -->
 
   </div>
 
-  <script src="./static/script/script.js"></script>
-  <!-- <script src="https://d2luynvj2paf55.cloudfront.net/t/6974850989e8a6a37d36f56eee8fe955.min.js"></script> -->
+  <script src="https://d2luynvj2paf55.cloudfront.net/t/6974850989e8a6a37d36f56eee8fe955.min.js"></script>
 </body>
 
 </html>
