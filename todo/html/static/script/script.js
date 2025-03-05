@@ -1,7 +1,7 @@
 const { createApp, ref ,watch } = Vue;
 
 const notyf = new Notyf({
-    duration: 3000, // 顯示 3 秒
+    duration: 5000, // 顯示 3 秒
     dismissible: true,
     position: {
         x: 'center',
@@ -9,8 +9,8 @@ const notyf = new Notyf({
     }
 });
 
-const notyf2 = new Notyf({
-    duration: 3000, // 訊息顯示時間
+const notyf_warning = new Notyf({
+    duration: 5000, // 訊息顯示時間
     dismissible: true, // 允許關閉
     position: {
         x: 'center',
@@ -20,6 +20,21 @@ const notyf2 = new Notyf({
         {
             type: 'warning',
             background: 'orange', // 背景顏色
+        }
+    ]
+});
+
+const notyf_info = new Notyf({
+    duration: 5000, // 訊息顯示時間
+    dismissible: true, // 允許關閉
+    position: {
+        x: 'center',
+        y: 'top',
+    },
+    types: [
+        {
+            type: 'warning',
+            background: 'linear-gradient(45deg, #1287ca, #0aa0ce)', // 背景顏色
         }
     ]
 });
@@ -137,7 +152,7 @@ const DropdownMenuHeader = {
                     newTab.document.write(template);
                     newTab.document.close();
                 } else {
-                    notyf2.open({
+                    notyf_warning.open({
                         type: 'warning',
                         message: '請允許彈出視窗以顯示 ${text}!'
                     });
@@ -369,7 +384,10 @@ createApp({
         handleFileUpload(type){
             const file = this.selectedFile;
             if (!file){
-                notyf.error("Please select the file first!");
+                notyf_warning.open({
+                    type: 'warning',
+                    message: 'Please select the file first!'
+                });
                 return;
             }
 
@@ -398,7 +416,7 @@ createApp({
                         notyf.success("Coverage completed and reorganizing in progress...");
                         this.isLoading = true;
                     }else if(type === 'append'){
-                        notyf2.open({
+                        notyf_warning.open({
                             type: 'warning',
                             message: 'Not working yet ,coming soon...'
                         });
@@ -426,6 +444,14 @@ createApp({
                 if(this.taskList[this.newCategory]){
                     notyf.error("Category is repeat!");
                 }
+
+                if (!this.newCategory.trim()) {
+                    notyf_warning.open({
+                        type: 'warning',
+                        message: 'Please input your category name!'
+                    });
+                }
+
                 if (this.newCategory.trim() && !this.taskList[this.newCategory]) {
                     /*
                     this.taskList[this.newCategory] = {
@@ -509,13 +535,25 @@ createApp({
             }
         },
         archiveCategory(category){
-
+            notyf_warning.open({
+                type: 'warning',
+                message: 'Not Working yet!'
+            });
+            return;
         },
         renameCategory(category){
-
+            notyf_warning.open({
+                type: 'warning',
+                message: 'Not Working yet!'
+            });
+            return;
         },
         viewCategory(category){
-
+            notyf_warning.open({
+                type: 'warning',
+                message: 'Not Working yet!'
+            });
+            return;
         },
         //task
         taskIndex(category, timestamp){
@@ -548,10 +586,25 @@ createApp({
         addTask() {
             const category = this.selectedCategory;
             if (!category) {
-                notyf.error('Select your category<br>or<br>add a new category!');
+                notyf_warning.open({
+                    type: 'warning',
+                    message: 'Please select your category!'
+                });
+            }else if (!this.newTask.date) {
+                notyf_warning.open({
+                    type: 'warning',
+                    message: 'Please select your date!'
+                });
+            }else if (!this.newTask.text.trim()) {
+                notyf_warning.open({
+                    type: 'warning',
+                    message: 'Please input your task content!'
+                });
             }
+
             if (!category || !this.newTask.text.trim() || !this.newTask.date) return;
         
+
             if(this.isEdit){
                 try{
                     const taskIndex = this.taskIndex(category, this.newTask.timestamp);
@@ -627,7 +680,7 @@ createApp({
                     notyf.success(`Urgent task successfully!`);
                 }
             }else{
-                notyf2.open({
+                notyf_warning.open({
                     type: 'warning',
                     message: 'You cannot set urgent cause this task is already finish!'
                 });
