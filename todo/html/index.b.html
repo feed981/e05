@@ -29,6 +29,7 @@
     }
 
     .app-container {
+      position: relative;
       /* overflow-y: auto;
     overflow-x: hidden; */
       height: 400px;
@@ -386,7 +387,7 @@
       /* display: inline-block; */
       /* margin-right: 20px; */
       cursor: pointer;
-      z-index: 9999;
+      z-index: 9998;
     }
 
 
@@ -647,7 +648,58 @@ opacity: 0;
 }
 /*burger svg end*/
 
+.light-mode .float{
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
 
+.light-mode .float .font-awesome-i{
+  color:#1287ca;
+}
+
+.float{
+  position: absolute;
+  /* position:fixed; */
+  width: 25px;
+  height: 40px;
+  top: 53px;
+  right: 0px;
+  color:#FFF;
+  border-radius: 90px 5px 5px 90px;
+  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+  text-align:center;
+  z-index: 9999;
+}
+
+.sound-float{
+  position: absolute;
+  width: 10px;
+  height: 40px;
+  top: 100px;
+  left: -10px;
+  border-radius: 90px 5px 5px 90px;
+  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+}
+
+.speak-float{
+  position: absolute;
+  width: 10px;
+  height: 40px;
+  top: 58px;
+  left: -10px;
+  border-radius: 90px 5px 5px 90px;
+  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+}
+
+.mute {
+  width: 5px;
+  left: -6px;
+}
+
+.my-float{
+  font-size: 12px;
+  margin: 14px 0px 0px 7px;
+  z-index: 9999;
+}
 
     .loading,
 .loading > div {
@@ -808,12 +860,12 @@ opacity: 0;
 <body>
   <div id="app" class="app-container">
 
-    <div v-if="isSendEmail &&!isImport" class="task-container">
+    <div v-if="isQrcode" class="task-container">
       <dropdown-menu-header
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -822,6 +874,26 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
+
+      <img src="5f1b11b5-4c7e-4d44-9df4-05f195a88bfa.png">
+    </div>
+
+    <div v-if="isSendEmail &&!isImport" class="task-container">
+      <dropdown-menu-header
+        @update:form-data="handleUpdate"
+        v-model:is-category-tasklist="isCategoryTasklist"
+        v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
+        v-model:is-qrcode="isQrcode"
+        v-model:is-light="isLight"
+        v-model:is-send-email="isSendEmail"
+        v-model:is-category-visible="isCategoryVisible"
+        v-model:is-import="isImport"
+        v-model:is-task-visible="isTaskVisible"
+        v-model:is-edit="isEdit"
+        >
+      </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <div class="card">
         <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-envelope"></i> FEEDBACK!</h1>
@@ -847,7 +919,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -856,6 +928,7 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <div class="loading-container">
         <div v-if="isLoading" class="loading">
@@ -874,6 +947,7 @@ opacity: 0;
         <i title="Overwrite, everything gone, careful!" @click="handleFileUpload('overwrite')" class="font-awesome-i fa-solid fa-feather"></i>
         <i title="Append, will keep the original, but still can work ha!" @click="handleFileUpload('append')" class="font-awesome-i fa-solid fa-feather-pointed"></i>
       </div>
+      
     </div>
     
     <div v-if="isTaskVisible || isEdit" class="task-container">
@@ -881,7 +955,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -890,6 +964,7 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-list-check"></i> new Task!</h1>
       
@@ -923,7 +998,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -932,6 +1007,7 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-icons"></i> new CATEGORY!</h1>
       <!-- <div v-if="this.selectedCategory" class="selected-category-sub">{{this.selectedCategory}} - sub</div> -->
@@ -988,7 +1064,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -997,6 +1073,7 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> All Tasklist!</h1>
 
@@ -1070,7 +1147,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1079,6 +1156,7 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{viewCategory}}</h1>
           <p v-if="!taskList[viewCategory]">No tasks found for this category.</p>
@@ -1127,7 +1205,7 @@ opacity: 0;
         @update:form-data="handleUpdate"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
-        v-model:is-need-speak="isNeedSpeak"
+        v-model:is-qrcode="isQrcode"
         v-model:is-light="isLight"
         v-model:is-send-email="isSendEmail"
         v-model:is-category-visible="isCategoryVisible"
@@ -1136,6 +1214,7 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
+      <float-addicon></float-addicon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{viewCategory}}</h1>
           <p v-if="!taskList[viewCategory]">No archive tasks found for this category.</p>

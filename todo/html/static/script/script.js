@@ -1,4 +1,21 @@
-const { createApp, ref, watch, reactive } = Vue;
+const { createApp, ref, watch, reactive, defineProps, defineEmits, computed } = Vue;
+
+const props = defineProps({
+    isSpeakMute: Boolean,
+    isSoundMute: Boolean,
+});
+
+const emit = defineEmits(['update:isSpeakMute','update:isSoundMute']);
+
+const localIsSoundMute = computed({
+    get: () => props.isSoundMute,
+    set: (value) => emit('update:isSoundMute', value)
+});
+
+const localIsSpeakMute = computed({
+    get: () => props.isSpeakMute,
+    set: (value) => emit('update:isSpeakMute', value)
+});
 
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
@@ -41,7 +58,6 @@ const notyf_info = new Notyf({
 
 const store = reactive({
     language: 0,
-    isMute: true,
     currentAudio: null,
 });
 
@@ -76,14 +92,14 @@ const Common = {
         return today.toISOString().split("T")[0]; // 轉成 YYYY-MM-DD 格式
     },
     speechSynthesisSpeak(text){
-        if(store.isMute){
+        if(localIsSpeakMute){
             const synth = window.speechSynthesis;
             const utterance = new SpeechSynthesisUtterance(text);
             synth.speak(utterance);
         }
     },
     playSoundtrack(path) {
-        if(store.isMute){
+        if(localIsSoundMute){
             // Ensure path is valid
             if (!path) {
                 console.error('No audio path provided');
@@ -105,7 +121,7 @@ const Common = {
 
                 // Check if audio is loaded before playing
                 store.currentAudio.oncanplaythrough = () => {
-                    if (store.isMute) {
+                    if (localIsSoundMute) {
                         store.currentAudio.play()
                             .catch(e => {
                                 console.error('Play error:', e);
@@ -142,9 +158,70 @@ const Common = {
     
 };
 
+const FloatAddIcon = {
+
+     template: `
+     <div @click="toggleSpeak" class="speak-float"></div>
+     <div @click="toggleSound" class="sound-float"></div>
+     <div v-if="!isQrcode && !isSendEmail && !isImport && !isTaskVisible && !isEdit" class="float">
+        <i @click="otherpage('isTaskVisible')"
+            class="my-float font-awesome-i fa-solid fa-plus"></i>
+     </div>
+     `,
+     methods:{
+        toggleSpeak(){
+            Common.successNotyftMessage([`Speak is ${localIsSpeakMute ? 'mute' : 'unmute'}`])
+            if (localIsSpeakMute) {
+                document.querySelector('.speak-float').classList.add('mute');
+             } else {
+                document.querySelector('.speak-float').classList.remove('mute');
+             }
+        },
+        toggleSound(){
+            Common.successNotyftMessage([`Sound is ${localIsSoundMute ? 'mute' : 'unmute'}`])
+            if (localIsSoundMute) {
+                document.querySelector('.sound-float').classList.add('mute');
+             } else {
+                document.querySelector('.sound-float').classList.remove('mute');
+             }
+        },
+        setIsWithOptions(activeKey) {
+            // Create an object with all keys set to false by default
+            const defaultFalseState = {
+                isAllTasklist: false,
+                isCategoryTasklist: false,
+                isCategoryArchiveTasklist: false,
+                isSendEmail: false,
+                isCategoryVisible: false,
+                isImport: false,
+                isTaskVisible: false,
+                isEdit: false,
+                isQrcode: false,
+            };
+    
+            // Create a new object with the specific key set to true
+            const updatedFormData = {
+                ...defaultFalseState,
+                [activeKey]: true
+            };
+    
+            // Emit the updated form data
+            this.$emit('update:formData', updatedFormData);
+        },
+        otherpage(activeKey, soundtrack){
+            if(soundtrack !== undefined){
+                Common.playSoundtrack(`../soundtrack/ds_ringtone_mail-mp3.mp3`);
+            }
+            if(activeKey === 'isTaskVisible'){
+                Common.successNotyftMessage([`Please add a new task!`,`請新增一項任務!`]);
+            }
+            this.setIsWithOptions(activeKey);
+        },
+    }
+}
 const DropdownMenuHeader = {
-    props: ['isLight','isAllTasklist','isCategoryTasklist','isCategoryArchiveTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','isEdit','formData'],  // 接收父组件的值
-    emits: ['update:isLight','update:isAllTasklist','update:isCategoryTasklist','update:isCategoryArchiveTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:isEdit','update:formData'],  // 允许子组件更新父组件
+    props: ['isQrcode','isLight','isAllTasklist','isCategoryTasklist','isCategoryArchiveTasklist','isSendEmail','isCategoryVisible','isImport','isTaskVisible','isEdit','formData'],  // 接收父组件的值
+    emits: ['update:isQrcode','update:isLight','update:isAllTasklist','update:isCategoryTasklist','update:isCategoryArchiveTasklist','update:isSendEmail','update:isCategoryVisible','update:isImport','update:isTaskVisible','update:isEdit','update:formData'],  // 允许子组件更新父组件
 
     template: `
 <div class="header-container">
@@ -156,14 +233,9 @@ const DropdownMenuHeader = {
             <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
           </svg>
         <ul v-show="dropdownviewHeader" class="dropdown-menu bars">
-<!--
-            <li v-if="!isMute" @click="$emit('update:isMute', true )">
-                <i class="font-awesome-i fa-solid fa-headset"></i><span>|　Voice reminder</span>
+            <li v-if="!isQrcode" @click="otherpage('isQrcode')">
+                <i class="font-awesome-i fa-solid fa-qrcode"></i><span>|　QR-Code</span>
             </li>
-            <li v-if="isMute" @click="$emit('update:isMute', false )">
-                <i class="font-awesome-i fa-solid fa-microphone-slash"></i><span>|　Slash sound speak</span>
-            </li>
--->
             <li v-if="isLight" @click="toggleLight(fasle)">
                 <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span>
             </li>
@@ -198,7 +270,7 @@ const DropdownMenuHeader = {
                 @click="otherpage('isTaskVisible')">
                 <i class="font-awesome-i fa-solid fa-list-check"></i><span>|　Add new task</span>
             </li>
-            <li v-if="isAllTasklist || isCategoryArchiveTasklist || isCategoryTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" 
+            <li v-if=" isQrcode || isAllTasklist || isCategoryArchiveTasklist || isCategoryTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit" 
                 @click="otherpage('isAllTasklist')">
                 <i class="font-awesome-i fa-solid fa-arrow-left"></i><span>|　Pre page</span>
             </li>
@@ -206,7 +278,7 @@ const DropdownMenuHeader = {
     </div>
     </div>
     <div title="Close this page and go back to alltasklist!" class="closeicon"
-        v-if="isCategoryTasklist || isCategoryArchiveTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit"
+        v-if="isQrcode || isCategoryTasklist || isCategoryArchiveTasklist || isSendEmail || isCategoryVisible || isImport || isTaskVisible || isEdit"
         >
         <i @click="otherpage('isAllTasklist')" class="font-awesome-i fa-regular fa-circle-xmark"></i>
     </div>
@@ -231,7 +303,8 @@ const DropdownMenuHeader = {
                 isCategoryVisible: false,
                 isImport: false,
                 isTaskVisible: false,
-                isEdit: false
+                isEdit: false,
+                isQrcode: false,
             };
     
             // Create a new object with the specific key set to true
@@ -254,6 +327,7 @@ const DropdownMenuHeader = {
             }
             this.setIsWithOptions(activeKey);
         },
+        
         toggleLight(isLight){
             if(isLight){
                 Common.playSoundtrack(`../soundtrack/hellodarknessmyoldfriend.mp3`);
@@ -518,9 +592,16 @@ let template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><me
 let template_e = `</div></body></html>`;
 
 createApp({
-    components: { 'dropdown-menu-header': DropdownMenuHeader 
+    components: { 
+        'dropdown-menu-header': DropdownMenuHeader ,
+        'float-addicon': FloatAddIcon ,
     },
     setup() {
+
+        const isQrcode = ref(false);
+        watch(isQrcode, (newVal) => {
+            console.log("isQrcode 变更为:", newVal);
+        });
 
         const isLight = ref(true);
         watch(isLight, (newVal) => {
@@ -537,6 +618,8 @@ createApp({
         watch(isAllTasklist, (newVal) => {
             // console.log("isAllTasklist 变更为:", newVal);
         });
+
+        
 
         const isCategoryTasklist = ref(false);
         watch(isCategoryTasklist, (newVal) => {
@@ -558,7 +641,7 @@ createApp({
         });
 
         watch(isSendEmail, (newVal) => {
-            console.log("isSendEmail 变更为:", newVal);
+            // console.log("isSendEmail 变更为:", newVal);
            if (!newVal) {
                 formData.value = {  // 不能用 `this.formData`，要用 `formData.value`
                     pageTitle: '',
@@ -590,7 +673,7 @@ createApp({
             // console.log("isEdit 变更为:", newVal);
         });
 
-        return { isLight, isAllTasklist, isCategoryTasklist, isCategoryArchiveTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible, isEdit };
+        return { isQrcode, isLight, isAllTasklist, isCategoryTasklist, isCategoryArchiveTasklist, isSendEmail, formData, isCategoryVisible, isImport, isTaskVisible, isEdit };
     },
     data() {
         return {
@@ -613,6 +696,7 @@ createApp({
             isLoading: false,
             selectedFile: null, // 用來儲存選擇的檔案
             categoryKey: 0,
+            isQrcode: false,
             isLight: false,
             isAllTasklist: false,
             dropdownviewTask: false,
@@ -624,6 +708,8 @@ createApp({
             isCategoryArchiveTasklist: false,
             dropdownviewTask: {},
             isEdit: false,
+            isSpeakMute: localIsSpeakMute,
+            isSoundMute: localIsSoundMute,
             language: store.language,
         };
     },
@@ -656,6 +742,7 @@ createApp({
             this.isImport = newData.isImport;
             this.isTaskVisible = newData.isTaskVisible;
             this.isEdit = newData.isEdit;
+            this.isQrcode = newData.isQrcode;
         },
         handleSubmit() {
             this.sending = true;
@@ -885,7 +972,6 @@ createApp({
         },
         toggleTaskbars(category, timestamp) {
             // console.log('category,',category,' ,newTask.timestamp',timestamp)
-            
             const taskIndex = this.taskIndex(category, timestamp);
             // console.log('taskIndex,',taskIndex)
             // 只開啟當前點擊的 task
