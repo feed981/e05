@@ -874,7 +874,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+      @update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <img src="5f1b11b5-4c7e-4d44-9df4-05f195a88bfa.png">
     </div>
@@ -893,7 +897,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <div class="card">
         <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-envelope"></i> FEEDBACK!</h1>
@@ -928,7 +936,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <div class="loading-container">
         <div v-if="isLoading" class="loading">
@@ -964,7 +976,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-list-check"></i> new Task!</h1>
       
@@ -1007,7 +1023,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-icons"></i> new CATEGORY!</h1>
       <!-- <div v-if="this.selectedCategory" class="selected-category-sub">{{this.selectedCategory}} - sub</div> -->
@@ -1073,7 +1093,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> All Tasklist!</h1>
 
@@ -1156,7 +1180,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{viewCategory}}</h1>
           <p v-if="!taskList[viewCategory]">No tasks found for this category.</p>
@@ -1214,7 +1242,11 @@ opacity: 0;
         v-model:is-edit="isEdit"
         >
       </dropdown-menu-header>
-      <float-addicon></float-addicon>
+      <float-icon 
+@update:form-data="handleUpdate"
+        v-model:is-speak-mute="isSpeakMute"
+        v-model:is-sound-mute="isSoundMute"
+      ></float-icon>
 
       <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{viewCategory}}</h1>
           <p v-if="!taskList[viewCategory]">No archive tasks found for this category.</p>
