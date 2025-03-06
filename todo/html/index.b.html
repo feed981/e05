@@ -224,6 +224,17 @@
       background-color: #cf472e;
     }
 
+    .light-mode .float{
+  /* box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset; */
+  /* background: #39b2f8; */
+  box-shadow:rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+    /* box-shadow: rgb(252 252 252) 3px 3px 6px 0px inset, rgb(236 236 236 / 50%) -3px -3px 6px 1px inset;*/
+}
+
+.light-mode .float .font-awesome-i{
+  color:#1287ca;
+}
+
 
     .date {
       font-family: "BhuTuka Expanded One", serif;
@@ -648,13 +659,7 @@ opacity: 0;
 }
 /*burger svg end*/
 
-.light-mode .float{
-  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
-}
 
-.light-mode .float .font-awesome-i{
-  color:#1287ca;
-}
 
 .float{
   position: absolute;
@@ -667,8 +672,24 @@ opacity: 0;
   border-radius: 90px 5px 5px 90px;
   box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
   text-align:center;
+  transition: all 0.8s ease;
   z-index: 9999;
 }
+
+.float:hover {
+  box-shadow: none;
+  transition: all 2.8s ease;
+}
+
+
+.light-mode .sound-float{
+  box-shadow:   rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px;
+}
+
+.light-mode .speak-float{
+  box-shadow:   rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px;
+}
+
 
 .sound-float{
   position: absolute;
@@ -677,7 +698,8 @@ opacity: 0;
   top: 100px;
   left: -10px;
   border-radius: 90px 5px 5px 90px;
-  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+  box-shadow: rgb(8 9 10 / 44%) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(43 43 43 / 20%) 0px 0px 10px;
+  /* box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px; */
 }
 
 .speak-float{
@@ -687,13 +709,15 @@ opacity: 0;
   top: 58px;
   left: -10px;
   border-radius: 90px 5px 5px 90px;
-  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+  box-shadow: rgb(8 9 10 / 44%) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(43 43 43 / 20%) 0px 0px 10px;
 }
 
 .mute {
   width: 5px;
-  left: -6px;
+  left: -5px;
 }
+
+
 
 .my-float{
   font-size: 12px;
@@ -875,12 +899,12 @@ opacity: 0;
         >
       </dropdown-menu-header>
       <float-icon 
-      @update:form-data="handleUpdate"
+        @update:form-data="handleUpdate"
         v-model:is-speak-mute="isSpeakMute"
         v-model:is-sound-mute="isSoundMute"
       ></float-icon>
 
-      <img src="5f1b11b5-4c7e-4d44-9df4-05f195a88bfa.png">
+      <img src="https://d2luynvj2paf55.cloudfront.net/t/5f1b11b5-4c7e-4d44-9df4-05f195a88bfa.png">
     </div>
 
     <div v-if="isSendEmail &&!isImport" class="task-container">
@@ -1082,6 +1106,7 @@ opacity: 0;
     <div v-if="isAllTasklist" class="task-container">
       <dropdown-menu-header
         @update:form-data="handleUpdate"
+        v-model:is-all-tasklist="isAllTasklist"
         v-model:is-category-tasklist="isCategoryTasklist"
         v-model:is-category-archive-tasklist="isCategoryArchiveTasklist"
         v-model:is-qrcode="isQrcode"
@@ -1274,9 +1299,17 @@ opacity: 0;
     </div><!-- isCategoryArchiveTasklist end -->
 
   </div>
-
-  <script src="./static/script/script.js"></script>
-  <!-- <script src="https://d2luynvj2paf55.cloudfront.net/t/6974850989e8a6a37d36f56eee8fe955.min.js"></script> -->
+  
+  <script src="./static/script/components/store.js"></script>
+  <script src="./static/script/components/floatIcon.js"></script>
+  <!-- <script src="./static/script/components/common.js"></script> -->
+  <!-- <script src="./static/script/components/dropdownMenuHeader.js"></script> -->
+  <!-- <script src="./static/script/components/main.js"></script> -->
+  <!-- <script src="https://d2luynvj2paf55.cloudfront.net/t/store.min.js"></script> -->
+  <!-- <script src="https://d2luynvj2paf55.cloudfront.net/t/floatIcon.min.js"></script> -->
+  <script src="https://d2luynvj2paf55.cloudfront.net/t/common.min.js"></script>
+  <script src="https://d2luynvj2paf55.cloudfront.net/t/dropdownMenuHeader.min.js"></script>
+  <script src="https://d2luynvj2paf55.cloudfront.net/t/main.min.js"></script>
 </body>
 
 </html>
