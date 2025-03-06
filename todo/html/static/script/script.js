@@ -1,21 +1,4 @@
-const { createApp, ref, watch, reactive, defineProps, defineEmits, computed } = Vue;
-
-const props = defineProps({
-    isSpeakMute: Boolean,
-    isSoundMute: Boolean,
-});
-
-const emit = defineEmits(['update:isSpeakMute','update:isSoundMute']);
-
-const localIsSoundMute = computed({
-    get: () => props.isSoundMute,
-    set: (value) => emit('update:isSoundMute', value)
-});
-
-const localIsSpeakMute = computed({
-    get: () => props.isSpeakMute,
-    set: (value) => emit('update:isSpeakMute', value)
-});
+const { createApp, ref, watch, reactive } = Vue;
 
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
@@ -58,6 +41,8 @@ const notyf_info = new Notyf({
 
 const store = reactive({
     language: 0,
+    isSpeakMute: true,
+    isSoundMute: true,
     currentAudio: null,
 });
 
@@ -91,15 +76,18 @@ const Common = {
         const today = new Date();
         return today.toISOString().split("T")[0]; // 轉成 YYYY-MM-DD 格式
     },
+
     speechSynthesisSpeak(text){
-        if(localIsSpeakMute){
+        console.log('isSpeakMute: ' + store.isSpeakMute);
+        if(store.isSpeakMute){
             const synth = window.speechSynthesis;
             const utterance = new SpeechSynthesisUtterance(text);
             synth.speak(utterance);
         }
     },
     playSoundtrack(path) {
-        if(localIsSoundMute){
+        console.log('isSoundMute: ' + store.isSoundMute);
+        if(store.isSoundMute){
             // Ensure path is valid
             if (!path) {
                 console.error('No audio path provided');
@@ -121,7 +109,7 @@ const Common = {
 
                 // Check if audio is loaded before playing
                 store.currentAudio.oncanplaythrough = () => {
-                    if (localIsSoundMute) {
+                    if(store.isSoundMute){
                         store.currentAudio.play()
                             .catch(e => {
                                 console.error('Play error:', e);
@@ -158,7 +146,10 @@ const Common = {
     
 };
 
-const FloatAddIcon = {
+const FloatIcon = {
+
+    props: ['isSpeakMute','isSoundMute','formData'],  // 接收父组件的值
+    emits: ['update:isSpeakMute','update:isSoundMute','update:formData'],  // 允许子组件更新父组件
 
      template: `
      <div @click="toggleSpeak" class="speak-float"></div>
@@ -168,22 +159,43 @@ const FloatAddIcon = {
             class="my-float font-awesome-i fa-solid fa-plus"></i>
      </div>
      `,
+     computed: {
+        localIsSpeakMute: {
+            get() { 
+                return this.isSpeakMute; 
+            },
+            set(value) { 
+                this.$emit('update:isSpeakMute', value);
+                // 同時更新全局狀態
+                store.isSpeakMute = value;
+            }
+        },
+        localIsSoundMute: {
+            get() { 
+                return this.isSoundMute; 
+            },
+            set(value) { 
+                this.$emit('update:isSoundMute', value);
+                // 同時更新全局狀態
+                store.isSoundMute = value;
+            }
+        }
+    },
+    // 在組件掛載時同步初始狀態
+    mounted() {
+        store.isSpeakMute = this.isSpeakMute;
+        store.isSoundMute = this.isSoundMute;
+    },
      methods:{
         toggleSpeak(){
-            Common.successNotyftMessage([`Speak is ${localIsSpeakMute ? 'mute' : 'unmute'}`])
-            if (localIsSpeakMute) {
-                document.querySelector('.speak-float').classList.add('mute');
-             } else {
-                document.querySelector('.speak-float').classList.remove('mute');
-             }
+            this.localIsSpeakMute = !this.localIsSpeakMute;
+            Common.successNotyftMessage([`Speak is ${this.localIsSpeakMute ? 'mute' : 'unmute'}`])
+            document.querySelector('.speak-float').classList.toggle('mute', this.localIsSpeakMute);
         },
         toggleSound(){
-            Common.successNotyftMessage([`Sound is ${localIsSoundMute ? 'mute' : 'unmute'}`])
-            if (localIsSoundMute) {
-                document.querySelector('.sound-float').classList.add('mute');
-             } else {
-                document.querySelector('.sound-float').classList.remove('mute');
-             }
+            this.localIsSoundMute = !this.localIsSoundMute;
+            Common.successNotyftMessage([`Sound is ${this.localIsSoundMute ? 'mute' : 'unmute'}`])
+            document.querySelector('.sound-float').classList.toggle('mute', this.localIsSoundMute);
         },
         setIsWithOptions(activeKey) {
             // Create an object with all keys set to false by default
@@ -217,6 +229,7 @@ const FloatAddIcon = {
             }
             this.setIsWithOptions(activeKey);
         },
+        
     }
 }
 const DropdownMenuHeader = {
@@ -594,7 +607,7 @@ let template_e = `</div></body></html>`;
 createApp({
     components: { 
         'dropdown-menu-header': DropdownMenuHeader ,
-        'float-addicon': FloatAddIcon ,
+        'float-icon': FloatIcon ,
     },
     setup() {
 
@@ -708,8 +721,8 @@ createApp({
             isCategoryArchiveTasklist: false,
             dropdownviewTask: {},
             isEdit: false,
-            isSpeakMute: localIsSpeakMute,
-            isSoundMute: localIsSoundMute,
+            isSpeakMute: store.isSpeakMute,
+            isSoundMute: store.isSoundMute,
             language: store.language,
         };
     },
@@ -1009,6 +1022,7 @@ createApp({
                     const taskIndex = this.taskIndex(category, this.newTask.timestamp);
                     this.taskList[category][taskIndex].text = this.newTask.text;
                     this.taskList[category][taskIndex].date = this.newTask.date;
+                    this.taskList[category][taskIndex].timestamp = Date.now();
                     this.taskList[category][taskIndex].updatetime = Date.now();
                     this.saveTasks();
                     Common.successNotyftMessage(['Edit task successfully!','已修改任務內容!']);
