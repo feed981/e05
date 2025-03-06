@@ -93,7 +93,13 @@ createApp({
             viewCategory: "",
             newCategory: "",
             selectedCategory: "",
-            newTask: { text: "", date: window.Common.getTodayDate(), opend: false, urgent: false, archive: false},
+            newTask: { 
+                text: "",
+                date: window.Common.getTodayDate(),
+                opend: false,
+                urgent: false,
+                archive: false
+            },
             taskList: JSON.parse(localStorage.getItem("tasks")) || {"default":[]},
             expandedCategories: [],
             formData: {
@@ -477,10 +483,10 @@ createApp({
             this.taskList[category][taskIndex].urgent = false;
             this.saveTasks();
             if(this.taskList[category][taskIndex].completed){
-                window.Common.playSoundtrack('https://d2luynvj2paf55.cloudfront.net/soundtrack/black-and-white-ost-disc-3-mission-success.mp3');
+                window.Common.playSoundtrack(`${store.cloudfrontsoundtrack}black-and-white-ost-disc-3-mission-success.mp3`);
                 window.Common.successNotyftMessage(['Finish task successfully!','順利完成任務!']);
             }else{
-                window.Common.playSoundtrack('https://d2luynvj2paf55.cloudfront.net/soundtrack/gta-san-andreas-ah-shit-here-we-go-again_BWv0Gvc.mp3');
+                window.Common.playSoundtrack(`${store.cloudfrontsoundtrack}gta-san-andreas-ah-shit-here-we-go-again_BWv0Gvc.mp3`);
                 window.Common.successNotyftMessage(['Cancel finish task successfully!','重啟任務!']);
             }
         },
@@ -501,7 +507,7 @@ createApp({
                 this.taskList[category][taskIndex].urgent = !this.taskList[category][taskIndex].urgent;
                 this.saveTasks();
                 if(this.taskList[category][taskIndex].urgent){
-                    window.Common.playSoundtrack(`https://d2luynvj2paf55.cloudfront.net/soundtrack/gan-wu-hua-dou.mp3`);
+                    window.Common.playSoundtrack(`${store.cloudfrontsoundtrack}gan-wu-hua-dou.mp3`);
                     window.Common.successNotyftMessage(['Urgent task successfully!','已將任務狀態設置為緊急!']);
                 }
             }else{
