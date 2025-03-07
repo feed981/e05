@@ -1,0 +1,108 @@
+.light-mode {
+    /* background-color: #414242; */
+    background-color: #fff;
+    color: #333;
+}
+
+
+.light-mode .task-container {
+    background-color: #fff;
+    color: #000;
+    /* background-color: #414242; */
+    /* color: #fff; */
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.light-mode select,
+.light-mode .date {
+    background-color: #69affa;
+}
+
+.light-mode select:hover,
+.light-mode .date:hover {
+    background-color: #2969ad;
+}
+
+
+.light-mode .font-awesome-i-inbutton {
+    background-color: #dcdcdc3b;
+}
+
+.light-mode .font-awesome-i-inbutton:hover {
+    background-color: #dcdcdc3b;
+}
+
+
+.light-mode .task-item {
+    color: #fff;
+    border-left: 4px solid #1ba0ef;
+    border-bottom: 4px solid #0056b3;
+    background-color: #7bb0e9;
+    border-radius: 5px;
+}
+
+
+.light-mode .task-completed {
+    background: #5f6161;
+    border-left: 4px solid rgb(199, 199, 199);
+    border-bottom: 4px solid #575656;
+
+}
+
+.light-mode .category {
+    background-color: #999797;
+    color: #ebebeb;
+}
+
+
+
+.light-mode .font-awesome-i,
+.light-mode .task-menu .font-awesome-i {
+    color: #f6f6f6;
+}
+
+.light-mode .heading-style1 {
+    font-family: 'Creepster', cursive;
+    color: #69affa;
+    text-shadow: 2px 2px 4px rgba(95, 110, 192, 0.3);
+}
+
+.light-mode .dropdown-menu {
+    color: #000;
+    background: #fff;
+}
+
+
+.light-mode .task-urgent {
+    border-left: 4px solid #d64d35;
+    border-bottom: 4px solid #b32a00;
+    background-color: #cf472e;
+}
+
+
+
+/* float.css s */
+.light-mode .float {
+    /* box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset; */
+    /* background: #39b2f8; */
+    box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+    /* box-shadow: rgb(252 252 252) 3px 3px 6px 0px inset, rgb(236 236 236 / 50%) -3px -3px 6px 1px inset;*/
+}
+
+.light-mode .float .font-awesome-i {
+    color: #1287ca;
+}
+
+
+.light-mode .sound-float {
+    box-shadow: rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px;
+}
+
+.light-mode .speak-float {
+    box-shadow: rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px;
+}
+
+/* float.css e */
