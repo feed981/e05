@@ -1,6 +1,22 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+
+export const useLightStore = defineStore('light', () => {
+  const isLight = ref(false);
+  const bar = useBarStore();
+
+  function toggleLight() {
+    isLight.value = !isLight.value;
+    isLight.value ? document.body.classList.add('light-mode') : document.body.classList.remove('light-mode');
+    bar.toggleBars();
+  }
+
+  return { 
+    isLight, toggleLight,
+   };
+});
+
 export const useBarStore = defineStore('bar', () => {
     const isBarOpen = ref(false);
   
