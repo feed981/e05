@@ -1,6 +1,7 @@
 <script setup>
-import { useBarStore } from '@/store/useStore';
+import { useBarStore, useLightStore } from '@/store/useStore';
 const barStore = useBarStore();
+const lightStore = useLightStore();
 </script>
 
 <template>
@@ -18,11 +19,8 @@ const barStore = useBarStore();
                         <i class="font-awesome-i fa-solid fa-qrcode"></i>|　QR-Code
                     </li>
                 </router-link>
-                <li v-if="isLight" @click="toggleLight(fasle)">
-                    <i class="font-awesome-i fa-solid fa-toggle-on"></i><span>|　Toggle dark-mode</span>
-                </li>
-                <li v-if="!isLight" @click="toggleLight(true)">
-                    <i class="font-awesome-i fa-solid fa-toggle-off"></i><span>|　Toggle light-mode</span>
+                <li @click="lightStore.toggleLight">
+                    <i class="font-awesome-i fa-solid" :class="{ 'fa-toggle-on': lightStore.isLight, 'fa-toggle-off': !lightStore.isLight }"></i>{{ lightStore.isLight ? '|　Toggle dark-mode' : '|　Toggle light-mode' }}
                 </li>
                 <router-link to="/feedback">
                     <li>

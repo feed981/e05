@@ -8,6 +8,8 @@ import CategoryTasks from './views/CategoryTasks.vue';
 import CategoryTasksArchive from './views/CategoryTasksArchive.vue';
 import Tasks from './views/Tasks.vue';
 
+import { useBarStore } from '@/store/useStore';
+
 const routes = [
   { path: '/', component: Home },
   { path: '/qrcode', component: QRCode },
@@ -22,6 +24,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+
+router.beforeEach((to, from, next) => {
+  const barStore = useBarStore(); // 確保 store 在這裡被調用
+  if (to.path === '/feedback') {
+    barStore.toggleBars();
+  }
+  next();
 });
 
 export default router;
