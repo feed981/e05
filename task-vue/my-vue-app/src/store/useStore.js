@@ -1,33 +1,59 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref } from "vue";
 
+// 建立全局響應式狀態
+const language = ref(0);  // Vue 3 的響應式變數
+
+// 提供一個函式來修改 language
+const setLanguage = (newLang) => {
+  language.value = newLang;
+};
+
+export function useStore() {
+  return {
+    language,
+    setLanguage
+  };
+}
 
 export const useLightStore = defineStore('light', () => {
-  const isLight = ref(false);
-  const bar = useBarStore();
+  const isOpen = ref(false);
 
-  function toggleLight() {
-    isLight.value = !isLight.value;
-    isLight.value ? document.body.classList.add('light-mode') : document.body.classList.remove('light-mode');
-    bar.toggleBars();
+  function toggleBars() {
+    isOpen.value = !isOpen.value;
+    isOpen.value ? document.body.classList.add('light-mode') : document.body.classList.remove('light-mode');
   }
 
   return { 
-    isLight, toggleLight,
+    isOpen, toggleBars,
    };
 });
 
-export const useBarStore = defineStore('bar', () => {
-    const isBarOpen = ref(false);
+export const useMenuStore = defineStore('bar', () => {
+    const isOpen = ref(false);
   
     function toggleBars() {
-        isBarOpen.value = !isBarOpen.value;
+      isOpen.value = !isOpen.value;
     }
   
     return { 
-        isBarOpen, toggleBars,
+      isOpen, toggleBars,
      };
-  });
+});
+
+export const useExportMenuStore = defineStore('export', () => {
+  const isOpen = ref(false);
+  const menu = useMenuStore(); // 點的同時也點了useMenuStore所以才會關掉
+
+  function toggleBars() {
+    isOpen.value = !isOpen.value;
+    menu.toggleBars(); // 連點兩下
+  }
+
+  return { 
+    isOpen, toggleBars,
+   };
+});
 
   
 export const useMuteStore = defineStore('mute', () => {

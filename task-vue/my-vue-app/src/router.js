@@ -8,7 +8,7 @@ import CategoryTasks from './views/CategoryTasks.vue';
 import CategoryTasksArchive from './views/CategoryTasksArchive.vue';
 import Tasks from './views/Tasks.vue';
 
-import { useBarStore } from '@/store/useStore';
+import { useMenuStore } from '@/store/useStore';
 
 const routes = [
   { path: '/', component: Home },
@@ -26,11 +26,12 @@ const router = createRouter({
   routes
 });
 
-
 router.beforeEach((to, from, next) => {
-  const barStore = useBarStore(); // 確保 store 在這裡被調用
+  const menuStore = useMenuStore(); // 確保 store 在這裡被調用
   if (to.path === '/feedback') {
-    barStore.toggleBars();
+  }else{ // 不關
+    menuStore.toggleBars();
+    console.log(to.path)
   }
   next();
 });
