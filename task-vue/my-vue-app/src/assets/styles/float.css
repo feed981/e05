@@ -1,4 +1,3 @@
-/* + add task */
 .float {
     position: absolute;
     /* position:fixed; */
@@ -12,16 +11,112 @@
     text-align: center;
     transition: all 0.8s ease;
     z-index: 9999;
-}
+  }
 
-.float:hover {
+  .float:hover {
     box-shadow: none;
     transition: all 2.8s ease;
+  }
+
+  .float-plus{
+    top: 100px;
+    width: 35px;
+    height: 500px;
+  }
+
+  .float-plus:hover{
+    border-radius: 15px 5px 5px 15px;
+    box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+    margin: 10px 0px 0px 250px;
+    width: 300px;
+    transition: all 3s ease;
+  }
+
+  .float-plus:hover i{
+    margin: 220px 0px 0px 40px;
+    font-size: 30px;
+    transition: all 1s ease;
+
+  }
+
+  .float-plus i{
+    margin: 28px 10px 0px 10px;
+    transition: all 0.8s ease;
+  }
+
+  .float-plus p {
+    display: none;  /* 預設隱藏 */
+  }
+  
+  .float-plus:hover p{
+    margin: 18px 0px 0px 80px;
+    display: block; /* hover 時顯示 */
+  }
+
+  .typing-effect {
+    white-space: pre-wrap;
+    /* 保留換行並自動換行 */
+    word-wrap: break-word;
+    /* 讓長單詞換行 */
+    border-right: 2px solid rgb(247, 247, 247);  /* 模擬打字游標 */
+    white-space: nowrap;  /* 確保文字不換行 */
+    overflow: hidden;  /* 隱藏超出範圍的文字 */
+    width: 10%;  /* 初始寬度為 0 */
+    animation: typing 1s steps(10, end) forwards, blink 0.7s infinite;
+  }
+
+
+/* 文字打字動畫 */
+@keyframes typing {
+  from {
+      width: 0;
+  }
+  to {
+      width: 120px;  /* 根據內容長度調整 */
+  }
 }
 
-/* sound btn */
+/* 游標閃爍動畫 */
+@keyframes blink {
+  50% {
+      border-color: transparent;
+  }
+}
 
-.sound-float {
+
+  .float-prepage{
+    top: 23px;
+    width: 35px;
+    height: 50px;
+    transition: all 3s ease;
+  }
+
+  .float-prepage:hover{
+    width: 50px;
+    height: 50px;
+    border-radius: 90px;
+    transition: all 3s ease;
+  }
+
+  .float-prepage i{
+    margin: 18px 0px 0px 5px;
+  }
+
+  .float-bars{
+    width: 100px;
+    height: 50px;
+    left: 23px;
+    top: 23px;
+    border-radius: 25px;
+  }
+
+  .float-bars .header-container{
+    margin: 18px;
+  }
+
+
+
+  .float-sound {
     position: absolute;
     width: 10px;
     height: 40px;
@@ -30,9 +125,9 @@
     border-radius: 90px 5px 5px 90px;
     box-shadow: rgb(8 9 10 / 44%) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(43 43 43 / 20%) 0px 0px 10px;
     /* box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px; */
-}
+  }
 
-.speak-float {
+  .float-speak {
     position: absolute;
     width: 10px;
     height: 40px;
@@ -40,15 +135,15 @@
     left: -10px;
     border-radius: 90px 5px 5px 90px;
     box-shadow: rgb(8 9 10 / 44%) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(43 43 43 / 20%) 0px 0px 10px;
-}
+  }
 
-.mute {
+  .mute {
     width: 5px;
     left: -5px;
-}
+  }
 
-.my-float {
+  .my-float {
     font-size: 12px;
     margin: 14px 0px 0px 7px;
     z-index: 9999;
-}
+  }
