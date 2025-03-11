@@ -1,6 +1,7 @@
 import { useTask } from "@/composables/useTask.js";
 import { useCommon } from "@/composables/useCommon.js";
 import { useStore, useMenuStore } from '@/store/useStore';
+import { useRouter } from 'vue-router';
 
 const { taskList, } = useTask();
 const { domain_soundtrack, } = useStore();
@@ -195,7 +196,7 @@ const template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><
 const template_e = `</div></body></html>`;
 
 export function useExport() {
-
+    const router = useRouter();
     const { 
         windowConfirm,
         successNotyftMessage,
@@ -230,7 +231,7 @@ export function useExport() {
     const resetdata = () => {
         const menuStore = useMenuStore();
         if (windowConfirm([`Are you sure you want to clear all the data ?`,`你確定要刪除所有數據嗎?`])) {
-            playSoundtrack(`${domain_soundtrack}matt-hardy-delete-delete-delete.mp3`);
+            playSoundtrack(`${domain_soundtrack.value}matt-hardy-delete-delete-delete.mp3`);
             localStorage.setItem("tasks" ,'{"default":[]}')
             successNotyftMessage([`Deleting data, please wait...`,`刪除數據中請稍後`]);
             
@@ -243,7 +244,7 @@ export function useExport() {
             }, 4000);
     
             setTimeout(() => {
-                window.location.reload();
+                router.push('/tasks/list');
             }, 10000);
         }
     };

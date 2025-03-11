@@ -16,15 +16,6 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
-.light-mode select,
-.light-mode .date {
-    background-color: #69affa;
-}
-
-.light-mode select:hover,
-.light-mode .date:hover {
-    background-color: #2969ad;
-}
 
 
 .light-mode .font-awesome-i-inbutton {
@@ -58,6 +49,10 @@
 }
 
 
+.light-mode .loading {
+    color: #313030;
+  }
+
 
 .light-mode .font-awesome-i,
 .light-mode .task-menu .font-awesome-i {
@@ -81,7 +76,6 @@
     border-bottom: 4px solid #b32a00;
     background-color: #cf472e;
 }
-
 
 
 /* float.css s */
