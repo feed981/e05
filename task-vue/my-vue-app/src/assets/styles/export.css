@@ -5,6 +5,8 @@
     padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: #888 #222;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
   .export-container::-webkit-scrollbar {
@@ -28,12 +30,13 @@
   }
 
   .export-category span{
+    width: 94%;
+    text-align: left;
+    padding-bottom: 10px;
     cursor: pointer;
     font-size: 16px;
     white-space: pre-wrap;
-    /* 保留換行並自動換行 */
     word-wrap: break-word;
-    /* 讓長單詞換行 */
   }
 
 

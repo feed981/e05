@@ -1,0 +1,145 @@
+select {
+    font-family: "BhuTuka Expanded One", serif;
+    font-size: 12px;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    background: #2b2b2b;
+    box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;    /* box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; */
+    transition: all 0.5s ease;
+    width: 80px;
+}
+
+/* 滑鼠懸停時變化 */
+select:hover {
+    background-color: #2b2b2b;
+    box-shadow: none;
+    transition: all 2.8s ease;
+}
+
+/* 點擊時的樣式 */
+select:focus {
+    outline: none;
+    transition: all 2.8s ease;
+}
+
+/* 下拉選單的箭頭樣式 */
+select::-ms-expand {
+    display: none;
+    /* 隱藏 IE 的箭頭 */
+}
+
+
+.date {
+    font-family: "BhuTuka Expanded One", serif;
+    font-size: 12px;
+    border: 2px;
+    border-radius: 5px;
+    background: #39b2f8;
+    color: #fff;
+    cursor: pointer;
+    background: #2b2b2b;
+    box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;    /* box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; */
+    transition: all 0.5s ease;
+    width: 78px;
+}
+
+.date:hover {
+    background-color: #2b2b2b;
+    box-shadow: none;
+    transition: all 2.8s ease;
+}
+
+.date:focus {
+    outline: none;
+    transition: all 2.8s ease;
+}
+
+.flex-container {
+    width: 300px;
+    height: 500px;
+    border-radius: 15px 5px 5px 15px;
+    box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+    margin: 42px 0px 0px 20px;
+    /* display: flex; */
+    align-items: stretch;
+    /* 讓子元素都撐滿父容器的高度 */
+}
+
+.flex-container .form{
+    padding: 130px 50px;
+    /* border: 2px red solid; */
+}
+
+.flex-container .form .seleet-container{
+    height: 80px;
+    width: 215px;
+    display: flex;
+    margin-bottom: 10px;
+    /* border: 2px red solid; */
+}
+
+.flex-container i{
+    margin-bottom: 10px;
+}
+
+input[type="text"]{
+    width: 92%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    color: #fff;
+    border: 1px solid #2b2b2b;
+    background: #2b2b2b;
+    box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;    /* box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; */
+
+}
+
+input[type="text"]:hover{
+    background-color: #2b2b2b;
+    box-shadow: none;
+    transition: all 2.8s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    transition: all 2.8s ease;
+}
+
+.addtaskicon{
+    cursor: pointer;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+
+.light-mode select,
+.light-mode .date {
+    background-color: #fff;
+    color: #000;
+    /* background-color: #69affa; */
+    box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+}
+
+.light-mode select:hover,
+.light-mode .date:hover {
+    box-shadow: none;
+}
+
+.light-mode .flex-container {
+    box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+}
+
+.light-mode input[type="text"]{
+    border: #000;
+    background-color: #fff;
+    box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+}
+
+.light-mode input[type="text"]:hover{
+    color: #000;
+    box-shadow: none;
+}

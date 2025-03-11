@@ -8,7 +8,6 @@ import { useStore, useMuteStore } from "@/store/useStore";
 
 import { useRoute } from 'vue-router';
 
-
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
     dismissible: true,
@@ -38,7 +37,7 @@ export function useCommon() {
 
     if (!getActivePinia()) return {}; // 確保 Pinia 已初始化
   
-    const { language } = useStore();
+    const { language, domain_soundtrack } = useStore();
 
     const { 
         isSpeakMute,
@@ -48,6 +47,11 @@ export function useCommon() {
     const windowConfirm = (message) => {
         speechSynthesisSpeak(message[language.value]);
         return window.confirm(message[language.value]);
+    };
+
+	const successNotyftMessageWithST = (message, file) => {
+        playSoundtrack(domain_soundtrack.value + file);
+        successNotyftMessage(message);
     };
 
 	const successNotyftMessage = (message) => {
@@ -61,7 +65,7 @@ export function useCommon() {
     const errorNotyftMessage = (message) => {
         speechSynthesisSpeak(message[language.value]);
         notyf.error(message[language.value]);
-        return;
+        
     };
 
     const warningNotyftMessageCheckData = (message) => {
@@ -70,7 +74,7 @@ export function useCommon() {
             type: 'warning',
             message: message[language.value]
         });
-        return;
+        
     };
 
     const speechSynthesisSpeak = (text) => {
@@ -162,6 +166,7 @@ export function useCommon() {
     return {
         getTodayDate,
         windowConfirm,
+        successNotyftMessageWithST,
         successNotyftMessage,
         errorNotyftMessage,
         warningNotyftMessageCheckData,

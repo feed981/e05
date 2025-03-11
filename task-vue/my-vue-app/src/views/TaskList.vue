@@ -19,11 +19,14 @@ const {
       <div v-if="index !== 0" class="hr"></div>
       <div class="export-category">
         <span>{{ category }}</span>
-        　<i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ allTaskCount(category) }}
+      </div>
+      <div class="export-category">
+
+        <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ allTaskCount(category) }}
         , <i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{ finishTaskCount(category) }} 
         , <i title="This category urgent task count!" class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(category) }}
       </div>
-
+        
       <div v-for="(tasks, date) in dates" :key="date" class="post">
         <!-- <span v-if="tasks.length === 0">　(No tasks available.)</span> -->
           <div class="user">
