@@ -29,7 +29,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const menuStore = useMenuStore(); // 確保 store 在這裡被調用
   //  close menu
-  if (to.path === '/') {
+  if (to.path === '/import/as/json') {
     menuStore.toggleBars();
     console.log(to.path)
   }else{ 

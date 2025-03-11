@@ -1,3 +1,13 @@
+<script setup>
+import { useExport } from "@/composables/useExport.js";
+
+const {
+    handleFileChange,
+    handleFileUpload,
+} = useExport();
+
+</script>
+
 <template>
     <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-file-import"></i> Import as JSON!</h1>
 

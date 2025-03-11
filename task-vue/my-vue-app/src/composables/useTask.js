@@ -1,10 +1,13 @@
 import { ref, computed, onMounted } from "vue";
 import { useCommon } from "@/composables/useCommon.js";
 import { useRouter } from 'vue-router';
+import dayjs from 'dayjs';
 
 export function useTask() {
   const router = useRouter();
-  const getTodayDate = () => new Date().toISOString().split("T")[0];
+  const setDate = (timestamp) => {
+    return dayjs(timestamp).format('YYYY-MM-DD');
+  };
 
   const { 
       playSoundtrack,
@@ -18,7 +21,7 @@ export function useTask() {
   const newTask = ref(
     { 
       text: "", 
-      date: getTodayDate(), 
+      date: setDate(), 
       opend: false, 
       urgent: false, 
       archive: false,
@@ -29,7 +32,7 @@ export function useTask() {
   );
 
   onMounted(() => {
-    newTask.value.date = getTodayDate();
+    newTask.value.date = setDate();
   });
 
 
@@ -45,7 +48,7 @@ export function useTask() {
   const afterTask = () => {
     selectedCategory.vallue = '';
     newTask.value.text = "";
-    newTask.value.date = getTodayDate;
+    newTask.value.date = setDate;
     router.push('/tasks/list');
   };
 
