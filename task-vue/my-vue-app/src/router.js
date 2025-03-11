@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from './views/Home.vue';
+import TaskList from './views/TaskList.vue';
 import QRCode from './views/QRCode.vue';
 import Feedback from './views/Feedback.vue';
 import ImportAsJson from './views/ImportAsJson.vue';
@@ -11,7 +11,7 @@ import Tasks from './views/Tasks.vue';
 import { useMenuStore } from '@/store/useStore';
 
 const routes = [
-  { path: '/', component: Home },
+  { path: '/tasks/list', component: TaskList },
   { path: '/qrcode', component: QRCode },
   { path: '/feedback', component: Feedback },
   { path: '/import/as/json', component: ImportAsJson },
@@ -28,8 +28,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const menuStore = useMenuStore(); // 確保 store 在這裡被調用
+  //  close menu
   if (to.path === '/feedback') {
-  }else{ // 不關
+  }else{ 
     menuStore.toggleBars();
     console.log(to.path)
   }

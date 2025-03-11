@@ -20,6 +20,27 @@
     border-radius: 4px;
   }
 
+  .export-container .hr{
+    background: #383838;
+    height: 1px;
+    margin: 17px 0px;
+    width: 100%;
+  }
+
+  .export-category span{
+    cursor: pointer;
+    font-size: 16px;
+    white-space: pre-wrap;
+    /* 保留換行並自動換行 */
+    word-wrap: break-word;
+    /* 讓長單詞換行 */
+  }
+
+
+  .export-category i{
+    font-size: 14px;
+  }
+
   .post {
     background: #222;
     padding: 15px;
@@ -38,14 +59,6 @@
 
   .content {
     margin-top: 5px;
-  }
-
-  .light-mode .content .text-content {
-    color: #fff;
-  }
-
-  .light-mode .content .completed {
-    color: #5a5a5a;
   }
 
   .content .completed {

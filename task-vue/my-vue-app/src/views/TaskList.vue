@@ -15,7 +15,8 @@ const {
 
 
   <div class="export-container">
-    <div v-for="(dates, category) in allTasklist" :key="category"> 
+    <div v-for="(dates, category, index) in allTasklist" :key="category"> 
+      <div v-if="index !== 0" class="hr"></div>
       <div class="export-category">
         <span>{{ category }}</span>
         　<i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ allTaskCount(category) }}
@@ -43,4 +44,9 @@ const {
   
 
 </template>
+  
+
+<style scoped>
+@import "../assets/styles/export.css";
+</style>
   

@@ -1,20 +1,9 @@
 import { useTask } from "@/composables/useTask.js";
 import { useCommon } from "@/composables/useCommon.js";
-import { useMenuStore } from '@/store/useStore';
+import { useStore, useMenuStore } from '@/store/useStore';
 
-const {
-  taskList,
-} = useTask();
-
-const common = useCommon();
-const { 
-    getTodayDate,
-    windowConfirm,
-    successNotyftMessage,
-    errorNotyftMessage,
-    warningNotyftMessageCheckData,
-    playSoundtrack,
-} = common;
+const { taskList, } = useTask();
+const { domain_soundtrack, } = useStore();
 
 const html = () => {
 
@@ -202,7 +191,16 @@ const exportfile = (template ,text ,type) => {
     }
 };
 
+const template_s = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Task List Export</title><link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon"><style>body{font-family:Arial,sans-serif;background-color:#1e1e1e;padding:20px;display:flex;flex-direction:column;align-items:center;color:#e0e0e0;transition:background .3s,color .3s}.container{width:100%;max-width:600px;display:flex;flex-direction:column;height:90vh}.log-container{flex-grow:1;overflow-y:auto;padding-top:10px}.log-entry{word-wrap: break-word;background:#2c2c2c;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.3);border-left:5px solid ;white-space:pre-line;color:#e0e0e0;transition:background .3s,color .3s}.log-title{font-size:18px;font-weight:700;margin-bottom:5px;color:#fff}.timestamp{font-size:14px;font-weight:700;color:#a0a0a0;display:block;margin-top:5px}a{color:#fff}.light-mode a{color:#1e1e1e}.light-mode{background-color:#414242;color:#333;margin-bottom:10px}.light-mode .log-entry{background:#fff;color:#333;border-left:5px solid ;box-shadow:0 2px 5px rgba(0,0,0,.1)}.light-mode .log-title{color:#222}.light-mode .timestamp{color:gray}.switch-container{display:flex;align-items:center;justify-content:center}.switch-label{font-size:16px;margin-left:10px}.switch{position:relative;display:inline-block;width:50px;height:25px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:25px}.slider:before{position:absolute;content:"";height:17px;width:17px;left:4px;bottom:4px;background-color:#fff;transition:.4s;border-radius:50%}input:checked+.slider{background-color:#1da1f2}input:checked+.slider:before{transform:translateX(24px)} pre{white-space: pre-wrap; /* 保留換行並自動換行 */ word-wrap: break-word; /* 讓長單詞換行 */}.light-mode pre{color:#fff;}</style></head><body><div id="app" class="container">`;
+const template_e = `</div></body></html>`;
+
 export function useExport() {
+
+    const { 
+        windowConfirm,
+        successNotyftMessage,
+        playSoundtrack,
+    } = useCommon();
 
     const viewAs = (format) => {
         successNotyftMessage([`Viewing as ${format.toUpperCase()}`,`檢視 ${format.toUpperCase()} 文件`]);
@@ -232,7 +230,7 @@ export function useExport() {
     const resetdata = () => {
         const menuStore = useMenuStore();
         if (windowConfirm([`Are you sure you want to clear all the data ?`,`你確定要刪除所有數據嗎?`])) {
-            playSoundtrack(`${store.cloudfrontsoundtrack}matt-hardy-delete-delete-delete.mp3`);
+            playSoundtrack(`${domain_soundtrack}matt-hardy-delete-delete-delete.mp3`);
             localStorage.setItem("tasks" ,'{"default":[]}')
             successNotyftMessage([`Deleting data, please wait...`,`刪除數據中請稍後`]);
             

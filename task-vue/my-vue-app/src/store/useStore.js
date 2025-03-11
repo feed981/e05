@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from "vue";
+import { useCommon } from "@/composables/useCommon.js";
 
 // 建立全局響應式狀態
 const language = ref(0);  // Vue 3 的響應式變數
@@ -10,9 +11,11 @@ const setLanguage = (newLang) => {
 };
 
 export function useStore() {
+  const domain_soundtrack = ref('https://d2luynvj2paf55.cloudfront.net/soundtrack/');
   return {
     language,
-    setLanguage
+    setLanguage,
+    domain_soundtrack
   };
 }
 
@@ -60,11 +63,17 @@ export const useMuteStore = defineStore('mute', () => {
   const isSpeakMute = ref(false);
   const isSoundMute = ref(true);
 
+  const { 
+      successNotyftMessage,
+  } = useCommon();
+
   function toggleSpeak() {
+    successNotyftMessage([`Language reminders is ${isSpeakMute.value ? 'turned off' : 'turned on'}!`])
     isSpeakMute.value = !isSpeakMute.value;
   }
-
+  
   function toggleSound() {
+    successNotyftMessage([`Soundtrack is ${isSpeakMute.value ? 'turned off' : 'turned on'}!`])
     isSoundMute.value = !isSoundMute.value;
   }
 
