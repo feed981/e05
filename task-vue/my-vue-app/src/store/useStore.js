@@ -73,7 +73,7 @@ export const useMuteStore = defineStore('mute', () => {
   }
   
   function toggleSound() {
-    successNotyftMessage([`Soundtrack is ${isSpeakMute.value ? 'turned off' : 'turned on'}!`])
+    successNotyftMessage([`Soundtrack is ${isSoundMute.value ? 'turned off' : 'turned on'}!`])
     isSoundMute.value = !isSoundMute.value;
   }
 

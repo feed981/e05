@@ -33,8 +33,6 @@ const notyf_warning = new Notyf({
 });
 
 export function useCommon() {
-    const getTodayDate = () => new Date().toISOString().split("T")[0];
-
     if (!getActivePinia()) return {}; // 確保 Pinia 已初始化
   
     const { language, domain_soundtrack } = useStore();
@@ -164,7 +162,6 @@ export function useCommon() {
     });
 
     return {
-        getTodayDate,
         windowConfirm,
         successNotyftMessageWithST,
         successNotyftMessage,

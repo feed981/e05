@@ -1,7 +1,9 @@
+import { ref, computed, onMounted } from "vue";
 import { useTask } from "@/composables/useTask.js";
 import { useCommon } from "@/composables/useCommon.js";
 import { useStore, useMenuStore } from '@/store/useStore';
 import { useRouter } from 'vue-router';
+import dayjs from 'dayjs';
 
 const { taskList, } = useTask();
 const { domain_soundtrack, } = useStore();
@@ -175,13 +177,18 @@ const viewopen = (template ,text) => {
     }
 };
 
+const formatDateTime = (timestamp) => {
+    return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss');
+  };
+
 const exportfile = (template ,text ,type) => {
+
     try {
         const blob = new Blob([template], { type: type });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `task_${getTodayDate()}.${text}`;
+        link.download = `task_${formatDateTime(Date.now())}.${text}`;
         link.click();
         setTimeout(() => {
             URL.revokeObjectURL(url);
@@ -198,10 +205,67 @@ const template_e = `</div></body></html>`;
 export function useExport() {
     const router = useRouter();
     const { 
+        formatDateTime,
         windowConfirm,
         successNotyftMessage,
+        warningNotyftMessageCheckData,
+        errorNotyftMessage,
         playSoundtrack,
     } = useCommon();
+
+    const isLoading = ref(false); 
+    const selectedFile = ref(null); // 用來儲存選擇的檔案
+
+    const handleFileChange = (event) => {
+        selectedFile.value = event.target.files[0]; // 存入 data
+    };
+
+    const handleFileUpload = (type) => {
+        const file = selectedFile.value;
+        if (!file){
+            warningNotyftMessageCheckData([`Please select the file first!`,`請選擇要匯入的檔案!`]);
+        }
+
+        const fileName = file.name; // 獲取檔名
+        const match = fileName.match(/^task_\d{4}-\d{2}-\d{2} \d{2}_\d{2}_\d{2}.json$/);
+
+        if (!match) {
+            errorNotyftMessage([`Failed to import ,please check your file format!`,`可能是檔名或是檔案內容格式有誤!`]);
+        }
+
+        const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        
+        // 檔案格式必須為 json
+        if (extension !== "json") {
+            errorNotyftMessage([`Failed to import ${extension} file!`,`不是 ${extension} 格式的檔案!`]);
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const json = JSON.parse(e.target.result);
+                if(type === 'overwrite'){
+                    localStorage.setItem("tasks", JSON.stringify(json._rawValue));
+                    successNotyftMessage([`Coverage completed and reorganizing in progress...`,`資料覆蓋已完成，重組中請稍等...`]);
+                    isLoading.value = true;
+                }else if(type === 'append'){
+                    warningNotyftMessageCheckData(['Not Working yet!','這個功能還沒搞!']);
+                    // notyf.success("Adding completed Reorganizing in progress...");
+                    // this.isLoading = true;
+                }
+            } catch (error) {
+                console.error('Import failed:', error);
+                // notyf.error("Failed to import!");
+            }
+        };
+        reader.readAsText(file);
+
+        setTimeout(() => {
+            isLoading.value = false;
+            router.push('/tasks/list');
+        }, 3000);
+
+    };
 
     const viewAs = (format) => {
         successNotyftMessage([`Viewing as ${format.toUpperCase()}`,`檢視 ${format.toUpperCase()} 文件`]);
@@ -215,6 +279,8 @@ export function useExport() {
         }
     };
 
+
+    
     const exportAs = (format) => {
         successNotyftMessage([`Exporting as ${format.toUpperCase()}`,`輸出成 ${format.toUpperCase()} 格式`]);
         
@@ -227,6 +293,7 @@ export function useExport() {
             exportfile(htmlContent ,format , "text/html");
         }
     };
+    
 
     const resetdata = () => {
         const menuStore = useMenuStore();
@@ -244,12 +311,14 @@ export function useExport() {
             }, 4000);
     
             setTimeout(() => {
-                router.push('/tasks/list');
+                window.location.reload();
             }, 10000);
         }
     };
 
     return {
+        handleFileChange,
+        handleFileUpload,
         viewAs,
         exportAs,
         resetdata,
