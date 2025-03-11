@@ -1,12 +1,13 @@
 import { getActivePinia } from "pinia";
 
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
 
 import { useStore, useMuteStore } from "@/store/useStore";
 
-const { language } = useStore();  
+import { useRoute } from 'vue-router';
+
 
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
@@ -32,60 +33,42 @@ const notyf_warning = new Notyf({
     ]
 });
 
-const currentAudio = ref(null);
-
-// 取得今天日期
-const getTodayDate = () => new Date().toISOString().split("T")[0];
-
-
-
-const pauseSoundtrack = () => {
-    if (currentAudio) {
-        try {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-            
-            // Optional: Remove event listeners to prevent memory leaks
-            currentAudio.onerror = null;
-            currentAudio.oncanplaythrough = null;
-        } catch (error) {
-            console.error('Pause error:', error);
-            currentAudio = null;
-        }
-    } else {
-        console.warn('No audio to pause');
-    }
-};
-
 export function useCommon() {
+    const getTodayDate = () => new Date().toISOString().split("T")[0];
+
     if (!getActivePinia()) return {}; // 確保 Pinia 已初始化
   
+    const { language } = useStore();
+
     const { 
         isSpeakMute,
         isSoundMute 
     } = useMuteStore();  
 
     const windowConfirm = (message) => {
-        speechSynthesisSpeak(message[language]);
-        return window.confirm(message[language]);
+        speechSynthesisSpeak(message[language.value]);
+        return window.confirm(message[language.value]);
     };
 
-    const successNotyftMessage = (message) => {
-        speechSynthesisSpeak(message[language]);
-        notyf.success(message[language]);
+	const successNotyftMessage = (message) => {
+        // console.log('1:'+message)
+        // console.log('2:'+language.value)
+        // console.log('3:'+message[language.value])
+        speechSynthesisSpeak(message[language.value]);
+        notyf.success(message[language.value]);
     };
 
     const errorNotyftMessage = (message) => {
-        speechSynthesisSpeak(message[language]);
-        notyf.error(message[language]);
+        speechSynthesisSpeak(message[language.value]);
+        notyf.error(message[language.value]);
         return;
     };
 
     const warningNotyftMessageCheckData = (message) => {
-        speechSynthesisSpeak(message[language]);
+        speechSynthesisSpeak(message[language.value]);
         notyf_warning.open({
             type: 'warning',
-            message: message[language]
+            message: message[language.value]
         });
         return;
     };
@@ -98,6 +81,8 @@ export function useCommon() {
             synth.speak(utterance);
         }
     };
+
+    let currentAudio = ref(null);
 
     const playSoundtrack = (path) => {
         // console.log('isSoundMute: ' + isSoundMute);
@@ -141,11 +126,47 @@ export function useCommon() {
         }
     };
 
+    // 取得今天日期
+    const pauseSoundtrack = () => {
+        if (currentAudio) {
+            try {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                
+                // Optional: Remove event listeners to prevent memory leaks
+                currentAudio.onerror = null;
+                currentAudio.oncanplaythrough = null;
+            } catch (error) {
+                console.error('Pause error:', error);
+                currentAudio = null;
+            }
+        } else {
+            console.warn('No audio to pause');
+        }
+    };
+
+    const route = useRoute();
+
+    const hiddenPlus = computed(() => {
+        // 可以輕鬆添加更多不顯示的路徑
+        const hiddenPaths = ['/qrcode','/feedback','/tasks/new'];
+        return !hiddenPaths.includes(route.path);
+    });
+
+    const hiddenPrepage = computed(() => {
+        // 可以輕鬆添加更多不顯示的路徑
+        const hiddenPaths = ['/tasks/list'];
+        return !hiddenPaths.includes(route.path);
+    });
+
     return {
+        getTodayDate,
         windowConfirm,
         successNotyftMessage,
         errorNotyftMessage,
         warningNotyftMessageCheckData,
         playSoundtrack,
+        hiddenPlus,
+        hiddenPrepage,
     };
 }

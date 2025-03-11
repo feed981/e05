@@ -1,6 +1,7 @@
 <script setup>
 import { useMenuStore, useLightStore, useExportMenuStore } from '@/store/useStore';
 import { useExport } from "@/composables/useExport.js";
+import { useCommon } from "@/composables/useCommon.js";
 
 const menuStore = useMenuStore();
 const lightStore = useLightStore();
@@ -11,6 +12,8 @@ const {
     exportAs,   
     resetdata,
 } = useExport();
+
+const { hiddenPrepage } = useCommon();
 </script>
 
 <template>
@@ -24,7 +27,7 @@ const {
                         <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
                     </svg>
                     <ul v-show="menuStore.isOpen" class="dropdown-menu bars">
-                        <router-link to="/qrcode">
+                        <router-link to="/qrcode" class="clean-link">
                             <li>
                                 <i class="font-awesome-i fa-solid fa-qrcode"></i>|　QR-Code
                             </li>
@@ -32,7 +35,7 @@ const {
                         <li @click="lightStore.toggleBars">
                             <i class="font-awesome-i fa-solid" :class="{ 'fa-toggle-on': lightStore.isOpen, 'fa-toggle-off': !lightStore.isOpen }"></i>{{ lightStore.isOpen ? '|　Toggle dark-mode' : '|　Toggle light-mode' }}
                         </li>
-                        <router-link to="/feedback">
+                        <router-link to="/feedback" class="clean-link">
                             <li>
                                 <i class="font-awesome-i fa-solid fa-envelope"></i>|　Feedback
                             </li>
@@ -46,21 +49,21 @@ const {
                             <ul v-show="exportMenuStore.isOpen" class="dropdown-menu dropdown-menu-sub">
                             <li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li>
                             <li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li>
-                            <router-link to="/import/as/json">
+                            <router-link to="/import/as/json" class="clean-link">
                                 <li><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li>
                             </router-link>
                             <li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li>
                             <li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li>
-                            <li @click="exportmenuStore.toggleBars"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
+                            <li @click="exportMenuStore.toggleBars"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
                             </ul>
                         </li>
-                        <router-link to="/category/list">
+                        <router-link to="/category/list" class="clean-link">
                             <li><i class="font-awesome-i fa-solid fa-icons"></i>|　Add new category</li>
                         </router-link>
-                        <router-link to="/tasks/new">
+                        <router-link to="/tasks/new" class="clean-link">
                             <li><i class="font-awesome-i fa-solid fa-list-check"></i>|　Add new task</li>
                         </router-link>
-                        <router-link to="/">
+                        <router-link to="/tasks/list" class="clean-link" v-show="hiddenPrepage">
                             <li><i class="font-awesome-i fa-solid fa-arrow-left"></i>|　Pre page</li>
                         </router-link>
                     </ul>
@@ -73,4 +76,3 @@ const {
 <style scoped>
 @import "../assets/styles/header.css";
 </style>
-  

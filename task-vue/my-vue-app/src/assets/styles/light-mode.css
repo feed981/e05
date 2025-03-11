@@ -116,3 +116,33 @@
 .light-mode .vbp-header-menu-button__svg line {
     stroke: #efefef;
   }
+/* burger svg e */
+
+/* export.css s */
+
+.light-mode .export-category {
+    color: #c5c5c5;
+  }
+
+  .light-mode .export-category i{
+    color: #c5c5c5;
+  }
+
+  
+.light-mode .content .text-content {
+    color: #fff;
+  }
+
+  .light-mode .content .completed {
+    color: #5a5a5a;
+  }
+
+.light-mode  .export-container {
+    scrollbar-color: #ffffff #ffffff;
+}
+
+.light-mode .export-container .hr{
+    background:#f0f0f0;
+}
+
+/* export.css e */

@@ -256,9 +256,6 @@ select::-ms-expand {
     border-bottom: 4px solid #414141;
 }
 
-
-
-
 .font-awesome-i {
     cursor: pointer;
     color: #fff;
@@ -298,7 +295,7 @@ select::-ms-expand {
     text-align: center;
     margin-bottom: 20px;
     color: #1287ca;
-    text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+    /* text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3); */
 }
 
 
@@ -312,6 +309,19 @@ select::-ms-expand {
 
 }
 
+
+.clean-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .clean-link:visited, 
+  .clean-link:active,
+  .clean-link:focus,
+  .clean-link:hover {
+    text-decoration: none;
+    color: inherit;
+  }
 
 @media screen and (max-width: 768px) {
     body {
