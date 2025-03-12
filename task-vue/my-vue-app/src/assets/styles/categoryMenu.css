@@ -1,0 +1,35 @@
+.float {
+  position: absolute;
+  /* position:fixed; */
+  width: 40px;
+  height: 40px;
+  top: auto; 
+  right: 50px;
+  color: #FFF;
+  border-radius: 90px;
+  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+  text-align: center;
+  transition: all 0.8s ease;
+  z-index: 9999;
+}
+
+.float-CategoryMenu .header-container{
+  margin: 16px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: -35px;
+  left: auto;
+  right: 30px;
+  color: #e0e0e0;
+  background: #2C2C2C;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 180px;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+}
+
+

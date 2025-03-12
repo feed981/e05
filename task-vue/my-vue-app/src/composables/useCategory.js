@@ -1,7 +1,4 @@
 import { ref, reactive, watch, toRaw } from "vue";
-
-
-import { useTask } from "@/composables/useTask.js";
 import { useCommon } from "@/composables/useCommon.js";
 
 export function useCategory(watchSource = null) {
@@ -37,11 +34,10 @@ export function useCategory(watchSource = null) {
     const saveDefaultCategoriesToLocalStorage = () => {
         localStorage.setItem("categories", JSON.stringify(defaultCategories));
     };
-    
 
     const createCategory = (name) => {
-        if (!categories.value[name]) {
-          categories.value[name] = {
+        if (!categories[name]) {
+          categories[name] = {
             info: {
               name: name,
               opend: false,
@@ -60,7 +56,6 @@ export function useCategory(watchSource = null) {
         saveToLocalStorage();
         successNotyftMessage(['Add category successfully!','已新增類別!']);
       };
-
 
     const storedCategories = localStorage.getItem("categories");
     const categories = reactive(storedCategories ? JSON.parse(storedCategories) : defaultCategories);
