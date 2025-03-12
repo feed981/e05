@@ -1,12 +1,15 @@
 <script setup>
 import { useTask } from "@/composables/useTask.js";
+import { useCategory } from "@/composables/useCategory.js";
 
 const {
-  taskList,
-  newTask,
+  categories,
+} = useCategory();
+
+const {
+  task,
   selectedCategory,
-  addTask,
-  editTask,
+  addTaskToCategory,
 } = useTask();
 
 </script>
@@ -20,27 +23,25 @@ const {
     <div class="flex-container">
       <select
         title="You can choose your category for your task, if you don't have one you should add a new category first!"
-        class="category-select" v-model="selectedCategory" :key="categoryKey">
-        <option value="">category</option>
-        <option v-for="(tasks, category) in taskList" :key="category" :value="category">
-          {{ category }}
+        class="category-select" v-model="selectedCategory">
+        <option v-for="(categoryData, categoryKey) in categories" :key="categoryKey">
+          {{ categoryData.info.name }}
         </option>
       </select>
     </div>
 
     
-    <input title="Must set a date for this task!" class="date" type="date" v-model="newTask.date">
+    <input title="Must set a date for this task!" class="date" type="date" v-model="task.date">
   </div>
 
   <div class="button-container">
 
-    <input title="Task content bro!" type="text" v-model="newTask.text" placeholder="Enter a task..." required>
+    <input title="Task content bro!" type="text" v-model="task.text" placeholder="Enter a task..." required>
     <div class="task-menu">
 
       <!-- <i v-if="isEdit" title="Edit this task content!" @click="editTask"
         class="font-awesome-i fa-solid fa-pen-to-square"></i> -->
-      <i v-if="!isEdit" title="Let's do it bro!" @click="addTask"
-        class="font-awesome-i fa-solid fa-paper-plane"></i>
+      <i title="Let's do it bro!" @click="addTaskToCategory('add',task)" class="font-awesome-i fa-solid fa-paper-plane"></i>
     </div>
   </div>
 </template>
