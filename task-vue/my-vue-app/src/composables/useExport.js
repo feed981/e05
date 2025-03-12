@@ -1,5 +1,6 @@
 import { ref, computed, onMounted } from "vue";
 import { useTask } from "@/composables/useTask.js";
+import { useCategory } from "@/composables/useCategory.js";
 import { useCommon } from "@/composables/useCommon.js";
 import { useStore, useMenuStore } from '@/store/useStore';
 import { useRouter } from 'vue-router';
@@ -245,7 +246,7 @@ export function useExport() {
             try {
                 const json = JSON.parse(e.target.result);
                 if(type === 'overwrite'){
-                    localStorage.setItem("tasks", JSON.stringify(json._rawValue));
+                    localStorage.setItem("categories", JSON.stringify(json.categories));
                     successNotyftMessage([`Coverage completed and reorganizing in progress...`,`資料覆蓋已完成，重組中請稍等...`]);
                     isLoading.value = true;
                 }else if(type === 'append'){
@@ -278,8 +279,6 @@ export function useExport() {
             viewopen(htmlContent ,format)
         }
     };
-
-
     
     const exportAs = (format) => {
         successNotyftMessage([`Exporting as ${format.toUpperCase()}`,`輸出成 ${format.toUpperCase()} 格式`]);
@@ -295,11 +294,17 @@ export function useExport() {
     };
     
 
+    const { 
+        saveDefaultCategoriesToLocalStorage,
+    } = useCategory();
+
     const resetdata = () => {
         const menuStore = useMenuStore();
         if (windowConfirm([`Are you sure you want to clear all the data ?`,`你確定要刪除所有數據嗎?`])) {
             playSoundtrack(`${domain_soundtrack.value}matt-hardy-delete-delete-delete.mp3`);
-            localStorage.setItem("tasks" ,'{"default":[]}')
+            
+            saveDefaultCategoriesToLocalStorage();
+
             successNotyftMessage([`Deleting data, please wait...`,`刪除數據中請稍後`]);
             
             setTimeout(() => {

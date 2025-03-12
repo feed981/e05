@@ -8,6 +8,9 @@ import { useStore, useMuteStore } from "@/store/useStore";
 
 import { useRoute } from 'vue-router';
 
+import dayjs from 'dayjs';
+
+
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
     dismissible: true,
@@ -161,6 +164,10 @@ export function useCommon() {
         return !hiddenPaths.includes(route.path);
     });
 
+    const setDate = (timestamp) => {
+        return dayjs(timestamp).format('YYYY-MM-DD');
+      };
+
     return {
         windowConfirm,
         successNotyftMessageWithST,
@@ -170,5 +177,6 @@ export function useCommon() {
         playSoundtrack,
         hiddenPlus,
         hiddenPrepage,
+        setDate,
     };
 }
