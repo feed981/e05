@@ -151,7 +151,7 @@ export function useCommon() {
 
     const hiddenPlus = computed(() => {
         // 可以輕鬆添加更多不顯示的路徑
-        const hiddenPaths = ['/qrcode','/feedback','/tasks/new'];
+        const hiddenPaths = ['/qrcode','/feedback','/tasks/new','/category/list'];
         return !hiddenPaths.includes(route.path);
     });
 

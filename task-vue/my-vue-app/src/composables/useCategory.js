@@ -35,7 +35,7 @@ export function useCategory() {
             localStorage.setItem("tasks", JSON.stringify(taskList.value));
             successNotyftMessage(['Add category successfully!','已新增類別!']);
         }
-        router.push('/tasks/list');
+        
     };
 
     return {
