@@ -12,10 +12,27 @@
     transition: all 0.8s ease;
     z-index: 9999;
   }
-
+  
   .float:hover {
     box-shadow: none;
     transition: all 2.8s ease;
+  }
+
+  .float-plus2{
+    top: 100px;
+    width: 35px;
+    height: 50px;
+  }
+
+  .float-plus2 i{
+    margin: 18px 0px 0px 5px;
+  }
+
+  .float-plus2:hover{
+    width: 50px;
+    height: 50px;
+    border-radius: 90px;
+    transition: all 3s ease;
   }
 
   .float-plus{
@@ -147,3 +164,31 @@
     margin: 14px 0px 0px 7px;
     z-index: 9999;
   }
+
+
+
+  
+.light-mode .float {
+  /* box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset; */
+  /* background: #39b2f8; */
+  box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+  /* box-shadow: rgb(252 252 252) 3px 3px 6px 0px inset, rgb(236 236 236 / 50%) -3px -3px 6px 1px inset;*/
+}
+
+.light-mode .float .font-awesome-i {
+  /* color: #1287ca; */
+  color: #e4e4e4;
+}
+
+.light-mode .float-plus:hover {
+  box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+}
+
+.light-mode .float-sound {
+  /* box-shadow: rgb(213 213 213 / 44%) 3px 3px 6px 0px inset, rgb(191 191 191 / 50%) -3px -3px 6px 1px inset, rgb(255 255 255 / 20%) 0px 0px 10px */
+  box-shadow: rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px;
+}
+
+.light-mode .float-speak {
+  box-shadow: rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px;
+}

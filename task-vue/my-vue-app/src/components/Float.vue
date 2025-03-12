@@ -20,7 +20,7 @@ const {
         </div>
     </router-link>
     <router-link to="/tasks/new" v-show="hiddenPlus">
-        <div class="float float-plus">
+        <div class="float float-plus2">
             <i class="my-float font-awesome-i fa-solid fa-plus"></i>
         </div>
     </router-link>

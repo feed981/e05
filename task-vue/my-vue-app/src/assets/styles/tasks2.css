@@ -1,0 +1,67 @@
+.flex-container {
+    display: flex;
+    align-items: stretch;
+    /* 讓子元素都撐滿父容器的高度 */
+    gap: 8px;
+    /* 避免元素之間太擠 */
+  }
+
+  .category-select {
+    min-width: 142px;
+    width: 80%;
+  }
+
+  .date {
+    font-family: "BhuTuka Expanded One", serif;
+    font-size: 12px;
+    padding: 8px 12px;
+    border: 2px;
+    border-radius: 5px;
+    background: #39b2f8;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+
+  }
+
+  .date:hover {
+    /* background-color: #2467cc; */
+    background-color: #0879c5;
+  }
+
+  select {
+    font-family: "BhuTuka Expanded One", serif;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background: #39b2f8;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+
+  }
+
+  /* 滑鼠懸停時變化 */
+  select:hover {
+    background-color: #0879c5;
+  }
+
+  /* 點擊時的樣式 */
+  select:focus {
+    outline: none;
+    border-color: #ffffff;
+    box-shadow: 0 0 5px rgba(4, 80, 42, 0.5);
+  }
+
+  /* 下拉選單的箭頭樣式 */
+  select::-ms-expand {
+    display: none;
+    /* 隱藏 IE 的箭頭 */
+  }
+  
+  .light-mode .font-awesome-i,
+  .light-mode .task-menu .font-awesome-i {
+    color: #f6f6f6;
+  }

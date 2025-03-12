@@ -1,0 +1,57 @@
+
+
+.category {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 12px 20px 20px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 12px;
+    margin-bottom: 5px;
+    height: 25px;
+    color: #FFF;
+    border-radius: 15px;
+    box-shadow: none;
+
+}
+
+.category:hover {
+  box-shadow: rgb(17 26 31) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;  
+}
+
+  
+.category-name {
+    /* border: 2px rgb(219, 98, 98) solid; */
+    width: 95%;
+    white-space: pre-wrap;
+    /* 保留換行並自動換行 */
+    word-wrap: break-word;
+    /* 讓長單詞換行 */
+
+}
+
+.category-name .title {
+    /* border: 2px red solid; */
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* 顯示2行，超過則顯示省略號 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.light-mode .category {
+    color: #b6b4b4;
+    background-color: #FFF;
+    box-shadow: none;
+}
+
+.light-mode .category .font-awesome-i {
+    /* color: #1287ca; */
+    color: #b6b4b4;
+}
+
+.light-mode .category:hover {
+      box-shadow: rgb(255 255 255 / 25%) 0px 1px 1px, rgb(15 55 124 / 13%) 0px 0px 1px 1px;
+  /* box-shadow: rgb(199 204 204) 3px 3px 6px 0px inset, rgb(230 228 228 / 50%) -3px -3px 6px 1px inset, rgb(251 251 251 / 20%) 0px 0px 10px; */
+}

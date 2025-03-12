@@ -6,7 +6,7 @@ import ImportAsJson from './views/ImportAsJson.vue';
 import Category from './views/Category.vue';
 import CategoryTasks from './views/CategoryTasks.vue';
 import CategoryTasksArchive from './views/CategoryTasksArchive.vue';
-import Tasks from './views/Tasks.vue';
+import Tasks from './views/Tasks2.vue';
 
 import { useMenuStore } from '@/store/useStore';
 
