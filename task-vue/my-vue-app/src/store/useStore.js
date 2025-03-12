@@ -44,6 +44,18 @@ export const useMenuStore = defineStore('bar', () => {
      };
 });
 
+export const useCategoryMenuStore = defineStore('categoryMenu', () => {
+  const expandedCategories = ref({}); // 存儲每個類別的展開狀態
+
+  const toggleBars = (categoryName) => {
+    expandedCategories.value[categoryName] = !expandedCategories.value[categoryName];
+  };
+
+  return { 
+    expandedCategories, toggleBars,
+   };
+});
+
 export const useExportMenuStore = defineStore('export', () => {
   const isOpen = ref(false);
   const menu = useMenuStore(); // 點的同時也點了useMenuStore所以才會關掉

@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 
 import { useCategory } from "@/composables/useCategory.js";
 
-
 export function useTask() {
   const router = useRouter();
   const setDate = (timestamp) => {
@@ -24,8 +23,6 @@ export function useTask() {
     text: '',
     date: setDate(),
   });
-
-  
     
   const {
     categories,
