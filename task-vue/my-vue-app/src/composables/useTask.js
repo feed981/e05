@@ -57,8 +57,8 @@ export function useTask() {
   if (!categories[categoryName].tasks) {
     console.error(`tasks does not exist!`);
     return;
-  }else{
-    console.log('categories[categoryName]:'+categories[categoryName].tasks)
+  // }else{
+  //   console.log('categories[categoryName]:'+categories[categoryName].tasks)
 
   }
       // 添加任务到对应分类
@@ -148,7 +148,9 @@ export function useTask() {
         groupedTasks[task.category][task.date] = { true: [], false: [] };
       }
   
-      groupedTasks[task.category][task.date][completedStatus].push(task.text);
+      groupedTasks[task.category][task.date][completedStatus].push(
+        {text: task.text, updatetime: task.updatetime}
+      );
     });
   
     return groupedTasks;
