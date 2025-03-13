@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import { useTask } from "@/composables/useTask.js";
 
 const {
@@ -7,19 +8,44 @@ const {
   urgentTaskCount,
   allTasklist
 } = useTask();
+
+const props = defineProps({
+  page: String,
+  categoryName: String
+});
+
+// Computed property to filter tasks based on categoryName
+
+const filteredTasklist = computed(() => {
+  const category = props.categoryName;
+  if (!category) {
+    return allTasklist.value; // Return all tasks if no category specified
+  } else {
+    // Create a new plain object with just the specific category
+    
+    // Only return the specific category
+    const filtered = {};
+    if (allTasklist.value[category]) {
+      filtered[category] = {...allTasklist.value[category]};
+    }
+    return filtered;
+  }
+});
+
 </script>
 
 
 <template>
-  <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> All Tasklist!</h1>
-
+  <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page }}</h1>
 
   <div class="export-container">
-    <div v-for="(dates, category, index) in allTasklist" :key="category"> 
+    <div v-for="(dates, category, index) in filteredTasklist" :key="category"> 
       <div v-if="index !== 0" class="hr"></div>
-      <div class="export-category">
-        <span>{{ category }}</span>
-      </div>
+      <router-link :to="`/${category}/tasks`" class="clean-link">
+        <div class="export-category">
+          <span>{{ category }}</span>
+        </div>
+      </router-link>
       <div class="export-category">
         <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ allTaskCount(category) }} 
         　<i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{ finishTaskCount(category) }} 

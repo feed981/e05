@@ -13,7 +13,8 @@
   z-index: 9999;
 }
 
-.float-CategoryMenu .header-container{
+.float-categoryMenu .header-container,
+.float-taskMenu .header-container{
   margin: 16px;
 }
 
