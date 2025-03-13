@@ -307,9 +307,9 @@ export function useExport() {
 
             successNotyftMessage([`Deleting data, please wait...`,`刪除數據中請稍後`]);
             
-            setTimeout(() => {
-                menuStore.toggleBars();
-            }, 2000);
+            // setTimeout(() => {
+            //     menuStore.toggleBars();
+            // }, 2000);
     
             setTimeout(() => {
                 successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);

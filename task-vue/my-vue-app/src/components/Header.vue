@@ -17,11 +17,12 @@ const { hiddenPrepage } = useCommon();
 </script>
 
 <template>
-    <div @click="menuStore.toggleBars" class="float float-bars">
+    <div class="float float-bars">
         <div class="header-container" >
             <div class="hamburger">
                 <div class="dropdown">
-                    <svg class="vbp-header-menu-button__svg" :class="{ 'header-opend': menuStore.isOpen }">
+                    <svg @click="menuStore.toggleBars"
+                    class="vbp-header-menu-button__svg" :class="{ 'header-opend': menuStore.isOpen }">
                         <line x1="0" y1="50%" x2="100%" y2="50%" class="top" shape-rendering="crispEdges" />
                         <line x1="0" y1="50%" x2="100%" y2="50%" class="middle" shape-rendering="crispEdges" />
                         <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
@@ -58,7 +59,7 @@ const { hiddenPrepage } = useCommon();
                             </ul>
                         </li>
                         <router-link to="/category/list" class="clean-link">
-                            <li><i class="font-awesome-i fa-solid fa-icons"></i>|　category</li>
+                            <li><i class="font-awesome-i fa-solid fa-icons"></i>|　Add new category</li>
                         </router-link>
                         <router-link to="/tasks/new" class="clean-link">
                             <li><i class="font-awesome-i fa-solid fa-list-check"></i>|　Add new task</li>
@@ -66,6 +67,7 @@ const { hiddenPrepage } = useCommon();
                         <router-link to="/" class="clean-link" v-show="hiddenPrepage">
                             <li><i class="font-awesome-i fa-solid fa-arrow-left"></i>|　Pre page</li>
                         </router-link>
+                        <li @click="menuStore.toggleBars"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
                     </ul>
                 </div>
             </div>
