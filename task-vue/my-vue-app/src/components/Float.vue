@@ -14,7 +14,7 @@ const {
     <Header/>
     <div @click="muteStore.toggleSpeak" class="float-speak" :class="{ mute: !muteStore.isSpeakMute }"></div>
     <div @click="muteStore.toggleSound" class="float-sound" :class="{ mute: !muteStore.isSoundMute }"></div>
-    <router-link to="/tasks/list" v-show="hiddenPrepage">
+    <router-link to="/" v-show="hiddenPrepage">
         <div class="float float-prepage">
             <i class="my-float font-awesome-i fa-solid fa-arrow-left"></i>
         </div>

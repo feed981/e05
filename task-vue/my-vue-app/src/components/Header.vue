@@ -58,12 +58,12 @@ const { hiddenPrepage } = useCommon();
                             </ul>
                         </li>
                         <router-link to="/category/list" class="clean-link">
-                            <li><i class="font-awesome-i fa-solid fa-icons"></i>|　Add new category</li>
+                            <li><i class="font-awesome-i fa-solid fa-icons"></i>|　category</li>
                         </router-link>
                         <router-link to="/tasks/new" class="clean-link">
                             <li><i class="font-awesome-i fa-solid fa-list-check"></i>|　Add new task</li>
                         </router-link>
-                        <router-link to="/tasks/list" class="clean-link" v-show="hiddenPrepage">
+                        <router-link to="/" class="clean-link" v-show="hiddenPrepage">
                             <li><i class="font-awesome-i fa-solid fa-arrow-left"></i>|　Pre page</li>
                         </router-link>
                     </ul>

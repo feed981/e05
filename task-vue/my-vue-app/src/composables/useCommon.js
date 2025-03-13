@@ -160,7 +160,7 @@ export function useCommon() {
 
     const hiddenPrepage = computed(() => {
         // 可以輕鬆添加更多不顯示的路徑
-        const hiddenPaths = ['/tasks/list'];
+        const hiddenPaths = ['/'];
         return !hiddenPaths.includes(route.path);
     });
 

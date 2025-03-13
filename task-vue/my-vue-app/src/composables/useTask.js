@@ -89,7 +89,7 @@ export function useTask() {
     selectedCategory.value = 'works';
     task.text = '';
     task.date = setDate;
-    router.push('/tasks/list');
+    router.push('/');
   };
   
 

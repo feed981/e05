@@ -1,22 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import TaskList from './views/TaskList.vue';
+import Home from './views/Home.vue';
 import QRCode from './views/QRCode.vue';
 import Feedback from './views/Feedback.vue';
 import ImportAsJson from './views/ImportAsJson.vue';
 import Category from './views/Category.vue';
-import CategoryTasks from './views/CategoryTasks.vue';
+import CategoryTaskList from './views/CategoryTaskList.vue';
 import CategoryTasksArchive from './views/CategoryTasksArchive.vue';
 import Tasks from './views/Tasks2.vue';
 
 import { useMenuStore } from '@/store/useStore';
 
 const routes = [
-  { path: '/tasks/list', component: TaskList },
+  { path: '/', component: Home },
   { path: '/qrcode', component: QRCode },
   { path: '/feedback', component: Feedback },
   { path: '/import/as/json', component: ImportAsJson },
   { path: '/category/list', component: Category },
-  { path: '/category/tasks', component: CategoryTasks },
+  { path: '/:category/tasks', component: CategoryTaskList },
   { path: '/category/tasks/archive', component: CategoryTasksArchive },
   { path: '/tasks/new', component: Tasks },
 ];

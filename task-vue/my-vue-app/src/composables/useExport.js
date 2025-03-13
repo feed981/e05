@@ -263,7 +263,7 @@ export function useExport() {
 
         setTimeout(() => {
             isLoading.value = false;
-            router.push('/tasks/list');
+            router.push('/');
         }, 3000);
 
     };
