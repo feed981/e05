@@ -56,6 +56,38 @@ export const useCategoryMenuStore = defineStore('categoryMenu', () => {
    };
 });
 
+export const useTaskMenuStore = defineStore('taskMenu', () => {
+  const expandedTasks = ref({}); // 存储每个类别的展开状态
+
+  const toggleBars = (categoryName, date, updatetime) => {
+    // 将时间戳转换为字符串，用作对象键
+    const timestampKey = String(updatetime);
+    
+    // console.log(
+    //     'categoryName:',categoryName,
+    //     'date:',date,
+    //     'updatetime:',updatetime,
+    // )
+
+    // 确保对象层级已初始化
+    if (!expandedTasks.value[categoryName]) {
+      expandedTasks.value[categoryName] = {};
+    }
+
+    if (!expandedTasks.value[categoryName][date]) {
+      expandedTasks.value[categoryName][date] = {};
+    }
+    
+    // 使用时间戳字符串作为键名
+    expandedTasks.value[categoryName][date][timestampKey] = !expandedTasks.value[categoryName][date][timestampKey];
+  };
+
+  return { 
+    expandedTasks, 
+    toggleBars
+  };
+});
+
 export const useExportMenuStore = defineStore('export', () => {
   const isOpen = ref(false);
   const menu = useMenuStore(); // 點的同時也點了useMenuStore所以才會關掉

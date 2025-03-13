@@ -5,7 +5,7 @@ import Feedback from './views/Feedback.vue';
 import ImportAsJson from './views/ImportAsJson.vue';
 import Category from './views/Category.vue';
 import CategoryTaskList from './views/CategoryTaskList.vue';
-import CategoryTasksArchive from './views/CategoryTasksArchive.vue';
+import CategoryTaskDateList from './views/CategoryTaskDateList.vue';
 import Tasks from './views/Tasks2.vue';
 
 import { useMenuStore } from '@/store/useStore';
@@ -17,8 +17,9 @@ const routes = [
   { path: '/import/as/json', component: ImportAsJson },
   { path: '/category/list', component: Category },
   { path: '/:category/tasks', component: CategoryTaskList },
-  { path: '/category/tasks/archive', component: CategoryTasksArchive },
+  { path: '/:category/tasks/:date', component: CategoryTaskDateList },
   { path: '/tasks/new', component: Tasks },
+  // { path: '/category/tasks/archive', component: CategoryTasksArchive },
 ];
 
 const router = createRouter({

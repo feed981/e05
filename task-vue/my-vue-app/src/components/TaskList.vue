@@ -11,7 +11,7 @@ const {
 
 const props = defineProps({
   page: String,
-  categoryName: String
+  categoryName: String,
 });
 
 // Computed property to filter tasks based on categoryName
@@ -53,18 +53,20 @@ const filteredTasklist = computed(() => {
       </div>
         
       <div v-for="(tasks, date) in dates" :key="date" class="post">
-            <div class="user">
-              <span class="time">{{ date }}</span>
-            </div>
-            
-            <div class="content">
-              <div v-for="(taskList, isCompleted) in tasks" :key="isCompleted">
-                <div v-for="(task, index) in taskList" :key="index"
-                  class="text-content" :class="{ 'completed': isCompleted === 'true'  }">
-                  {{ index + 1 }}. {{ task }}
-                </div>
+        <router-link :to="`/${category}/tasks/${date}`" class="clean-link">
+          <div class="user">
+            <span class="time">{{ date }}</span>
+          </div>
+          
+          <div class="content">
+            <div v-for="(taskList, isCompleted) in tasks" :key="isCompleted">
+              <div v-for="(task, index) in taskList" :key="index"
+                class="text-content" :class="{ 'completed': isCompleted === 'true'  }">
+                {{ index + 1 }}. {{ task.text }}
               </div>
             </div>
+          </div>
+        </router-link>
       </div>
     </div>
   </div><!-- export-container -->

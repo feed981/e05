@@ -194,7 +194,7 @@ input[type="file"] {
 }
 
 .text-content {
-    width: 80%;
+    /* width: 80%; */
     flex: 1;
     /* 讓文字內容占用剩餘空間 */
     word-wrap: break-word;

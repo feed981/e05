@@ -1,5 +1,5 @@
 <script setup>
-import TaskList from '@/components/TaskList.vue'
+import TaskListDate from '@/components/TaskListCondition.vue'
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -7,9 +7,10 @@ const route = useRoute();
 </script>
 
 <template>
-  <TaskList 
+  <TaskListDate 
     v-bind:page="route.params.category" 
     v-bind:categoryName="route.params.category" 
+    v-bind:date="route.params.date" 
   />
 </template>
 
