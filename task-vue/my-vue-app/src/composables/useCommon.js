@@ -35,6 +35,8 @@ const notyf_warning = new Notyf({
     ]
 });
 
+let currentAudio = ref(null);
+
 export function useCommon() {
     if (!getActivePinia()) return {}; // 確保 Pinia 已初始化
   
@@ -87,7 +89,7 @@ export function useCommon() {
         }
     };
 
-    let currentAudio = ref(null);
+
 
     const playSoundtrack = (path) => {
         // console.log('isSoundMute: ' + isSoundMute);
@@ -123,7 +125,7 @@ export function useCommon() {
                 };
 
                 // Debugging log
-                console.log('Created Audio object:', currentAudio);
+                // console.log('Created Audio object:', currentAudio);
             } catch (error) {
                 console.error('Failed to create Audio object:', error);
                 currentAudio = null;
@@ -154,7 +156,7 @@ export function useCommon() {
 
     const hiddenPlus = computed(() => {
         // 可以輕鬆添加更多不顯示的路徑
-        const hiddenPaths = ['/qrcode','/feedback','/tasks/new','/category/list'];
+        const hiddenPaths = ['/qrcode','/feedback','/tasks/new','/category/list','/:category/tasks/:date'];
         return !hiddenPaths.includes(route.path);
     });
 

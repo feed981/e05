@@ -146,7 +146,7 @@ export function useCategory(watchSource = null) {
         tasks: [
             {
             id: "task1",
-            text: "Finish the report!",
+            text: "Finish this task!",
             date: "2025-03-15",
             opend: false,
             urgent: true,

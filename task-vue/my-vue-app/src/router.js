@@ -6,9 +6,10 @@ import ImportAsJson from './views/ImportAsJson.vue';
 import CategoryList from './views/CategoryList.vue';
 import CategoryTaskList from './views/CategoryTaskList.vue';
 import CategoryTaskDateList from './views/CategoryTaskDateList.vue';
-import TasksNew from './views/TasksNew.vue';
+import TasksNew from '@/components/TasksNew.vue';
 
 import { useMenuStore } from '@/store/useStore';
+import { useTask } from "@/composables/useTask.js";
 
 const routes = [
   { path: '/', component: Home },
@@ -29,11 +30,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const menuStore = useMenuStore(); // 確保 store 在這裡被調用
+  const task = useTask(); // 確保 store 在這裡被調用
   //  close menu
   if (to.path === '/') {
+    task.isEdit.value = false;
+  }else if (to.path === '/tasks/new') {
+    task.isEdit.value = false;
   }else{ 
     menuStore.isOpen = false;
-    console.log(to.path)
+    // console.log(to.path)
   }
   next();
 });

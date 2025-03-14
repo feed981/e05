@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useTask } from "@/composables/useTask.js";
 import TaskMenu from '@/components/TaskMenu.vue'
+import TasksNew from '@/components/TasksNew.vue'
 
 const {
   allTasklist
@@ -37,7 +38,12 @@ const filteredTasklist = computed(() => {
 
 <template>
   <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page }}</h1>
-  
+  <TasksNew 
+    v-bind:page="categoryName"
+    v-bind:categoryName="categoryName"
+    v-bind:date="date"
+  />
+  <br>
   <span class="title">{{ date }}</span>
 
   <div class="export-container">

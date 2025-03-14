@@ -2,93 +2,119 @@ import { ref, computed, onMounted, toRaw } from "vue";
 import { useCommon } from "@/composables/useCommon.js";
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
-
 import { useCategory } from "@/composables/useCategory.js";
 
+const isEdit = ref(false);
+// 設定日期為當天的 YYYY-MM-DD 格式
+const setDate = () => {
+  return dayjs().format('YYYY-MM-DD');
+};
+
+
+const task = ref({
+  text: '',
+  date: setDate(),
+});
+
+const selectedCategory = ref('');
+
+
+const editTask = ref({
+  id: '',
+  categoryName: '',
+  text: '',
+  date: setDate(),
+  updatetime: Date.now(),
+  urgent: false,
+  completed: false,
+  archive: false,
+  opend: false
+});
+
+// 在 mounted 或 created 生命週期鉤子中設置初始值
+onMounted(() => {
+  // 如果類別不為空，則選擇第一個類別
+  if (Object.keys(categories).length > 0) {
+    selectedCategory.value = Object.keys(categories)[0];
+  }
+});
 export function useTask() {
   const router = useRouter();
-  const setDate = (timestamp) => {
-    return dayjs(timestamp).format('YYYY-MM-DD');
-  };
 
   const { 
-      playSoundtrack,
-      successNotyftMessageWithST,
-      successNotyftMessage,
-      warningNotyftMessageCheckData,
+    windowConfirm,
+    successNotyftMessageWithST,
+    successNotyftMessage,
+    warningNotyftMessageCheckData,
   } = useCommon();
-
-  const selectedCategory = ref('works');
-  const task = ref({
-    text: '',
-    date: setDate(),
-  });
     
   const {
     categories,
     saveToLocalStorage,
   } = useCategory();
+
+
   
-  // 添加任务到分类的函数
-  const addTaskToCategory = (type, task) => {
+  const checkTaskToCategoryData = (task) => {
     const categoryName = selectedCategory.value;
-    
     if (!categoryName) {
       warningNotyftMessageCheckData(['Please select your category!','請先選擇類別!']);
-      return;
+      return false;
     }
     
     if (!task.date) {
       warningNotyftMessageCheckData(['Please select your date!','請選擇日期!']);
-      return;
+      return false;
     }
-  
+    
     if (!task.text.trim()) {
       warningNotyftMessageCheckData(['Please input your task content!','請輸入任務內容!']);
-      return;
+      return false;
     }
-
+    
     if (!categories[categoryName]) {
       console.error(`Category ${categoryName} does not exist!`);
-      return;
+      return false;
+    }
+    
+    
+    if (!categories[categoryName].tasks) {
+      console.error(`tasks does not exist!`);
+      return false;
+      // }else{
+        //   console.log('categories[categoryName]:'+categories[categoryName].tasks)
+
+    }
+    return true;
   }
 
-
-  if (!categories[categoryName].tasks) {
-    console.error(`tasks does not exist!`);
-    return;
-  // }else{
-  //   console.log('categories[categoryName]:'+categories[categoryName].tasks)
-
+  const newTaskToCategory = (task) => {
+    // 添加任务到对应分类
+    const newTask = {
+      id: Date.now().toString(), // 简单的唯一ID
+      text: task.text,
+      date: task.date || setDate(),
+      opend: false,
+      urgent: task.urgent || false,
+      archive: false,
+      completed: false,
+      timestamp: Date.now(),
+      updatetime: Date.now(),
+    };
+    categories[selectedCategory.value].tasks.push(newTask);
   }
-      // 添加任务到对应分类
-  const newTask = {
-    id: Date.now().toString(), // 简单的唯一ID
-    text: task.text,
-    date: task.date || setDate(),
-    opend: false,
-    urgent: task.urgent || false,
-    archive: false,
-    completed: false,
-    timestamp: Date.now(),
-    updatetime: Date.now(),
-  };
-    
-    categories[categoryName].tasks.push(newTask);
-    
+
+  // 添加任务到分类的函数
+  const addTaskToCategory = (task) => {
+
+    if(!checkTaskToCategoryData(task)) return;
+    newTaskToCategory(task);
+
     // 保存到localStorage
     saveToLocalStorage();
-  if(type === 'add'){
     successNotyftMessage(['Add task successfully!','已新增一項任務!']);
 
-  }else if(type === 'edit'){
-    successNotyftMessage(['Edit task successfully!','已修改任務內容!']);
-  }else{
-    return;
-  }
-    selectedCategory.value = 'works';
     task.text = '';
-    task.date = setDate;
     router.push('/');
   };
   
@@ -103,6 +129,13 @@ export function useTask() {
   const finishTaskCount = (category) => {
     if (!categories[category]) return 0; // 確保分類存在
     return categories[category].tasks.filter(task => task.completed).length;
+  };
+
+  const NotfinishTaskDateCount = (category, date) => {
+    if (!categories[category]) return 0; // 確保分類存在
+    return categories[category].tasks.filter(
+      task => !task.completed && task.date === date
+    ).length;
   };
 
 
@@ -157,158 +190,222 @@ export function useTask() {
   });
 
 
-  // todo: 
+  const taskFind = (category, date, timestamp) => {
+      return categories[category].tasks.find(
+        task => task.date === date && task.updatetime === timestamp
+      );
+  };
 
+  const setUrgentTask = (category, date, timestamp) => {
+    // Find the task that matches the date and timestamp
+    const targetTask = taskFind(category, date, timestamp);
+    
+    if (!targetTask) {
+      warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
+      return;
 
+    }
 
+    // If the task exists, toggle its urgent status
+    if (targetTask) {
+      targetTask.urgent = !targetTask.urgent;
+      if(targetTask.urgent){
+        successNotyftMessageWithST(
+          ['Urgent task successfully!','已將任務狀態設置為緊急!'],
+          'gan-wu-hua-dou.mp3'
+        );
+      }else{
+        successNotyftMessage(
+          ['Cancel Urgent task successfully!','任務沒有很緊急!']
+        );
+      }
+      saveToLocalStorage();
+    }
+  };
 
-  const taskIndex = (category, timestamp) => {
-      const taskIndex = taskList[category].findIndex(task => task.timestamp === timestamp);
-      if (taskIndex === -1) return false; // 如果找不到，直接 return
-      return taskIndex;
+  const finishTask = (category, date, timestamp) => {
+    // Find the task that matches the date and timestamp
+    const targetTask = taskFind(category, date, timestamp);
+    
+    if (!targetTask) {
+      warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
+      return;
+
+    }
+
+    // If the task exists, toggle its urgent status
+    if (targetTask) {
+      targetTask.completed = !targetTask.completed;
+      if(targetTask.completed){
+        successNotyftMessageWithST(
+          ['Finish task successfully!','順利完成任務!'],
+          'black-and-white-ost-disc-3-mission-success.mp3'
+        );
+      }else{
+        successNotyftMessageWithST(
+          ['Cancel finish task successfully!','重啟任務!'],
+          'gta-san-andreas-ah-shit-here-we-go-again_BWv0Gvc.mp3'
+        );
+      }
+      saveToLocalStorage();
+    }
   };
 
 
+  const setEditTask = (category, date, timestamp, text) => {
+    
+      // Find the task that matches the date and timestamp
+    const targetTask = taskFind(category, date, timestamp);
+    
+    if (!targetTask) {
+      warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
+      return;
+
+    }
+
+    // If the task exists, toggle its urgent status
+    if (targetTask) {
+      editTask.value = {
+        id: targetTask.id,
+        category,
+        text: targetTask.text,
+        date: targetTask.date,
+        updatetime: targetTask.updatetime,
+        urgent: targetTask.urgent,
+        completed: targetTask.completed,
+        archive: targetTask.archive,
+        opend: targetTask.opend
+      };
+      selectedCategory.value = category;
+      task.value.text = text;
+      task.value.date = date;
+      isEdit.value = true;
+    }
+
+  };
 
 
-
-  
-const editTask = () => {
-  successNotyftMessage(['Edit your task content!','請修改任務內容!']);
-  if (!selectedCategory.value) {
-    warningNotyftMessageCheckData(['Please select your category!','請先選擇類別!']);
-    return;
+  const removeTask = (categoryName, date, updatetime, text) => {
+    if (windowConfirm([`Are you sure you want to delete '${categoryName}', date: ${date}, task content: '${text}'?`,`你確定要刪除${categoryName} 類別中日期為 ${date} 任務內容為：'${text}' 的任務嗎?`])) {
+      removeTaskByDateAndUpdatetime(categoryName, date, updatetime, true);
+      saveToLocalStorage();
+      if(NotfinishTaskDateCount(categoryName, date) > 0){
+        router.go(0);
+      }else{
+        router.push('/');
+      }
+    }
   }
-  
-  if (!newTask.value.date) {
-    warningNotyftMessageCheckData(['Please select your date!','請選擇日期!']);
-    return;
-  }
-  
-  if (!newTask.value.text.trim()) {
-    warningNotyftMessageCheckData(['Please input your task content!','請輸入任務內容!']);
-    return;
-  }
 
-  try{
-      const taskIndex = taskIndex(selectedCategory, newTask.timestamp);
-      if(!taskIndex) {
+  const removeTaskByDateAndUpdatetime = (categoryName, date, updatetime, isRemove) => {
+    // 確保該類別存在
+    if (categories[categoryName] && categories[categoryName].tasks) {
+      // 使用 filter 方法過濾掉同時符合指定日期和 updatetime 的任務
+      categories[categoryName].tasks = categories[categoryName].tasks.filter(
+        task => !(task.date === date && task.updatetime === updatetime)
+      );
+      if(isRemove){
+
+        successNotyftMessage(
+          [`Remove '${categoryName}', date: ${date}, task successfully!`,`已移除 ${categoryName} 類別中日期為 ${date} 且 updatetime 為 ${updatetime} 的任務!`]
+        );
+        
+      }
+    } else {
+      successNotyftMessage(
+        [`Can't find '${categoryName}' task!`,`找不到 ${categoryName} 類別或其任務列表!`]
+      );
+    }
+  };
+
+  const editTaskToCategory = (task) => {
+
+    if (isEdit.value && editTask.value.id) {
+
+       // Find the task that matches the date and timestamp
+      const targetTask = taskFind(
+        editTask.value.category, 
+        editTask.value.date, 
+        editTask.value.updatetime
+      );
+      
+      if (!targetTask) {
         warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
         return;
+        
       }
-      taskList[selectedCategory][taskIndex].text = newTask.text;
-      taskList[selectedCategory][taskIndex].date = newTask.date;
-      taskList[selectedCategory][taskIndex].timestamp = Date.now();
-      taskList[selectedCategory][taskIndex].updatetime = Date.now();
-      localStorage.setItem("tasks", JSON.stringify(taskList));
       
-  }catch{
-      notyf.error("Edit task error!");
-  }
-  afterTask();
-};
+      if(!checkTaskToCategoryData(task)) return;
 
-
-  const copyTask = (text) => {
-    navigator.clipboard.writeText(text.trim())
-        .then(() => notyf.success("Copy success task text successfully!"))
-        .catch(err => console.error("Copy error!", err));
-  };
-
-  const finishTask = (category, timestamp) => {
-    const taskIndex = taskIndex(category, timestamp);
-    if(!taskIndex) {
-      warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
-      return;
-    }
-    taskList[category][taskIndex].completed = !taskList[category][taskIndex].completed;
-    taskList[category][taskIndex].urgent = false;
-    localStorage.setItem("tasks", JSON.stringify(taskList));
-
-    if(taskList[category][taskIndex].completed){
-      successNotyftMessageWithST(
-        ['Finish task successfully!','順利完成任務!'],
-        'black-and-white-ost-disc-3-mission-success.mp3'
-      );
-    }else{
-      successNotyftMessageWithST(
-        ['Cancel finish task successfully!','重啟任務!'],
-        'gta-san-andreas-ah-shit-here-we-go-again_BWv0Gvc.mp3'
-      );
-    }
-  };
-
-  const archiveTask = (category, timestamp) => {
-    const taskIndex = taskIndex(category, timestamp);
-    if(!taskIndex) {
-      warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
-      return;
-    }
-    taskList[category][taskIndex].archive = !taskList[category][taskIndex].archive;
-    localStorage.setItem("tasks", JSON.stringify(taskList));
-
-    if(taskList[category][taskIndex].archive){
-        successNotyftMessage(['Archive task successfully!','已將任務封存!']);
-    }else{
-        successNotyftMessage(['Cancel archive task successfully!','取消任務封存!']);
-    }
-  };
-
-  const setUrgentTask = (category, timestamp) => {
-    const taskIndex = taskIndex(category, timestamp);
-    if(!taskIndex) {
-      warningNotyftMessageCheckData(['Missing data!','缺失数据!']);
-      return;
-    }
-    if(!taskList[category][taskIndex].completed){
-        taskList[category][taskIndex].urgent = !taskList[category][taskIndex].urgent;
-        localStorage.setItem("tasks", JSON.stringify(taskList));
-
-        if(taskList[category][taskIndex].urgent){
-          successNotyftMessageWithST(
-            ['Urgent task successfully!','已將任務狀態設置為緊急!'],
-            'gan-wu-hua-dou.mp3'
+      if (targetTask !== -1) {
+        if(selectedCategory.value !== editTask.value.category){
+          removeTaskByDateAndUpdatetime(
+            editTask.value.category, 
+            editTask.value.date, 
+            editTask.value.updatetime
           );
+          newTaskToCategory(task);
+          successNotyftMessage([`Move task to '${selectedCategory.value}' successfully!`,`已將任務移動到'${selectedCategory.value}'!`]);
+        }else{
+          targetTask.text = task.text;
+          targetTask.date = task.date;
+          targetTask.updatetime = Date.now();
+          successNotyftMessage(['Edit task successfully!','已修改任務內容!']);
         }
-    }else{
-        warningNotyftMessageCheckData(['You cannot set urgent cause this task is already finish!','無法將任務設置為緊急因為任務已經結束!']);
-    }
-  };
-
-  const removeTask = (category, timestamp, text) => {
-      if (windowConfirm([`Are you sure you want to delete '${text}'?`,`你確定要刪除'${text}'嗎?`])) {
-          taskList[category] = taskList[category].filter(task => task.timestamp !== timestamp);
-          localStorage.setItem("tasks", JSON.stringify(taskList));
-
-          successNotyftMessage([`Successfully deleted '${text}' permanently.`,`已經永久刪除 '${text}'`]);
+        
+        // Reset edit mode
+        isEdit.value = false;
+        editTask.value = {
+          id: '',
+          categoryName: '',
+          text: '',
+          date: setDate(),
+          updatetime: Date.now(),
+          urgent: false,
+          completed: false,
+          archive: false,
+          opend: false
+        };
+        
       }
+
+      // 保存到localStorage
+      saveToLocalStorage();
+  
+      task.text = '';
+      router.go(0);
+
+    }
+  }
+
+  const copyTask = (category, date, text) => {
+    navigator.clipboard.writeText(text.trim())
+        .then(() => 
+          successNotyftMessage(['Copy success task text successfully!','複製成功!'])
+        )
+        .catch(err => console.error("Copy error!", err));
+      selectedCategory.value = category;
+      task.value.text = text;
+      task.value.date = date;
   };
 
-  // 計算是否有任務
-  const isListVisible = computed(() => Object.keys(taskList.value).length > 0);
-
-  
-
-  // 監聽 localStorage 變化
-  onMounted(() => {
-    window.addEventListener("storage", () => {
-      taskList.value = JSON.parse(localStorage.getItem("tasks")) || { "default": [] };
-    });
-  });
 
   return {
     task,
-    isListVisible,
     allTaskCount,
     finishTaskCount,
     urgentTaskCount,
     allTasklist,
     addTaskToCategory,
-    editTask,
-    copyTask,
     finishTask,
     setUrgentTask,
-    removeTask,
+    copyTask,
+    // removeTask,
     selectedCategory,
+    setUrgentTask,
+    setEditTask,
+    isEdit,
+    editTaskToCategory,
+    removeTask,
   };
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useTask } from "@/composables/useTask.js";
 
 const {
@@ -15,7 +15,6 @@ const props = defineProps({
 });
 
 // Computed property to filter tasks based on categoryName
-
 const filteredTasklist = computed(() => {
   const category = props.categoryName;
   if (!category) {
@@ -37,6 +36,7 @@ const filteredTasklist = computed(() => {
 
 <template>
   <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page }}</h1>
+  
 
   <div class="export-container">
     <div v-for="(dates, category, index) in filteredTasklist" :key="category"> 
