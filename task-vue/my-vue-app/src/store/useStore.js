@@ -90,11 +90,9 @@ export const useTaskMenuStore = defineStore('taskMenu', () => {
 
 export const useExportMenuStore = defineStore('export', () => {
   const isOpen = ref(false);
-  const menu = useMenuStore(); // 點的同時也點了useMenuStore所以才會關掉
 
   function toggleBars() {
     isOpen.value = !isOpen.value;
-    menu.toggleBars(); // 連點兩下
   }
 
   return { 

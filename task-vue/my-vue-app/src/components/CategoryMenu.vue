@@ -44,4 +44,5 @@ const {
 <style scoped>
 @import "../assets/styles/header.css";
 @import "../assets/styles/categoryMenu.css";
+
 </style>

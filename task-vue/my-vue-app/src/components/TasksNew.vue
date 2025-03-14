@@ -10,13 +10,35 @@ const {
   task,
   selectedCategory,
   addTaskToCategory,
+  isEdit,
+  editTaskToCategory,
 } = useTask();
+
+
+const props = defineProps({
+  page: String,
+  categoryName: String,
+  date: String,
+});
+
+if(!isEdit.value){
+}
+
+if(props.page){
+  selectedCategory.value = props.categoryName;
+  task.value.date = props.date;
+}
+
+// console.log(
+//   'selectedCategory.value:',props.categoryName,
+//   'task.value.date:',props.date,
+// )
 
 </script>
 
 
 <template>
-  <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-list-check"></i> new Task!</h1>
+  <h1 v-if="!categoryName" class="bhutuka-expanded-one-regular"><i class="fa-solid fa-list-check"></i> new Task!</h1>
 
   <div class="button-container">
 
@@ -24,7 +46,7 @@ const {
       <select
         title="You can choose your category for your task, if you don't have one you should add a new category first!"
         class="category-select" v-model="selectedCategory">
-        <option v-for="(categoryData, categoryKey) in categories" :key="categoryKey">
+        <option v-for="(categoryData, categoryKey) in categories" :key="categoryKey" :value="categoryKey">
           {{ categoryData.info.name }}
         </option>
       </select>
@@ -38,10 +60,8 @@ const {
 
     <input title="Task content bro!" type="text" v-model="task.text" placeholder="Enter a task..." required>
     <div class="task-menu">
-
-      <!-- <i v-if="isEdit" title="Edit this task content!" @click="editTask"
-        class="font-awesome-i fa-solid fa-pen-to-square"></i> -->
-      <i title="Let's do it bro!" @click="addTaskToCategory('add',task)" class="font-awesome-i fa-solid fa-paper-plane"></i>
+      <i v-if="isEdit" title="Edit this task content!" @click="editTaskToCategory(task)" class="font-awesome-i fa-solid fa-pen-to-square"></i>
+      <i v-if="!isEdit" title="Let's do it bro!" @click="addTaskToCategory(task)" class="font-awesome-i fa-solid fa-paper-plane"></i>
     </div>
   </div>
 </template>
