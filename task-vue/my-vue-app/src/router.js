@@ -33,7 +33,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),//使用 history 模式並設置 base URL
+  history: createWebHistory('/'),//使用 history 模式並設置 base URL
   routes
 });
 
@@ -48,6 +48,13 @@ router.beforeEach((to, from, next) => {
     // console.log(to.path)
   }
   next();
+});
+
+router.afterEach(() => {
+  // 當路由變化時重新加載廣告
+  if (window.adsbygoogle) {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }
 });
 
 export default router;
