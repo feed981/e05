@@ -14,12 +14,12 @@ const {
     <Header/>
     <div @click="muteStore.toggleSpeak" class="float-speak" :class="{ mute: !muteStore.isSpeakMute }"></div>
     <div @click="muteStore.toggleSound" class="float-sound" :class="{ mute: !muteStore.isSoundMute }"></div>
-    <router-link to="/" v-show="hiddenPrepage">
+    <router-link :to="{ name: 'v2.home' }" v-show="hiddenPrepage">
         <div class="float float-prepage">
             <i class="my-float font-awesome-i fa-solid fa-arrow-left"></i>
         </div>
     </router-link>
-    <router-link to="/tasks/new" v-show="hiddenPlus">
+    <router-link :to="{ name: 'v2.tasks.new' }" v-show="hiddenPlus">
         <div class="float float-plus2">
             <i class="my-float font-awesome-i fa-solid fa-plus"></i>
         </div>

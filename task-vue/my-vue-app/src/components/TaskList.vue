@@ -14,6 +14,9 @@ const props = defineProps({
   categoryName: String,
 });
 
+// console.log('category exists:', props.categoryName === '');
+// console.log('category exists:', props.categoryName !== undefined && props.categoryName !== null);
+
 // Computed property to filter tasks based on categoryName
 const filteredTasklist = computed(() => {
   const category = props.categoryName;
@@ -36,12 +39,11 @@ const filteredTasklist = computed(() => {
 
 <template>
   <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page }}</h1>
-  
 
   <div class="export-container">
     <div v-for="(dates, category, index) in filteredTasklist" :key="category"> 
       <div v-if="index !== 0" class="hr"></div>
-      <router-link :to="`/${category}/tasks`" class="clean-link">
+      <router-link v-if="props.categoryName === ''" :to="{ name: 'v2.category.tasks', params: { category: `${category}` } }" class="clean-link">
         <div class="export-category">
           <span>{{ category }}</span>
         </div>
@@ -53,7 +55,7 @@ const filteredTasklist = computed(() => {
       </div>
         
       <div v-for="(tasks, date) in dates" :key="date" class="post">
-        <router-link :to="`/${category}/tasks/${date}`" class="clean-link">
+        <router-link :to="{ name: 'v2.category.tasks.date', params: { category: `${category}`, date: `${date}` } }" class="clean-link">
           <div class="user">
             <span class="time">{{ date }}</span>
           </div>

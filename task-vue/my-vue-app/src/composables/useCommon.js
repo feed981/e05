@@ -8,9 +8,6 @@ import { useStore, useMuteStore } from "@/store/useStore";
 
 import { useRoute } from 'vue-router';
 
-import dayjs from 'dayjs';
-
-
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
     dismissible: true,
@@ -89,8 +86,6 @@ export function useCommon() {
         }
     };
 
-
-
     const playSoundtrack = (path) => {
         // console.log('isSoundMute: ' + isSoundMute);
         if(isSoundMute){
@@ -133,7 +128,6 @@ export function useCommon() {
         }
     };
 
-    // 取得今天日期
     const pauseSoundtrack = () => {
         if (currentAudio) {
             try {
@@ -155,20 +149,16 @@ export function useCommon() {
     const route = useRoute();
 
     const hiddenPlus = computed(() => {
-        // 可以輕鬆添加更多不顯示的路徑
-        const hiddenPaths = ['/qrcode','/feedback','/tasks/new','/category/list','/:category/tasks/:date'];
+        const hiddenPaths = ['/v2/qrcode','/v2/feedback','/v2/tasks/new',
+            '/v2/category/list','/v2/:category/tasks/:date'
+        ];
         return !hiddenPaths.includes(route.path);
     });
 
     const hiddenPrepage = computed(() => {
-        // 可以輕鬆添加更多不顯示的路徑
-        const hiddenPaths = ['/'];
+        const hiddenPaths = ['/v2'];
         return !hiddenPaths.includes(route.path);
     });
-
-    const setDate = (timestamp) => {
-        return dayjs(timestamp).format('YYYY-MM-DD');
-      };
 
     return {
         windowConfirm,
@@ -179,6 +169,5 @@ export function useCommon() {
         playSoundtrack,
         hiddenPlus,
         hiddenPrepage,
-        setDate,
     };
 }

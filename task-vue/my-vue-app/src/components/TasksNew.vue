@@ -1,6 +1,7 @@
 <script setup>
 import { useTask } from "@/composables/useTask.js";
 import { useCategory } from "@/composables/useCategory.js";
+import { useDate } from "@/composables/useDate.js";
 
 const {
   categories,
@@ -14,6 +15,9 @@ const {
   editTaskToCategory,
 } = useTask();
 
+const { 
+  setDate,
+} = useDate();
 
 const props = defineProps({
   page: String,
@@ -22,6 +26,9 @@ const props = defineProps({
 });
 
 if(!isEdit.value){
+  task.value.text = '';
+  task.value.date = setDate();
+  selectedCategory.value = '';
 }
 
 if(props.page){
@@ -46,6 +53,7 @@ if(props.page){
       <select
         title="You can choose your category for your task, if you don't have one you should add a new category first!"
         class="category-select" v-model="selectedCategory">
+        <option v-if="!categoryName" value="">Category</option>
         <option v-for="(categoryData, categoryKey) in categories" :key="categoryKey" :value="categoryKey">
           {{ categoryData.info.name }}
         </option>

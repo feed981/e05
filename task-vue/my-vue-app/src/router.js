@@ -12,19 +12,28 @@ import { useMenuStore } from '@/store/useStore';
 import { useTask } from "@/composables/useTask.js";
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/qrcode', component: QRCode },
-  { path: '/feedback', component: Feedback },
-  { path: '/import/as/json', component: ImportAsJson },
-  { path: '/tasks/new', component: TasksNew },
-  { path: '/category/list', component: CategoryList },
-  { path: '/:category/tasks', component: CategoryTaskList },
-  { path: '/:category/tasks/:date', component: CategoryTaskDateList },
-  // { path: '/category/tasks/archive', component: CategoryTasksArchive },
+  // 重定向從根路徑到 /v2
+  { path: '/', redirect: '/v2' },
+  // 讓 /index.html 轉向 /v2
+  { path: '/index.html', redirect: '/v2' },
+  { path: '/v2/index.html', redirect: '/v2' },
+  {
+    path: '/v2',
+    children: [
+      { path: '', name: 'v2.home', component: Home },
+      { path: 'qrcode', name: 'v2.qrcode', component: QRCode },
+      { path: 'feedback', name: 'v2.feedback', component: Feedback },
+      { path: 'import/as/json', name: 'v2.import.json', component: ImportAsJson },
+      { path: 'tasks/new', name: 'v2.tasks.new', component: TasksNew },
+      { path: 'category/list', name: 'v2.category.list', component: CategoryList },
+      { path: ':category/tasks', name: 'v2.category.tasks', component: CategoryTaskList },
+      { path: ':category/tasks/:date', name: 'v2.category.tasks.date', component: CategoryTaskDateList },
+    ]
+  }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(),//使用 history 模式並設置 base URL
   routes
 });
 
@@ -32,9 +41,7 @@ router.beforeEach((to, from, next) => {
   const menuStore = useMenuStore(); // 確保 store 在這裡被調用
   const task = useTask(); // 確保 store 在這裡被調用
   //  close menu
-  if (to.path === '/') {
-    task.isEdit.value = false;
-  }else if (to.path === '/tasks/new') {
+  if (to.path === '/' || to.path === '/tasks/new') {
     task.isEdit.value = false;
   }else{ 
     menuStore.isOpen = false;

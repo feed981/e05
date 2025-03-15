@@ -30,7 +30,9 @@ const {
         <div class="category">
         <!-- <div class="category" :key="refreshKey"> -->
           <div class="category-name">
-            <span class="title">{{ categoryData.info.name }}</span>
+            <router-link :to="{ name: 'v2.category.tasks', params: { category: `${categoryData.info.name}` } }" class="clean-link">
+              <span class="title">{{ categoryData.info.name }}</span>
+            </router-link>
               <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ allTaskCount(categoryData.info.name) }}
               　<i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{ finishTaskCount(categoryData.info.name) }} 
               　<i title="This category urgent task count!" class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(categoryData.info.name) }} 

@@ -28,7 +28,7 @@ const { hiddenPrepage } = useCommon();
                         <line x1="0" y1="50%" x2="100%" y2="50%" class="bottom" shape-rendering="crispEdges" />
                     </svg>
                     <ul v-show="menuStore.isOpen" class="dropdown-menu bars">
-                        <router-link to="/qrcode" class="clean-link">
+                        <router-link :to="{ name: 'v2.qrcode' }" class="clean-link">
                             <li>
                                 <i class="font-awesome-i fa-solid fa-qrcode"></i>|　QR-Code
                             </li>
@@ -36,7 +36,7 @@ const { hiddenPrepage } = useCommon();
                         <li @click="lightStore.toggleBars">
                             <i class="font-awesome-i fa-solid" :class="{ 'fa-toggle-on': lightStore.isOpen, 'fa-toggle-off': !lightStore.isOpen }"></i>{{ lightStore.isOpen ? '|　Toggle dark-mode' : '|　Toggle light-mode' }}
                         </li>
-                        <router-link to="/feedback" class="clean-link">
+                        <router-link :to="{ name: 'v2.feedback' }" class="clean-link">
                             <li>
                                 <i class="font-awesome-i fa-solid fa-envelope"></i>|　Feedback
                             </li>
@@ -50,21 +50,21 @@ const { hiddenPrepage } = useCommon();
                             <ul v-show="exportMenuStore.isOpen" class="dropdown-menu dropdown-menu-sub">
                             <li @click="viewAs('json')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as JSON</li>
                             <li @click="viewAs('html')"><i class="font-awesome-i fa-solid fa-eye"></i>|　View as HTML</li>
-                            <router-link to="/import/as/json" class="clean-link">
+                            <!-- <router-link :to="{ name: 'v2.import.json' }" class="clean-link">
                                 <li><i class="font-awesome-i fa-solid fa-file-import"></i>|　Import as JSON</li>
-                            </router-link>
+                            </router-link> -->
                             <li @click="exportAs('json')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as JSON</li>
                             <li @click="exportAs('html')"><i class="font-awesome-i fa-solid fa-file-export"></i>|　Export as HTML</li>
-                            <li @click="exportMenuStore.toggleBars"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
+                            <!-- <li @click="exportMenuStore.toggleBars"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li> -->
                             </ul>
                         </li>
-                        <router-link to="/category/list" class="clean-link">
+                        <router-link :to="{ name: 'v2.category.list' }" class="clean-link">
                             <li><i class="font-awesome-i fa-solid fa-icons"></i>|　Add new category</li>
                         </router-link>
-                        <router-link to="/tasks/new" class="clean-link">
+                        <router-link :to="{ name: 'v2.tasks.new' }" class="clean-link">
                             <li><i class="font-awesome-i fa-solid fa-list-check"></i>|　Add new task</li>
                         </router-link>
-                        <router-link to="/" class="clean-link" v-show="hiddenPrepage">
+                        <router-link :to="{ name: 'v2.home' }" class="clean-link" v-show="hiddenPrepage">
                             <li><i class="font-awesome-i fa-solid fa-arrow-left"></i>|　Pre page</li>
                         </router-link>
                         <li @click="menuStore.toggleBars"><i class="font-awesome-i fa-solid fa-xmark"></i>|　Close the menu</li>
