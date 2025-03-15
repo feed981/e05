@@ -1,15 +1,14 @@
-import { ref, computed, onMounted, toRaw } from "vue";
+import { ref, computed } from "vue";
 import { useCommon } from "@/composables/useCommon.js";
+import { useDate } from "@/composables/useDate.js";
 import { useRouter } from 'vue-router';
-import dayjs from 'dayjs';
 import { useCategory } from "@/composables/useCategory.js";
 
 const isEdit = ref(false);
-// 設定日期為當天的 YYYY-MM-DD 格式
-const setDate = () => {
-  return dayjs().format('YYYY-MM-DD');
-};
 
+const { 
+  setDate,
+} = useDate();
 
 const task = ref({
   text: '',
@@ -17,7 +16,6 @@ const task = ref({
 });
 
 const selectedCategory = ref('');
-
 
 const editTask = ref({
   id: '',
@@ -31,13 +29,8 @@ const editTask = ref({
   opend: false
 });
 
-// 在 mounted 或 created 生命週期鉤子中設置初始值
-onMounted(() => {
-  // 如果類別不為空，則選擇第一個類別
-  if (Object.keys(categories).length > 0) {
-    selectedCategory.value = Object.keys(categories)[0];
-  }
-});
+
+
 export function useTask() {
   const router = useRouter();
 
@@ -46,6 +39,7 @@ export function useTask() {
     successNotyftMessageWithST,
     successNotyftMessage,
     warningNotyftMessageCheckData,
+    setDate,
   } = useCommon();
     
   const {
@@ -390,6 +384,7 @@ export function useTask() {
   };
 
 
+
   return {
     task,
     allTaskCount,
@@ -407,5 +402,6 @@ export function useTask() {
     isEdit,
     editTaskToCategory,
     removeTask,
+    setDate,
   };
 }

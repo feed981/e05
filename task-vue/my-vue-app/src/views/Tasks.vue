@@ -11,7 +11,6 @@ const {
 
 </script>
 
-
 <template>
      <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-list-check"></i> new Task!</h1>
         
