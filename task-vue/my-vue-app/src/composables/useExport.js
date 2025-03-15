@@ -301,7 +301,7 @@ export function useExport() {
             }, 4000);
     
             setTimeout(() => {
-                window.location.reload();
+                router.push('/');
             }, 10000);
         }
     };
