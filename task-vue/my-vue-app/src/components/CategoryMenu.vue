@@ -19,7 +19,7 @@ const {
 </script>
 
 <template>
-    <div @click="menuStore.toggleBars(categoryName)" class="float float-categoryMenu">
+    <div @click="menuStore.toggleBars(categoryName)" class="float2 float-categoryMenu">
         <div class="header-container" >
             <div class="hamburger">
                 <div class="dropdown">

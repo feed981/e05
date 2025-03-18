@@ -28,6 +28,7 @@ export function useCategory(watchSource = null) {
 
     const { 
         successNotyftMessage,
+        warningNotyftMessageCheckData,
         windowConfirm,
     } = useCommon();
 
@@ -139,21 +140,31 @@ export function useCategory(watchSource = null) {
         if (windowConfirm([`Are you sure you want to remove this category ?`,`你確定要刪除這個類別嗎?`])) {
             const taskCount = categories[name]?.tasks?.length || 0;
             
-            if(taskCount > 0){
-                if (windowConfirm([`Are you sure you want to remove this category, it has ${taskCount} tasks?`,`你確定要刪除這個類別嗎，裡面還有 ${taskCount} 個任務?`])) {
-                
-                    delete categories[name];
-                    saveToLocalStorage();
-                    successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
-                    // 重新加载当前路由
-                    router.go(0); 
-                }
+            if(taskCount < 1){
+                delete categories[name];
+                saveToLocalStorage();
+                successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
+                // 重新加载当前路由
+                // router.go(0); 
+            }else if (windowConfirm([`Are you sure you want to remove this category, it has ${taskCount} tasks?`,`你確定要刪除這個類別嗎，裡面還有 ${taskCount} 個任務?`])) {
+            
+                delete categories[name];
+                saveToLocalStorage();
+                successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
+                // 重新加载当前路由
+                // router.go(0); 
+
             }
         }
     };
 
 
     const createCategory = (name) => {
+        // name = name.trim();
+        if(!name || !name.trim()){
+            warningNotyftMessageCheckData([`Please input your category!`,'請輸入類別!']);
+            return;
+        } 
         if (!categories[name]) {
           categories[name] = {
             info: {

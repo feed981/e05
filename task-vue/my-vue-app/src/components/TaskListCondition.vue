@@ -4,7 +4,11 @@ import { useTask } from "@/composables/useTask.js";
 import TaskMenu from '@/components/TaskMenu.vue'
 import TasksNew from '@/components/TasksNew.vue'
 
+
 const {
+  allTaskCount,
+  finishTaskCount,
+  urgentTaskCount,
   allTasklist
 } = useTask();
 
@@ -30,7 +34,7 @@ const filteredTasklist = computed(() => {
   }
   
   // 尚未完成
-  const filtered = allTasklist.value[category][date].false;
+  const filtered = allTasklist.value[category][date];
   return filtered;  // 直接返回任务数组，而不是嵌套对象
 });
 
@@ -44,22 +48,41 @@ const filteredTasklist = computed(() => {
     v-bind:date="date"
   />
   <br>
-  <span class="title">{{ date }}</span>
+  <div class="title-date">{{ date }}</div>
+
+  <div class="export-category">
+        <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{
+          allTaskCount(categoryName, date) }}
+        　<i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{
+          finishTaskCount(categoryName, date) }}
+        　<i title="This category urgent task count!" class="font-awesome-i fa-solid fa-thumbtack"></i> : {{
+          urgentTaskCount(categoryName, date) }}
+      </div>
 
   <div class="export-container">
     <div v-for="task in filteredTasklist" :key="task.updatetime">
-      <div class="category">
+      
+      <div class="category"
+      :class="{ 
+                'completed': task.status === 'completed', 
+                'urgent': task.status === 'urgent' 
+          }">
         <div class="category-name">
-          <span class="title">{{ task.text }}</span>
+          <span class="title">
+            <i v-if="task.status === 'completed'" class="font-awesome-i fa-solid fa-flag-checkered"></i>
+            <i v-if="task.status === 'urgent'" class="font-awesome-i fa-solid fa-thumbtack"></i>
+          {{ task.text }}</span>
           <!-- <span class="title">{{ task.updatetime }}</span> -->
         </div>
         <TaskMenu 
-          v-bind:categoryName="categoryName" 
-          v-bind:date="date" 
-          v-bind:text="task.text" 
-          v-bind:updatetime="task.updatetime" 
-        />
+        v-bind:categoryName="categoryName" 
+        v-bind:date="date" 
+        v-bind:text="task.text" 
+        v-bind:updatetime="task.updatetime" 
+        v-bind:taskstatus="task.status" 
+      />
       </div>
+
     </div>
   </div>
 
@@ -70,8 +93,16 @@ const filteredTasklist = computed(() => {
 @import "../assets/styles/category.css";
 
 .category-name .title {
-    -webkit-line-clamp: 2; /* 顯示2行，超過則顯示省略號 */
+    -webkit-line-clamp: 5; /* 顯示2行，超過則顯示省略號 */
 }
+
+.category{
+  height: auto;
+}
+
+.export-container {
+    max-height: 50vh;
+}  
 
 </style>
   

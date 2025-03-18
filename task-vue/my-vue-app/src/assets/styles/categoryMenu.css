@@ -13,10 +13,26 @@
   z-index: 9999;
 }
 
+.float{
+  /* width: 90%; */
+  /* height: 42px; */
+  /* top: auto; */
+  /* right: 18px; */
+	/* border-radius: 15px; */
+	margin: 10px -20px
+}
+
+/* .export-container .completed{
+  box-shadow: rgba(0, 146, 231, 0.473) 0px -23px 25px 0px inset, rgba(25, 126, 221, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(26, 156, 243, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+.export-container .urgent{
+  box-shadow: rgb(165, 53, 53) 3px 3px 6px 0px inset, rgb(29 29 29 / 50%) -3px -3px 6px 1px inset, rgb(103 97 97 / 20%) 0px 0px 10px;
+} */
 
 .float-categoryMenu .header-container,
 .float-taskMenu .header-container{
-  margin: 16px;
+  /* margin: 16px; */
 }
 
 .dropdown-menu {
@@ -34,7 +50,9 @@
   border-radius: 10px;
 }
 
-
+.dropdown i{
+  font-size: 24px;
+}
 
 .light-mode .dropdown-menu {
   color: #000;
