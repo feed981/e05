@@ -95,14 +95,6 @@
     color: #c5c5c5;
   }
 
-  
-.light-mode .content .text-content {
-    color: #fff;
-  }
-
-  .light-mode .content .completed {
-    color: #5a5a5a;
-  }
 
 .light-mode  .export-container {
     scrollbar-color: #ffffff #ffffff;

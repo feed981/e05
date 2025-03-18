@@ -39,7 +39,6 @@ export function useTask() {
     successNotyftMessageWithST,
     successNotyftMessage,
     warningNotyftMessageCheckData,
-    setDate,
   } = useCommon();
     
   const {
@@ -114,14 +113,24 @@ export function useTask() {
   
 
   // 計算所有任務數量
-  const allTaskCount = (category) => {
+  const allTaskCount = (category, date) => {
     if (!categories[category]) return 0; // 確保分類存在
+    if(date){
+      return categories[category].tasks.filter(
+        task => task.date === date
+      ).length;
+    }
     return categories[category].tasks.length; // 獲取該分類下所有任務數量
   };
 
   // 計算已完成的任務數量
-  const finishTaskCount = (category) => {
+  const finishTaskCount = (category, date) => {
     if (!categories[category]) return 0; // 確保分類存在
+    if(date){
+      return categories[category].tasks.filter(
+        task => task.date === date && task.completed
+      ).length;
+    }
     return categories[category].tasks.filter(task => task.completed).length;
   };
 
@@ -134,8 +143,13 @@ export function useTask() {
 
 
   // 計算緊急任務數量
-  const urgentTaskCount = (category) => {
+  const urgentTaskCount = (category, date) => {
     if (!categories[category]) return 0;
+    if(date){
+      return categories[category].tasks.filter(
+        task => task.date === date && task.urgent
+      ).length;
+    }
     return categories[category].tasks.filter(task => task.urgent).length || 0;
   };
 
@@ -166,18 +180,37 @@ export function useTask() {
     const groupedTasks = {};
   
     allTasks.forEach(task => {
-      const completedStatus = task.completed ? "true" : "false";
+      const completedStatus = task.completed ? "completed" : "normal";
+      const urgentStatus = task.urgent ? "urgent" : "normal";
   
       if (!groupedTasks[task.category]) {
         groupedTasks[task.category] = {};
       }
+      // 單個條件可使用這種方式
+      // if (!groupedTasks[task.category][task.date]) {
+      //   groupedTasks[task.category][task.date] = { true: [], false: [] };
+      // }
+
       if (!groupedTasks[task.category][task.date]) {
-        groupedTasks[task.category][task.date] = { true: [], false: [] };
+        groupedTasks[task.category][task.date] = [];  // 使用数组而不是对象
       }
-  
-      groupedTasks[task.category][task.date][completedStatus].push(
-        {text: task.text, updatetime: task.updatetime}
-      );
+      // 确定任务状态
+      let status;
+      if (task.completed) {
+        status = "completed";
+      } else if (task.urgent) {
+        status = "urgent";
+      } else {
+        status = "normal";
+      }
+
+      // 将任务添加到数组中，并包含状态信息
+      groupedTasks[task.category][task.date].push({
+        text: task.text,
+        updatetime: task.updatetime,
+        status: status
+      });
+
     });
   
     return groupedTasks;
@@ -214,6 +247,7 @@ export function useTask() {
         );
       }
       saveToLocalStorage();
+      // router.go(0);
     }
   };
 
@@ -236,12 +270,16 @@ export function useTask() {
           'black-and-white-ost-disc-3-mission-success.mp3'
         );
       }else{
-        successNotyftMessageWithST(
+        successNotyftMessage(
           ['Cancel finish task successfully!','重啟任務!'],
-          'gta-san-andreas-ah-shit-here-we-go-again_BWv0Gvc.mp3'
         );
+        // successNotyftMessageWithST(
+        //   ['Cancel finish task successfully!','重啟任務!'],
+        //   'gta-san-andreas-ah-shit-here-we-go-again_BWv0Gvc.mp3'
+        // );
       }
       saveToLocalStorage();
+      // router.go(0);
     }
   };
 

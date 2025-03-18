@@ -17,4 +17,3 @@ const route = useRoute();
 <style scoped>
 @import "../assets/styles/export.css";
 </style>
-  

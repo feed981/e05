@@ -10,6 +10,7 @@ import TasksNew from '@/components/TasksNew.vue';
 
 import { useMenuStore } from '@/store/useStore';
 import { useTask } from "@/composables/useTask.js";
+import NotFound from '@/views/404.vue'  // 你的 404 頁面
 
 const routes = [
   // 重定向從根路徑到 /v2
@@ -17,6 +18,7 @@ const routes = [
   // 讓 /index.html 轉向 /v2
   { path: '/index.html', redirect: '/v2' },
   { path: '/v2/index.html', redirect: '/v2' },
+  { path: '/:pathMatch(.*)*', component: NotFound },  // 捕獲所有未定義路徑
   {
     path: '/v2',
     children: [
@@ -41,12 +43,9 @@ router.beforeEach((to, from, next) => {
   const menuStore = useMenuStore(); // 確保 store 在這裡被調用
   const task = useTask(); // 確保 store 在這裡被調用
   //  close menu
-  if (to.path === '/' || to.path === '/tasks/new') {
-    task.isEdit.value = false;
-  }else{ 
-    menuStore.isOpen = false;
-    // console.log(to.path)
-  }
+  task.isEdit.value = false;
+  menuStore.isOpen = false;
+  // console.lg(to.path)
   next();
 });
 

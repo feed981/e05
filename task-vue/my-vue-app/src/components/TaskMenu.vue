@@ -8,7 +8,8 @@ const props = defineProps({
     categoryName: String,
     date: String,
     text: String,
-    updatetime: Number  // 使用 Number 类型来接收时间戳
+    updatetime: Number,  // 使用 Number 类型来接收时间戳
+    taskstatus: String,
 });
 
 
@@ -29,7 +30,12 @@ const {
 </script>
 
 <template>
-    <div @click="menuStore.toggleBars(categoryName, date, updatetime)" class="float float-categoryMenu">
+    <div @click="menuStore.toggleBars(categoryName, date, updatetime)" class="float2 float-categoryMenu"
+    :class="{ 
+            'completed': taskstatus === 'completed', 
+            'urgent': taskstatus === 'urgent' 
+        }"
+    >
         <div class="header-container" >
             <div class="hamburger">
                 <div class="dropdown">

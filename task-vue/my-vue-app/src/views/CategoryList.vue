@@ -35,7 +35,7 @@ const {
             </router-link>
               <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{ allTaskCount(categoryData.info.name) }}
               　<i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{ finishTaskCount(categoryData.info.name) }} 
-              　<i title="This category urgent task count!" class="font-awesome-i fa-solid fa-jug-detergent"></i> : {{ urgentTaskCount(categoryData.info.name) }} 
+              　<i title="This category urgent task count!" class="font-awesome-i fa-solid fa-thumbtack"></i> : {{ urgentTaskCount(categoryData.info.name) }} 
           </div>
           <CategoryMenu 
             v-bind:categoryName="categoryData.info.name" 

@@ -1,6 +1,6 @@
 .export-container {
     width: 94%;
-    max-height: 80vh;
+    max-height: 60vh;
     overflow-y: auto;
     padding: 10px;
     scrollbar-width: thin;
@@ -74,8 +74,23 @@
     margin-top: 5px;
   }
 
-  .content .completed {
+  .content .completed{
+    text-decoration: line-through;
     color: #5a5a5a;
+  }
+
+  .content .completed i{
+    color: #5a5a5a;
+    font-size: 14px;
+  }
+
+  .content .urgent{
+    color: #c04040;
+  }
+
+  .content .urgent i{
+    color: #c04040;
+    font-size: 14px;
   }
 
   .actions {
@@ -103,6 +118,10 @@
     transition: all 0.8s ease;
   }
 
-  .light-mode .content .text-content{
-    color: #757373;
+  .light-mode .content .text-content {
+    color: #636363;
+  }
+  
+  .light-mode .content .completed{
+    color: #b9b8b8;
   }
