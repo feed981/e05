@@ -14,8 +14,8 @@ const {
     <input type="file" @change="handleFileChange" accept=".json">
 
     <div>
-    <i title="Overwrite, everything gone, careful!" @click="handleFileUpload('overwrite')" class="font-awesome-i fa-solid fa-feather"></i>
-    <i title="Append, will keep the original, but still can work ha!" @click="handleFileUpload('append')" class="font-awesome-i fa-solid fa-feather-pointed"></i>
+    <i title="Overwrite, everything gone, careful!" @click="handleFileUpload('overwrite')" class="fa-solid fa-feather"></i>
+    <i title="Append, will keep the original, but still can work ha!" @click="handleFileUpload('append')" class="fa-solid fa-feather-pointed"></i>
     </div>
 </template>
 

@@ -124,7 +124,7 @@ input[type="file"] {
     padding-left: 15px;
 }
 
-.category .font-awesome-i {
+.category i {
     font-size: 15px;
 }
 
@@ -171,7 +171,7 @@ input[type="file"] {
     border-bottom: 4px solid #414141;
 }
 
-.font-awesome-i {
+i {
     cursor: pointer;
     color: #fff;
     font-size: 24px;
@@ -212,6 +212,11 @@ input[type="file"] {
     color: #1287ca;
     /* text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3); */
 }
+
+h1 i{
+    color: #1287ca;
+}
+
 
 
 .heading-style1 {

@@ -45,22 +45,22 @@ const {
                     menuStore.expandedTasks[categoryName][date][String(updatetime)]" 
                     class="dropdown-menu bars">
                         <!-- <li @click="archiveTask(categoryName, updatetime)" >
-                            <i class="font-awesome-i fa-solid fa-boxes-packing"></i><span>|　Archive task</span>
+                            <i class="fa-solid fa-boxes-packing"></i><span>|　Archive task</span>
                         </li> -->
                         <li @click="copyTask(categoryName, date, text)">
-                            <i class="font-awesome-i fa-solid fa-clone"></i><span>|　Copy task text</span>
+                            <i class="fa-solid fa-clone"></i><span>|　Copy task text</span>
                         </li>
                         <li @click="setEditTask(categoryName, date, updatetime, text)">
-                            <i class="font-awesome-i fa-solid fa-pen-to-square"></i><span>|　Edit task</span>
+                            <i class="fa-solid fa-pen-to-square"></i><span>|　Edit task</span>
                         </li>
                         <li @click="setUrgentTask(categoryName, date, updatetime)">
-                            <i class="font-awesome-i fa-solid fa-jug-detergent"></i><span>|　Set urgent task</span>
+                            <i class="fa-solid fa-jug-detergent"></i><span>|　Set urgent task</span>
                         </li>
                         <li @click="finishTask(categoryName, date, updatetime)">
-                            <i class="font-awesome-i fa-solid fa-flag-checkered"></i><span>|　Finish task</span>
+                            <i class="fa-solid fa-flag-checkered"></i><span>|　Finish task</span>
                         </li>
                         <li @click="removeTask(categoryName, date, updatetime, text)" >
-                            <i class="font-awesome-i fa-solid fa-trash"></i><span>|　Remove task</span>
+                            <i class="fa-solid fa-trash"></i><span>|　Remove task</span>
                         </li>
                     </ul>
                 </div>

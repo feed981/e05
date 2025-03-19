@@ -50,11 +50,11 @@ const filteredTasklist = computed(() => {
         </div>
       </router-link>
       <div class="export-category">
-        <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{
+        <i title="This category task count!" class="fa-solid fa-list-check"></i> : {{
           allTaskCount(category) }}
-        　<i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{
+        　<i title="This category archive task count!" class="fa-solid fa-flag-checkered"></i> : {{
           finishTaskCount(category) }}
-        　<i title="This category urgent task count!" class="font-awesome-i fa-solid fa-thumbtack"></i> : {{
+        　<i title="This category urgent task count!" class="fa-solid fa-thumbtack"></i> : {{
           urgentTaskCount(category) }}
       </div>
 
@@ -72,8 +72,8 @@ const filteredTasklist = computed(() => {
                 'completed': task.status === 'completed', 
                 'urgent': task.status === 'urgent' 
               }">
-              <i v-if="task.status === 'completed'" class="font-awesome-i fa-solid fa-flag-checkered"></i>
-              <i v-if="task.status === 'urgent'" class="font-awesome-i fa-solid fa-thumbtack"></i>
+              <i v-if="task.status === 'completed'" class="fa-solid fa-flag-checkered"></i>
+              <i v-if="task.status === 'urgent'" class="fa-solid fa-thumbtack"></i>
               {{ index + 1 }}. {{ task.text }}
             </div>
           </div>

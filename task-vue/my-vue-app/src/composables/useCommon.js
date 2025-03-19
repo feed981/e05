@@ -149,14 +149,31 @@ export function useCommon() {
     const route = useRoute();
 
     const hiddenPlus = computed(() => {
-        const hiddenPaths = ['/v2/qrcode','/v2/feedback','/v2/tasks/new',
-            '/v2/category/list','/v2/:category/tasks/:date'
+        const path = '/task/v2';
+        const exactHiddenPaths = [
+            path+'/qrcode',
+            path+'/feedback',
+            path+'/tasks/new',
+            path+'/category/list',
+            path+'/export',
         ];
-        return !hiddenPaths.includes(route.path);
+
+        // Check for exact matches first
+        if (exactHiddenPaths.includes(route.path)) {
+            return false;
+        }
+        
+        // Check dynamic path with regex pattern
+        const dynamicPattern = /^\/task\/v2\/[^/]+\/tasks\/[^/]+$/;
+        if (dynamicPattern.test(route.path)) {
+            return false;
+        }
+
+        return true;
     });
 
     const hiddenPrepage = computed(() => {
-        const hiddenPaths = ['/v2'];
+        const hiddenPaths = ['/task/v2'];
         return !hiddenPaths.includes(route.path);
     });
 

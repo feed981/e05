@@ -51,13 +51,13 @@ const filteredTasklist = computed(() => {
   <div class="title-date">{{ date }}</div>
 
   <div class="export-category">
-        <i title="This category task count!" class="font-awesome-i fa-solid fa-list-check"></i> : {{
-          allTaskCount(categoryName, date) }}
-        　<i title="This category archive task count!" class="font-awesome-i fa-solid fa-flag-checkered"></i> : {{
-          finishTaskCount(categoryName, date) }}
-        　<i title="This category urgent task count!" class="font-awesome-i fa-solid fa-thumbtack"></i> : {{
-          urgentTaskCount(categoryName, date) }}
-      </div>
+    <i title="This category task count!" class="fa-solid fa-list-check"></i> : {{
+      allTaskCount(categoryName, date) }}
+    　<i title="This category archive task count!" class="fa-solid fa-flag-checkered"></i> : {{
+      finishTaskCount(categoryName, date) }}
+    　<i title="This category urgent task count!" class="fa-solid fa-thumbtack"></i> : {{
+      urgentTaskCount(categoryName, date) }}
+  </div>
 
   <div class="export-container">
     <div v-for="task in filteredTasklist" :key="task.updatetime">
@@ -69,8 +69,8 @@ const filteredTasklist = computed(() => {
           }">
         <div class="category-name">
           <span class="title">
-            <i v-if="task.status === 'completed'" class="font-awesome-i fa-solid fa-flag-checkered"></i>
-            <i v-if="task.status === 'urgent'" class="font-awesome-i fa-solid fa-thumbtack"></i>
+            <i v-if="task.status === 'completed'" class="fa-solid fa-flag-checkered"></i>
+            <i v-if="task.status === 'urgent'" class="fa-solid fa-thumbtack"></i>
           {{ task.text }}</span>
           <!-- <span class="title">{{ task.updatetime }}</span> -->
         </div>
@@ -101,7 +101,7 @@ const filteredTasklist = computed(() => {
 }
 
 .export-container {
-    max-height: 50vh;
+    max-height: 46vh;
 }  
 
 </style>
