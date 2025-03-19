@@ -30,8 +30,8 @@ const {
         </div>
           
           <div class="addtaskicon" @click="addTask">+</div>
-          <!-- <i title="Let's do it bro!" @click="addTask" class="font-awesome-i fa-solid fa-paper-plane"></i> -->
-          <!-- <i title="Edit this task content!" @click="editTask" class="font-awesome-i fa-solid fa-pen-to-square"></i> -->
+          <!-- <i title="Let's do it bro!" @click="addTask" class="fa-solid fa-paper-plane"></i> -->
+          <!-- <i title="Edit this task content!" @click="editTask" class="fa-solid fa-pen-to-square"></i> -->
           
           <input title="Task content bro!" type="text" v-model="newTask.text" placeholder="Enter a task..." required>
 

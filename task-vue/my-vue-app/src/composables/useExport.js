@@ -6,8 +6,11 @@ import { useDate } from "@/composables/useDate.js";
 import { useStore, } from '@/store/useStore';
 import { useRouter } from 'vue-router';
 
-const { allTasklist, } = useTask();
+
 const { domain_soundtrack, } = useStore();
+
+const { allTasklist, 
+} = useTask();
 
 const { 
     categories,
@@ -18,93 +21,269 @@ const {
     formatDateTime,
 } = useDate();
 
+function quartertimeRangeDescription(exportParams){
+    let timeRangeDescription = '';
+    switch (exportParams.quarter) {
+        case 1:
+        timeRangeDescription = `${exportParams.year}/01 - 03`;
+        break;
+        case 2:
+        timeRangeDescription = `${exportParams.year}/04 - 06`;
+        break;
+        case 3:
+        timeRangeDescription = `${exportParams.year}/07 - 09`;
+        break;
+        case 4:
+        timeRangeDescription = `${exportParams.year}/10 - 12`;
+        break;
+    }
+    return timeRangeDescription;
+}
+
+function convertToHtml(filteredCategories, exportParams) {
+    // 創建時間範圍的描述
+    let timeRangeDescription = '';
+    switch (exportParams.type) {
+      case 'year':
+        timeRangeDescription = `${exportParams.year}`;
+        break;
+      case 'quarter':
+        timeRangeDescription = quartertimeRangeDescription(exportParams);
+        break;
+      case 'month':
+        timeRangeDescription = `${exportParams.year}/${exportParams.month < 10 ? '0' + exportParams.month : exportParams.month}`;
+        break;
+      case 'date':
+        timeRangeDescription = `${exportParams.startDate.replaceAll('-','/')} - ${exportParams.endDate.replaceAll('-','/')}`;
+        break;
+    }
+
+  
+    // 獲取當前日期時間作為報表生成時間
+    const now = new Date();
+    const generatedTime = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+  
+    // 開始構建 HTML
+    let html = `
+  <!DOCTYPE html>
+  <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Report - ${timeRangeDescription}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        height: 100vh;
+        background-color: #323232;
+      }
+      h1 {
+        text-align: center;
+        color: #868b91;
+        margin-bottom: 20px;
+      }
+      .report-info {
+        text-align: right;
+        color: #7f8c8d;
+        font-size: 0.9em;
+        margin-bottom: 30px;
+      }
+      .category {
+        margin-bottom: 40px;
+      }
+      .category-header {
+        background-color: #141414;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .category-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 15px;
+        padding: 0 15px;
+      }
+      .category-info div {
+        flex: 1;
+        min-width: 200px;
+      }
+      .category-info label {
+        font-weight: bold;
+        color: #7f8c8d;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th, td {
+        border: 1px solid #676767;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+      color: #efefef;
+        background-color: #212121;
+      }
+      tr:nth-child(even) {
+        background-color: #474747;
+      }
+       th:first-child {
+  width: 20%;
+}
+
+        .task-normal{
+        color: #efefef;
+        }
+      .task-completed {
+        text-decoration: line-through;
+        color: #7f8c8d;
+      }
+      .task-urgent {
+        color: #e74c3c;
+        font-weight: bold;
+      }
+      .empty-tasks {
+        text-align: center;
+        padding: 20px;
+        color: #7f8c8d;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Task report - ${timeRangeDescription}</h1>
+    <div class="report-info">Report generation time: ${generatedTime}</div>
+  `;
+  
+    // 遍歷每個類別
+    Object.keys(filteredCategories).forEach(categoryKey => {
+      const category = filteredCategories[categoryKey];
+      const tasks = category.tasks || [];
+      
+      html += `
+    <div class="category">
+      <div class="category-header">${category.info.name}</div>
+      <div class="category-info">
+        <!--<div><label>Category status:</label> ${category.info.completed ? 'completed' : 'in progress'}</div>
+        <div><label>Priority:</label> ${category.info.urgent ? 'urgent' : 'normal'}</div>
+        <div><label>Created time:</label> ${new Date(category.info.timestamp).toLocaleString()}</div>
+        <div><label>Update time:</label> ${new Date(category.info.updatetime).toLocaleString()}</div>-->
+      </div>
+  `;
+  
+      if (tasks.length > 0) {
+        html += `
+      <table>
+        <thead>
+          <tr>
+          <th>Date</th>
+            <th>Task content</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <!--<th>Created time</th>-->
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+        tasks.forEach(task => {
+          // 決定任務的 CSS 類別
+          const taskClass = task.completed ? 'task-completed' : (task.urgent ? 'task-urgent' : 'task-normal');
+          
+          html += `
+          <tr class="${taskClass}">
+          <td>${task.date}</td>
+            <td>${task.text}</td>
+            <td data-task-id="${task.updatetime}" data-date="${task.date}" data-category="${category.info.name}">
+            ${task.completed ? 'completed' : (task.archive ? 'archive' : 'in progress')}
+            </td>
+            <td data-task-id="${task.updatetime}" data-date="${task.date}" data-category="${category.info.name}">
+            ${task.urgent ? 'urgent' : 'normal'}
+            </td>
+            <!--<td>${new Date(task.timestamp).toLocaleString()}</td>-->
+          </tr>
+  `;
+        });
+  
+        html += `
+        </tbody>
+      </table>
+  `;
+      } else {
+        html += `
+      <div class="empty-tasks">There are no tasks during this time period.</div>
+  `;
+      }
+  
+      html += `
+    </div>
+  `;
+    });
+  
+    // 添加頁腳
+    html += `
+    <div class="report-info">
+      <p>${Object.keys(filteredCategories).length} categories of data were exported</p>
+    </div>
+  </body>
+  </html>
+  `;
+  
+    return html;
+  }
+  
+  /**
+   * 下載 HTML 格式的任務報表
+   * @param {string} html - HTML 格式的報表內容
+   * @param {string} filename - 下載的文件名
+   */
+  function downloadHtml(html, filename = `tasks-report-${formatDateTime(Date.now())}.html`) {
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 0);
+  }
+  
+  /**
+   * 預覽 HTML 報表內容
+   * @param {string} html - HTML 格式的報表內容
+   */
+  function previewHtml(html) {
+    const previewWindow = window.open('', '_blank');
+    previewWindow.document.write(html);
+    previewWindow.document.close();
+  }
+
 const html = () => {
 
     let htmlContent = `
-
-    <!DOCTYPE html>
-    <html>
-    
-    <head>
-      <meta charset="UTF-8">
-       <title>Export tasklist 2 html</title>
-      <link rel="icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
-      <link rel="shortcut icon" href="https://d2luynvj2paf55.cloudfront.net/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-      <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background-color: #121212;
-                font-family: Arial, sans-serif;
-                color: white;
-                margin: 0;
-                overflow: hidden;
-            }
-            .export-container {
-                width: 80%;
-                max-height: 80vh;
-                overflow-y: auto;
-                padding: 10px;
-                scrollbar-width: thin;
-                scrollbar-color: #888 #222;
-            }
-            .export-container::-webkit-scrollbar {
-                width: 8px;
-            }
-            .export-container::-webkit-scrollbar-track {
-                background: #222;
-            }
-            .export-container::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 4px;
-            }
-            .post {
-                background: #222;
-                padding: 15px;
-                margin: 10px 0;
-                border-radius: 10px;
-            }
-            .user {
-                font-weight: bold;
-            }
-            .time {
-                color: gray;
-                font-size: 12px;
-            }
-            .content {
-                margin-top: 5px;
-            }
-    
-            .content .completed{
-                color: #5a5a5a;
-            }
-            .actions {
-                display: flex;
-                gap: 10px;
-                margin-top: 10px;
-                color: gray;
-            }
-
-             .export-container .hr{
-    background: #4b4a4a;
-    height: 1px;
-    margin: 17px 0px;
-    width: 100%;
-  }
-        </style>
-    </head>
-    
-    <body>
-      <div class="export-container">
+<!DOCTYPEhtml><html><head><metacharset="UTF-8"><title>Exporttasklist2html</title><linkrel="icon"href="https://d2luynvj2paf55.cloudfront.net/favicon.ico"type="image/x-icon"><linkrel="shortcuticon"href="https://d2luynvj2paf55.cloudfront.net/favicon.ico"type="image/x-icon"><linkrel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><style>body{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#121212;font-family:Arial,sans-serif;color:white;margin:0;overflow:hidden;}.export-container{width:80%;max-height:80vh;overflow-y:auto;padding:10px;scrollbar-width:thin;scrollbar-color:#888#222;}.export-container::-webkit-scrollbar{width:8px;}.export-container::-webkit-scrollbar-track{background:#222;}.export-container::-webkit-scrollbar-thumb{background:#888;border-radius:4px;}.post{background:#222;padding:15px;margin:10px0;border-radius:10px;}.user{font-weight:bold;}.time{color:gray;font-size:12px;}.content{margin-top:5px;}.content.completed{color:#5a5a5a;}.actions{display:flex;gap:10px;margin-top:10px;color:gray;}.export-container.hr{background:#4b4a4a;height:1px;margin:17px0px;width:100%;}</style></head><body><divclass="export-container">
     `;
 
 
-    // console.log('allTasklist.value:',allTasklist.value);
+    console.log('allTasklist.value:',allTasklist.value);
+    console.log('filteredData.value:',filteredData);
     
-
+    
     // Iterate through all categories
     Object.keys(allTasklist.value).forEach(category => {
         htmlContent += `<div class="hr"></div>`;
@@ -263,23 +442,25 @@ export function useExport() {
 
     };
 
-    const viewAs = (format) => {
-        successNotyftMessage([`Viewing as ${format.toUpperCase()}`,`檢視 ${format.toUpperCase()} 文件`]);
+
+    const viewAs = (format, filteredData) => {
+        console.log('format:',format)
+        successNotyftMessage([`Preview ${format.toUpperCase()}`,`檢視 ${format.toUpperCase()} 文件`]);
         if(format === 'json'){
-            const jsonString = JSON.stringify(categories, null, 2);
+            const jsonString = JSON.stringify(filteredData, null, 2);
             const template = `${template_s}<pre>${jsonString}</pre>${template_e}`;
             viewopen(template ,format)
         }else if (format === 'html') {
-            let htmlContent = html();
+            let htmlContent = html(filteredData);
             viewopen(htmlContent ,format)
         }
     };
     
-    const exportAs = (format) => {
-        successNotyftMessage([`Exporting as ${format.toUpperCase()}`,`輸出成 ${format.toUpperCase()} 格式`]);
-        
+    const exportAs = (format, filteredData) => {
+        // console.log('filteredData:',filteredData)
+        successNotyftMessage([`Download ${format.toUpperCase()}`,`輸出成 ${format.toUpperCase()} 格式`]);
         if(format === 'json'){
-            const jsonString = JSON.stringify(categories, null, 2);
+            const jsonString = JSON.stringify(filteredData, null, 2);
             exportfile(jsonString ,format , "application/json");
 
         }else if (format === 'html') {
@@ -312,5 +493,8 @@ export function useExport() {
         viewAs,
         exportAs,
         resetdata,
+        convertToHtml,
+        previewHtml,
+        downloadHtml,
     };
 }

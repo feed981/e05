@@ -61,7 +61,7 @@
     /* 隱藏 IE 的箭頭 */
   }
   
-  .light-mode .font-awesome-i,
-  .light-mode .task-menu .font-awesome-i {
+  .light-mode i,
+  .light-mode .task-menu i {
     color: #f6f6f6;
   }

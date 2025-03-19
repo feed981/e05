@@ -5,9 +5,10 @@ import { useRouter } from 'vue-router';
 // 定义响应式变量用于存储新分类名称
 /// 從 export 搬出來 ，修改 useCategory.js 为单例模式
 const isEdit = ref(false);
+const isCopy = ref(false);
 const newCategoryName = ref('');
 const categoryName = ref('');
-// const refreshKey = ref(0);
+const refreshKey = ref(0);
 
 export function useCategory(watchSource = null) {
     const router = useRouter();
@@ -84,22 +85,51 @@ export function useCategory(watchSource = null) {
     // 保存到localStorage
     const saveToLocalStorage = () => {
         localStorage.setItem("categories", JSON.stringify(toRaw(categories)));
+        refreshKey.value++;
     };
 
     const saveDefaultCategoriesToLocalStorage = () => {
         localStorage.setItem("categories", JSON.stringify(defaultCategories));
     };
 
-    
-
-    const editCategory = (categoryName, newCategoryName) => {
-        
+    const copyCategory = (categoryName, newName) => {
+        if(categoryName === newName.trim()){
+            warningNotyftMessageCheckData([`Please input your new category name!`,'請輸入新的類別名稱!']);
+            return;
+        }
         // 创建新的条目
         const updatedCategory = {
             ...categories[categoryName],  // 复制原有数据
             info: {
                 ...categories[categoryName].info,  // 复制原有的 info 对象
-                name: newCategoryName,  // 更新名称
+                name: newName,  // 更新名称
+                updatetime: Date.now()  // 更新时间
+            },
+            tasks: [...categories[categoryName].tasks]  // 复制所有任务
+        };
+        
+        // 删除旧条目并添加新条目
+        categories[newName] = updatedCategory;
+
+        saveToLocalStorage();
+        successNotyftMessage(['Copy category successfully!','已複製類別!']);
+        isCopy.value = false;
+        newCategoryName.value = '';
+        router.push(`/task/v2/${newName}/tasks`);
+    };
+
+    const editCategory = (categoryName, newName) => {
+        if(categoryName === newName.trim()){
+            warningNotyftMessageCheckData([`Please input your new category name!`,'請輸入新的類別名稱!']);
+            return;
+        }
+
+        // 创建新的条目
+        const updatedCategory = {
+            ...categories[categoryName],  // 复制原有数据
+            info: {
+                ...categories[categoryName].info,  // 复制原有的 info 对象
+                name: newName,  // 更新名称
                 updatetime: Date.now()  // 更新时间
             },
             tasks: [...categories[categoryName].tasks]  // 复制所有任务
@@ -107,21 +137,29 @@ export function useCategory(watchSource = null) {
         
         // 删除旧条目并添加新条目
         delete categories[categoryName];
-        categories[newCategoryName] = updatedCategory;
+        categories[newName] = updatedCategory;
 
         saveToLocalStorage();
         successNotyftMessage(['Edit category successfully!','已修改類別!']);
-
-         // 重新加载当前路由
-         router.go(0); 
-        // refreshKey.value++; // 强制组件重新渲染
+        isEdit.value = false;
+        newCategoryName.value = '';
+        router.push(`/task/v2/${newName}/tasks`);
     };
 
+    const setCopyCategory = (name, datetime) => {
+        if (!categories[name] && !datetime)  return;
+        categoryName.value = name;
+        newCategoryName.value = name;
+        isCopy.value = true;
+        isEdit.value = false;
+    };
+    
     const setEditCategory = (name, datetime) => {
         if (!categories[name] && !datetime)  return;
         categoryName.value = name;
         newCategoryName.value = name;
         isEdit.value = true;
+        isCopy.value = false;
     };
 
     const clearCategoryTasks = (name, datetime) => {
@@ -130,10 +168,11 @@ export function useCategory(watchSource = null) {
             categories[name].tasks = [];
             saveToLocalStorage();
             successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
-            // 重新加载当前路由
-            router.go(0); 
         }
     };
+
+
+
 
     const removeCategory = (name, datetime) => {
         if (!categories[name] && !datetime)  return;
@@ -144,15 +183,11 @@ export function useCategory(watchSource = null) {
                 delete categories[name];
                 saveToLocalStorage();
                 successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
-                // 重新加载当前路由
-                // router.go(0); 
             }else if (windowConfirm([`Are you sure you want to remove this category, it has ${taskCount} tasks?`,`你確定要刪除這個類別嗎，裡面還有 ${taskCount} 個任務?`])) {
             
                 delete categories[name];
                 saveToLocalStorage();
                 successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
-                // 重新加载当前路由
-                // router.go(0); 
 
             }
         }
@@ -187,7 +222,7 @@ export function useCategory(watchSource = null) {
     };
 
     return {
-        // refreshKey,
+        refreshKey,
         categoryName,
         newCategoryName,
         categories,
@@ -199,5 +234,8 @@ export function useCategory(watchSource = null) {
         editCategory,
         clearCategoryTasks,
         removeCategory,
+        setCopyCategory,
+        isCopy,
+        copyCategory,
     };
 }

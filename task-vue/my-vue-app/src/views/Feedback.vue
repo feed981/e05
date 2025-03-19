@@ -71,7 +71,7 @@ const handleSubmit = () => {
           <textarea v-model="formData.message" required placeholder="Enter your message here..."></textarea>
         </div>
           <button class="font-awesome-i-inbutton" type="submit">
-            <i title="Send your feedback mail!" class="font-awesome-i fa-solid fa-paper-plane"></i>
+            <i title="Send your feedback mail!" class="fa-solid fa-paper-plane"></i>
           </button>
         <div class="status" :class="{ error: isError }" v-if="status">{{ status }}</div>
       </form>

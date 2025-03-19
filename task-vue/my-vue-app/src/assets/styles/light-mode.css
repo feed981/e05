@@ -4,6 +4,10 @@
     color: #333;
 }
 
+.light-mode h1 i{
+    color: #1287ca;
+}
+
 
 .light-mode .task-container {
     background-color: #fff;
@@ -54,8 +58,8 @@
   }
 
 
-.light-mode .font-awesome-i,
-.light-mode .task-menu .font-awesome-i {
+.light-mode i,
+.light-mode .task-menu i {
     color: #f6f6f6;
 }
 

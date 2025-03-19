@@ -6,7 +6,9 @@ const {
   newCategoryName,
   createCategory,
   isEdit,
+  isCopy,
   editCategory,
+  copyCategory,
 } = useCategory();
 
 </script>
@@ -17,8 +19,9 @@ const {
         <input type="text" v-model="newCategoryName" placeholder="Enter a new category..." required>
         <div class="task-menu">
             <!-- 修复函数调用语法 -->
-            <i v-if="!isEdit" title="As you see is add a new category!" @click="createCategory(newCategoryName)" class="font-awesome-i fa-solid fa-paper-plane"></i>
-            <i v-if="isEdit" title="As you see is add a new category!" @click="editCategory(categoryName, newCategoryName)" class="font-awesome-i fa-solid fa-pen-to-square"></i>
+            <i v-if="isCopy" @click="copyCategory(categoryName, newCategoryName)" class="fa-solid fa-clone"></i>
+            <i v-if="!isEdit && !isCopy" title="As you see is add a new category!" @click="createCategory(newCategoryName)" class="fa-solid fa-paper-plane"></i>
+            <i v-if="isEdit" title="As you see is add a new category!" @click="editCategory(categoryName, newCategoryName)" class="fa-solid fa-pen-to-square"></i>
         </div>
       </div>
 </template>

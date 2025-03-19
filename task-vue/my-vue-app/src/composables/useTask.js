@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router';
 import { useCategory } from "@/composables/useCategory.js";
 
 const isEdit = ref(false);
-
 const { 
   setDate,
 } = useDate();
@@ -108,7 +107,6 @@ export function useTask() {
     successNotyftMessage(['Add task successfully!','已新增一項任務!']);
 
     task.text = '';
-    router.push('/');
   };
   
 
@@ -322,9 +320,6 @@ export function useTask() {
       removeTaskByDateAndUpdatetime(categoryName, date, updatetime, true);
       saveToLocalStorage();
       if(NotfinishTaskDateCount(categoryName, date) > 0){
-        router.go(0);
-      }else{
-        router.push('/');
       }
     }
   }
@@ -405,8 +400,6 @@ export function useTask() {
       saveToLocalStorage();
   
       task.text = '';
-      router.go(0);
-
     }
   }
 

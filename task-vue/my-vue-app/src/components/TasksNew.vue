@@ -54,7 +54,7 @@ if(props.page){
         title="You can choose your category for your task, if you don't have one you should add a new category first!"
         class="category-select" v-model="selectedCategory">
         <option v-if="!categoryName" value="">Category</option>
-        <option v-for="(categoryData, categoryKey) in categories" :key="categoryKey" :value="categoryKey">
+        <option v-for="(categoryData, categoryKey) in categories" :key="categoryKey">
           {{ categoryData.info.name }}
         </option>
       </select>
@@ -68,8 +68,8 @@ if(props.page){
 
     <input title="Task content bro!" type="text" v-model="task.text" placeholder="Enter a task..." required>
     <div class="task-menu">
-      <i v-if="isEdit" title="Edit this task content!" @click="editTaskToCategory(task)" class="font-awesome-i fa-solid fa-pen-to-square"></i>
-      <i v-if="!isEdit" title="Let's do it bro!" @click="addTaskToCategory(task)" class="font-awesome-i fa-solid fa-paper-plane"></i>
+      <i v-if="isEdit" title="Edit this task content!" @click="editTaskToCategory(task)" class="fa-solid fa-pen-to-square"></i>
+      <i v-if="!isEdit" title="Let's do it bro!" @click="addTaskToCategory(task)" class="fa-solid fa-paper-plane"></i>
     </div>
   </div>
 </template>
