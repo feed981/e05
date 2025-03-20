@@ -28,6 +28,14 @@ const notyf_warning = new Notyf({
         {
             type: 'warning',
             background: 'orange', // 背景顏色
+            icon: {
+                style: {
+                    color: 'white', // 設定圖示顏色
+                    fontSize: '20px' // 設定大小，讓它更明顯
+                },
+                className: 'fa-solid fa-circle-exclamation', // 使用 FontAwesome 圖標
+                tagName: 'i' // 使用 <i> 標籤
+            }
         }
     ]
 });
@@ -177,6 +185,19 @@ export function useCommon() {
         return !hiddenPaths.includes(route.path);
     });
 
+    const hiddenFooter = computed(() => {
+        const path = '/task/v2';
+        const exactHiddenPaths = [
+            path+'/export',
+        ];
+
+        // Check for exact matches first
+        if (exactHiddenPaths.includes(route.path)) {
+            return false;
+        }
+        return true;
+    });
+
     return {
         windowConfirm,
         successNotyftMessageWithST,
@@ -186,5 +207,6 @@ export function useCommon() {
         playSoundtrack,
         hiddenPlus,
         hiddenPrepage,
+        hiddenFooter,
     };
 }

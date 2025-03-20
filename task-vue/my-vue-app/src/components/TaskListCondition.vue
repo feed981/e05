@@ -101,7 +101,7 @@ const filteredTasklist = computed(() => {
 }
 
 .export-container {
-    max-height: 46vh;
+    max-height: 35vh;
 }  
 
 </style>

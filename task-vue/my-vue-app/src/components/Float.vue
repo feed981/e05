@@ -1,5 +1,4 @@
 <script setup>
-import Header from '../components/Header.vue'
 import { useMuteStore } from '@/store/useStore';
 import { useCommon } from "@/composables/useCommon.js";
 const muteStore = useMuteStore();
@@ -11,7 +10,6 @@ const {
 </script>
 
 <template>
-    <Header/>
     <div @click="muteStore.toggleSpeak" class="float-speak" :class="{ mute: !muteStore.isSpeakMute }"></div>
     <div @click="muteStore.toggleSound" class="float-sound" :class="{ mute: !muteStore.isSoundMute }"></div>
     <router-link :to="{ name: 'v2.home' }" v-show="hiddenPrepage">
