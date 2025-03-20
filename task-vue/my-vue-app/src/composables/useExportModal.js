@@ -16,10 +16,6 @@ const {
   categories,
 } = useCategory();
 
-const {
-  viewAs,
-  exportAs
-} = useExport();
 
 // 彈出窗口顯示控制
 // const showExportModal = ref(false);
@@ -588,6 +584,10 @@ function convertToHtml1(filteredCategories, exportParams) {
 export function useExportModal() {
 
   
+const {
+  viewAs,
+  exportAs
+} = useExport();
 
   // 匯出資料
 function exportData(type, format, htmlmodal) {
@@ -615,7 +615,7 @@ function exportData(type, format, htmlmodal) {
       break;
   }
 
-  console.log('匯出參數：', exportParams);
+  // console.log('匯出參數：', exportParams);
 
   // 篩選符合時間範圍的任務
   const filteredData = filterTasksByDateRange(categories, exportParams);
@@ -633,7 +633,7 @@ function exportData(type, format, htmlmodal) {
       downloadHtml(htmlReport);
     }
    }else if(format === 'json'){
-    console.log('format:',format)
+    // console.log('format:',format)
      if(type === 'preview'){
        viewAs(format, filteredData);
      }else {
@@ -693,7 +693,7 @@ function filterTasksByDateRange(categories, exportParams) {
   const filterFunction = dateFilters[exportParams.type];
   
   if (!filterFunction) {
-    console.error('未知的時間範圍類型:', exportParams.type);
+    // console.error('未知的時間範圍類型:', exportParams.type);
     return filteredCategories;
   }
   
