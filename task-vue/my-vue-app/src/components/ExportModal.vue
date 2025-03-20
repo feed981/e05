@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { useCategory } from "@/composables/useCategory.js";
-import { useExport } from "@/composables/useExport.js";
+import { watch } from 'vue';
 import { useTask } from "@/composables/useTask.js";
+import { useCategory } from "@/composables/useCategory.js";
+import { useExportModal } from "@/composables/useExportModal.js";
 
 const {
   selectedCategory,
@@ -14,183 +14,28 @@ const {
   categories,
 } = useCategory();
 
+
 const {
-    viewAs,
-    exportAs,
-    convertToHtml,
-    previewHtml,
-    downloadHtml,
-} = useExport();
+  rangeTypes,
+  selectedExport,
+  exportOptions,
+  selectedRangeType,
+  yearOptions,
+  selectedYear,
+  selectedMonth,
+  selectedQuarter,
+  startDate,
+  endDate,
+  selectRangeType,
+  exportData,
+} = useExportModal();
 
-
-// 彈出窗口顯示控制
-// const showExportModal = ref(false);
-
-// 時間範圍類型選項
-const rangeTypes = [
-  { label: 'all', value: 'all' },
-  { label: 'year', value: 'year' },
-  { label: 'quarter', value: 'quarter' },
-  { label: 'month', value: 'month' },
-  { label: 'date', value: 'date' }
-];
-
-// 選中的時間範圍類型
-const selectedRangeType = ref('month');
-
-// 年份選項 (當前年份往前 5 年)
-const yearOptions = computed(() => {
-  const currentYear = new Date().getFullYear();
-  const years = [];
-  for (let i = 0; i < 6; i++) {
-    years.push(currentYear - i);
+watch(selectedExport, (newValue) => {
+  if (newValue) {
+    exportData(newValue.action, newValue.format, newValue.modal);
   }
-  return years;
 });
 
-// 選中的年份 (默認當前年份)
-const selectedYear = ref(new Date().getFullYear());
-
-// 選中的月份 (默認當前月份)
-const selectedMonth = ref(new Date().getMonth() + 1);
-
-// 選中的季度 (根據當前月份計算當前季度)
-const selectedQuarter = ref(Math.ceil((new Date().getMonth() + 1) / 3));
-
-// 日期區間選擇
-const today = new Date().toISOString().split('T')[0];
-const startDate = ref(today);
-const endDate = ref(today);
-
-// 選擇時間範圍類型
-function selectRangeType(type) {
-  selectedRangeType.value = type;
-}
-
-// 匯出資料
-function exportData(type, format) {
-  // 根據選擇的範圍類型和日期構建匯出參數
-  let exportParams = {
-    selectedCategories: selectedCategory.value,
-    type: selectedRangeType.value,
-  };
-
-  switch (selectedRangeType.value) {
-    case 'year':
-      exportParams.year = selectedYear.value;
-      break;
-    case 'quarter':
-      exportParams.year = selectedYear.value;
-      exportParams.quarter = selectedQuarter.value;
-      break;
-    case 'month':
-      exportParams.year = selectedYear.value;
-      exportParams.month = selectedMonth.value;
-      break;
-    case 'date':
-      exportParams.startDate = startDate.value;
-      exportParams.endDate = endDate.value;
-      break;
-  }
-
-  console.log('匯出參數：', exportParams);
-
-  // 篩選符合時間範圍的任務
-  const filteredData = filterTasksByDateRange(categories, exportParams);
-   if(format === 'html'){
-    const htmlReport = convertToHtml(filteredData, exportParams);
-    if(type === 'preview'){
-      previewHtml(htmlReport);
-    }else{
-      downloadHtml(htmlReport);
-    }
-   }else if(format === 'json'){
-    console.log('format:',format)
-     if(type === 'preview'){
-       viewAs(format, filteredData);
-     }else {
-       exportAs(format, filteredData);
-     }
-   }
-
-  // 這裡可以調用你的 API 進行資料匯出
-  // exportDataApi(exportParams);
-  
-  // 關閉彈出窗口
-  // showExportModal.value = false;
-}
-
-function filterTasksByDateRange(categories, exportParams) {
-  // 創建一個深拷貝，避免修改原始數據
-  const filteredCategories = JSON.parse(JSON.stringify(categories));
-  
-  // 為不同的時間範圍類型定義過濾函數
-  const dateFilters = {
-    // 年份過濾
-    year: (task) => {
-      const taskDate = new Date(task.date);
-      return taskDate.getFullYear() === exportParams.year;
-    },
-    
-    // 季度過濾
-    quarter: (task) => {
-      const taskDate = new Date(task.date);
-      const taskYear = taskDate.getFullYear();
-      const taskMonth = taskDate.getMonth() + 1;
-      const taskQuarter = Math.ceil(taskMonth / 3);
-      
-      return taskYear === exportParams.year && taskQuarter === exportParams.quarter;
-    },
-    
-    // 月份過濾
-    month: (task) => {
-      const taskDate = new Date(task.date);
-      const taskYear = taskDate.getFullYear();
-      const taskMonth = taskDate.getMonth() + 1;
-      
-      return taskYear === exportParams.year && taskMonth === exportParams.month;
-    },
-    
-    // 日期範圍過濾
-    date: (task) => {
-      const taskTime = new Date(task.date).getTime();
-      const startTime = new Date(exportParams.startDate).getTime();
-      const endTime = new Date(exportParams.endDate).getTime();
-      
-      return taskTime >= startTime && taskTime <= endTime;
-    }
-  };
-  
-  // 選擇對應的過濾函數
-  const filterFunction = dateFilters[exportParams.type];
-  
-  if (!filterFunction) {
-    console.error('未知的時間範圍類型:', exportParams.type);
-    return filteredCategories;
-  }
-  
-  // 如果指定了類別，只保留選定的類別
-  if (exportParams.selectedCategories && exportParams.selectedCategories.length > 0) {
-    Object.keys(filteredCategories).forEach(categoryKey => {
-      if (exportParams.selectedCategories !== categoryKey) {
-        delete filteredCategories[categoryKey];
-      }
-    });
-  }
-
-  // 對每個類別的任務進行過濾
-  Object.keys(filteredCategories).forEach(categoryKey => {
-    const category = filteredCategories[categoryKey];
-    if (category.tasks && Array.isArray(category.tasks)) {
-      category.tasks = category.tasks.filter(task => {
-        // 確保任務具有有效的日期
-        return task.date && filterFunction(task);
-      });
-    }
-  });
-  
-  return filteredCategories;
-}
 
 
 
@@ -307,12 +152,15 @@ function filterTasksByDateRange(categories, exportParams) {
 
         <div class="modal-footer">
 
-          <!-- 時間範圍類型選擇 -->
           <div class="range-type-selector2">
-            <div @click="exportData('preview','json')" class="range-type-option"><i class="fa-solid fa-eye"></i>|　Preview JSON</div>
-            <div @click="exportData('download','json')" class="range-type-option"><i class="fa-solid fa-file-export"></i>|　Download JSON</div>
-            <div @click="exportData('preview','html')" class="range-type-option"><i class="fa-solid fa-eye"></i>|　Preview HTML</div>
-            <div @click="exportData('download','html')" class="range-type-option"><i class="fa-solid fa-file-export"></i>|　Download HTML</div>
+            <select v-model="selectedExport">
+              <option v-for="option in exportOptions" 
+                      :key="option.action + option.format" 
+                      :value="option"
+                      @click="exportData(option.action, option.format, option.modal)">
+                 {{ option.text }}
+              </option>
+            </select>
           </div>
 
           
