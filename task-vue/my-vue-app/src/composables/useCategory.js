@@ -167,7 +167,7 @@ export function useCategory(watchSource = null) {
         if (windowConfirm([`Are you sure you want to clear '${name}' tasks ?`,`你確定要刪除這個類別的所有任務嗎?`])) {
             categories[name].tasks = [];
             saveToLocalStorage();
-            successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
+            successNotyftMessage([`Permanently delete ${name} all tasks.`,`永久刪除這個類別的所有任務`]);
         }
     };
 
@@ -182,12 +182,12 @@ export function useCategory(watchSource = null) {
             if(taskCount < 1){
                 delete categories[name];
                 saveToLocalStorage();
-                successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
+                successNotyftMessage([`Permanently delete ${name}.`,`永久刪除這個類別`]);
             }else if (windowConfirm([`Are you sure you want to remove this category, it has ${taskCount} tasks?`,`你確定要刪除這個類別嗎，裡面還有 ${taskCount} 個任務?`])) {
-            
+                
                 delete categories[name];
                 saveToLocalStorage();
-                successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
+                successNotyftMessage([`Permanently delete ${name}.`,`永久刪除這個類別`]);
 
             }
         }

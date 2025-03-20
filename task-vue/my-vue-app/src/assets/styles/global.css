@@ -29,6 +29,7 @@ body {
 }
 
 .task-container {
+    position: relative;
     height: 150%;
     background: #2b2b2b;
     /* background-color: #2C2C2C; */
@@ -201,6 +202,11 @@ i {
     word-break: break-word;
     /* 避免超出容器 */
 }
+.notyf__icon i {
+    color: white !important; /* 強制白色 */
+    font-size: 20px;
+}
+
 
 .bhutuka-expanded-one-regular {
     font-family: "BhuTuka Expanded One", serif;

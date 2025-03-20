@@ -70,7 +70,7 @@ input[type="text"]{
   }
 
 .export-container {
-    max-height: 65vh;
+    max-height: 50vh;
     overflow-y: auto;
     padding: 10px;
     scrollbar-width: thin;
@@ -87,6 +87,19 @@ input[type="text"]{
 
 .export-container .urgent{
     background: #b53c2c;
+    transition: all 0.8s ease;
+}
+
+.light-mode .export-container .completed{
+    background: #2c83b5;
+    color: #fff;
+    transition: all 0.8s ease;
+}
+
+
+.light-mode .export-container .urgent{
+    background: #b53c2c;
+    color: #fff;
     transition: all 0.8s ease;
 }
 

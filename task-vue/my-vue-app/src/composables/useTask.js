@@ -233,10 +233,16 @@ export function useTask() {
 
     // If the task exists, toggle its urgent status
     if (targetTask) {
+      if(targetTask.completed){
+        warningNotyftMessageCheckData(
+          ['Task Completed Unable to set task status to Urgent.','任務已完成無法將任務狀態設置為緊急!'],
+        );
+        return;
+      }
       targetTask.urgent = !targetTask.urgent;
       if(targetTask.urgent){
         successNotyftMessageWithST(
-          ['Urgent task successfully!','已將任務狀態設置為緊急!'],
+          ['Task status is set to Urgent.','已將任務狀態設置為緊急!'],
           'gan-wu-hua-dou.mp3'
         );
       }else{
@@ -269,7 +275,7 @@ export function useTask() {
         );
       }else{
         successNotyftMessage(
-          ['Cancel finish task successfully!','重啟任務!'],
+          ['Restart task.','重啟任務!'],
         );
         // successNotyftMessageWithST(
         //   ['Cancel finish task successfully!','重啟任務!'],

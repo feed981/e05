@@ -138,7 +138,7 @@ function convertToHtml(filteredCategories, exportParams) {
         background-color: #474747;
       }
        th:first-child {
-  width: 20%;
+  width: 50%;
 }
 
         .task-normal{
@@ -186,8 +186,8 @@ function convertToHtml(filteredCategories, exportParams) {
       <table>
         <thead>
           <tr>
+          <th>Task content</th>
           <th>Date</th>
-            <th>Task content</th>
             <th>Status</th>
             <th>Priority</th>
             <!--<th>Created time</th>-->
@@ -202,8 +202,8 @@ function convertToHtml(filteredCategories, exportParams) {
           
           html += `
           <tr class="${taskClass}">
+          <td>${task.text}</td>
           <td>${task.date}</td>
-            <td>${task.text}</td>
             <td data-task-id="${task.updatetime}" data-date="${task.date}" data-category="${category.info.name}">
             ${task.completed ? 'completed' : (task.archive ? 'archive' : 'in progress')}
             </td>
@@ -478,7 +478,7 @@ export function useExport() {
             successNotyftMessage([`Deleting data, please wait...`,`刪除數據中請稍後`]);
             
             setTimeout(() => {
-                successNotyftMessage([`Successfully clear permanently...`,`永久刪除所有數據`]);
+                successNotyftMessage([`Permanently delete all data.`,`永久刪除所有數據`]);
             }, 4000);
     
             setTimeout(() => {
