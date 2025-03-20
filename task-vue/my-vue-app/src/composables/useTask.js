@@ -1,7 +1,6 @@
 import { ref, computed } from "vue";
 import { useCommon } from "@/composables/useCommon.js";
 import { useDate } from "@/composables/useDate.js";
-import { useRouter } from 'vue-router';
 import { useCategory } from "@/composables/useCategory.js";
 
 const isEdit = ref(false);
@@ -31,13 +30,13 @@ const editTask = ref({
 
 
 export function useTask() {
-  const router = useRouter();
 
   const { 
     windowConfirm,
     successNotyftMessageWithST,
     successNotyftMessage,
     warningNotyftMessageCheckData,
+    errorNotyftMessage,
   } = useCommon();
     
   const {
@@ -66,6 +65,7 @@ export function useTask() {
     
     if (!categories[categoryName]) {
       console.error(`Category ${categoryName} does not exist!`);
+      errorNotyftMessage([`Category name: '${categoryName}' does not exist!`, `'${categoryName}' 不存在!`]);
       return false;
     }
     
@@ -251,7 +251,6 @@ export function useTask() {
         );
       }
       saveToLocalStorage();
-      // router.go(0);
     }
   };
 
@@ -283,7 +282,6 @@ export function useTask() {
         // );
       }
       saveToLocalStorage();
-      // router.go(0);
     }
   };
 
@@ -413,8 +411,12 @@ export function useTask() {
     navigator.clipboard.writeText(text.trim())
         .then(() => 
           successNotyftMessage(['Copy success task text successfully!','複製成功!'])
-        )
-        .catch(err => console.error("Copy error!", err));
+      )
+      .catch(err => {
+          errorNotyftMessage(['Copy error!','錯誤']);
+          console.error("Copy error!", err)
+        }
+      );
       selectedCategory.value = category;
       task.value.text = text;
       task.value.date = date;

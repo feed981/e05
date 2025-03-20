@@ -6,7 +6,7 @@ import "notyf/notyf.min.css";
 
 import { useStore, useMuteStore } from "@/store/useStore";
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const notyf = new Notyf({
     duration: 5000, // 顯示 3 秒
@@ -15,6 +15,29 @@ const notyf = new Notyf({
         x: 'center',
         y: 'top'
     }
+});
+
+const notyf_success = new Notyf({
+    duration: 5000, // 訊息顯示時間
+    dismissible: true, // 允許關閉
+    position: {
+        x: 'center',
+        y: 'top',
+    },
+    types: [
+        {
+            type: 'success',
+            background: '#2dbd67', // 背景顏色
+            icon: {
+                style: {
+                    color: 'white', // 設定圖示顏色
+                    fontSize: '20px' // 設定大小，讓它更明顯
+                },
+                className: 'fa-solid fa-thumbs-up', // 使用 FontAwesome 圖標
+                tagName: 'i' // 使用 <i> 標籤
+            }
+        }
+    ]
 });
 
 const notyf_warning = new Notyf({
@@ -40,6 +63,30 @@ const notyf_warning = new Notyf({
     ]
 });
 
+const notyf_error = new Notyf({
+    duration: 5000, // 訊息顯示時間
+    dismissible: true, // 允許關閉
+    position: {
+        x: 'center',
+        y: 'top',
+    },
+    types: [
+        {
+            type: 'error',
+            background: '#ad2331', // 背景顏色
+            icon: {
+                style: {
+                    color: 'white', // 設定圖示顏色
+                    fontSize: '20px' // 設定大小，讓它更明顯
+                },
+                className: 'fa-solid fa-spider', // 使用 FontAwesome 圖標
+                tagName: 'i' // 使用 <i> 標籤
+            }
+        }
+    ]
+});
+
+
 let currentAudio = ref(null);
 
 export function useCommon() {
@@ -51,6 +98,10 @@ export function useCommon() {
         isSpeakMute,
         isSoundMute 
     } = useMuteStore();  
+
+    const route = useRoute();
+    const router = useRouter();
+
 
     const windowConfirm = (message) => {
         speechSynthesisSpeak(message[language.value]);
@@ -67,13 +118,23 @@ export function useCommon() {
         // console.log('2:'+language.value)
         // console.log('3:'+message[language.value])
         speechSynthesisSpeak(message[language.value]);
-        notyf.success(message[language.value]);
+        // notyf.success(message[language.value]);
+        notyf_success.open({
+            type: 'success',
+            message: message[language.value]
+        });
     };
 
     const errorNotyftMessage = (message) => {
         speechSynthesisSpeak(message[language.value]);
-        notyf.error(message[language.value]);
-        
+        // notyf.error(message[language.value]);
+        notyf_error.open({
+            type: 'error',
+            message: 'Please feedback this error, <br>' + message[language.value]
+        });
+        setTimeout(() => {
+            router.push('/task/v2/feedback');
+        }, 3000);
     };
 
     const warningNotyftMessageCheckData = (message) => {
@@ -154,7 +215,7 @@ export function useCommon() {
         }
     };
 
-    const route = useRoute();
+    
 
     const hiddenPlus = computed(() => {
         const path = '/task/v2';

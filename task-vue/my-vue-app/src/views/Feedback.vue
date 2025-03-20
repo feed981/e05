@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import emailjs from '@emailjs/browser';
+import { useCommon } from "@/composables/useCommon.js";
 
 // 初始化 emailjs
 onMounted(() => {
@@ -20,6 +21,10 @@ const sending = ref(false);
 const status = ref('');
 const isError = ref(false);
 
+const { 
+    errorNotyftMessage,
+} = useCommon();
+
 const handleSubmit = () => {
   sending.value = true;
   status.value = 'Sending...';
@@ -35,7 +40,7 @@ const handleSubmit = () => {
     formData.value
   ).then(
     (response) => {
-      console.log('Email sent successfully!', response);
+      // console.log('Email sent successfully!', response);
       status.value = 'Sending successfully!';
       sending.value = false;
 
@@ -50,6 +55,7 @@ const handleSubmit = () => {
     },
     (error) => {
       console.error('Error sending email:', error);
+      errorNotyftMessage([`Error sending email:${error}`, error]);
       status.value = 'Sending error, try later...';
       isError.value = true;
       sending.value = false;
