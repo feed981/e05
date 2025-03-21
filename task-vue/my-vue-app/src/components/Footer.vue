@@ -1,10 +1,15 @@
 <script setup>
 import { useCommon } from "@/composables/useCommon.js";
+import { useHintStore } from '@/store/useStore';
+
 const { 
   hiddenFooter,
+  hiddenHint,
 } = useCommon();
 
+const hideStore = useHintStore();
 </script>
+
 <template>
     <div class="footer">
         <router-link :to="{ name: 'v2.tasks.new' }" v-show="hiddenFooter" class="clean-link">
@@ -13,6 +18,7 @@ const {
         <router-link :to="{ name: 'v2.category.list' }" v-show="hiddenFooter" class="clean-link">
             <i class="fa-solid fa-icons"></i>
         </router-link>
+        <i class="fa-solid fa-question" @click="hideStore.toggleBars" v-show="hiddenHint" ></i>
     </div>
 </template>
 

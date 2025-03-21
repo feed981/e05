@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useTask } from "@/composables/useTask.js";
 import { useCategory } from "@/composables/useCategory.js";
 import { useDate } from "@/composables/useDate.js";
+import { useHintStore } from '@/store/useStore';
 
 const {
   categories,
@@ -45,6 +46,8 @@ if(props.page){
 //   'task.value.date:',props.date,
 // )
 
+
+const hideStore = useHintStore();
 </script>
 
 
@@ -78,7 +81,7 @@ if(props.page){
   </div>
   <div class="describe" v-if="isEdit">You can select a new category or choose the task time or edit the task content.</div>
   <div class="describe" v-if="!isEdit && !isFromTaskListCondition">First, you must select a category, then choose the task time, and enter the task content.</div>
-  <div class="describe common-describe" v-if="isHint">if you do not need to perform this action, 
+  <div class="describe common-describe" v-if="hideStore.isOpen">if you do not need to perform this action, 
         you can click <router-link :to="{ name: 'v2.home' }" class="clean-link" >home</router-link>
         or the icon in the top right corner <i class="fa-solid fa-arrow-left"></i> to return to the homepage.</div>
 

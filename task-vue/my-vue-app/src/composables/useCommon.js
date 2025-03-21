@@ -33,7 +33,7 @@ const notyf_success = new Notyf({
                     color: 'white', // 設定圖示顏色
                     fontSize: '20px' // 設定大小，讓它更明顯
                 },
-                className: 'fa-solid fa-thumbs-up', // 使用 FontAwesome 圖標
+                className: 'fa-solid fa-check', // 使用 FontAwesome 圖標
                 tagName: 'i' // 使用 <i> 標籤
             }
         }
@@ -259,6 +259,25 @@ export function useCommon() {
         return true;
     });
 
+    const hiddenHint = computed(() => {
+        const path = '/task/v2';
+        const exactHiddenPaths = [
+            path+'/tasks/new',
+            path+'/category/list',
+        ];
+
+        // Check for exact matches first
+        if (exactHiddenPaths.includes(route.path)) {
+            return true;
+        }
+
+        const dynamicPattern = /^\/task\/v2\/[^/]+\/tasks\/[^/]+$/;
+        if (dynamicPattern.test(route.path)) {
+            return true;
+        }
+        return false;
+    });
+
     return {
         windowConfirm,
         successNotyftMessageWithST,
@@ -269,5 +288,6 @@ export function useCommon() {
         hiddenPlus,
         hiddenPrepage,
         hiddenFooter,
+        hiddenHint,
     };
 }
