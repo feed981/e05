@@ -249,6 +249,30 @@ h1 i{
     color: inherit;
   }
 
+
+  
+.describe{
+    margin  : 10px 0px;
+    text-align: left;
+    color: #797979;
+  }
+  
+  .common-describe .clean-link{
+    color: #1287ca;
+  }
+  
+  .common-describe i{
+    font-size: 12px;
+    color: #1287ca;
+  }
+
+ .light-mode .common-describe i{
+    font-size: 12px;
+    color: #1287ca;
+  }
+
+
+  
 @media screen and (max-width: 768px) {
     body {
         height: auto;

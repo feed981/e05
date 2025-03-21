@@ -102,7 +102,7 @@ export const useExportMenuStore = defineStore('export', () => {
 
   
 export const useMuteStore = defineStore('mute', () => {
-  const isSpeakMute = ref(false);
+  const isSpeakMute = ref(true);
   const isSoundMute = ref(true);
 
   const { 

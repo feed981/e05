@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 // 定义响应式变量用于存储新分类名称
 /// 從 export 搬出來 ，修改 useCategory.js 为单例模式
 const isEdit = ref(false);
-const isCopy = ref(false);
+const isClone = ref(false);
 const newCategoryName = ref('');
 const categoryName = ref('');
 const refreshKey = ref(0);
@@ -113,7 +113,7 @@ export function useCategory(watchSource = null) {
 
         saveToLocalStorage();
         successNotyftMessage(['Copy category successfully!','已複製類別!']);
-        isCopy.value = false;
+        isClone.value = false;
         newCategoryName.value = '';
         router.push(`/task/v2/${newName}/tasks`);
     };
@@ -150,7 +150,7 @@ export function useCategory(watchSource = null) {
         if (!categories[name] && !datetime)  return;
         categoryName.value = name;
         newCategoryName.value = name;
-        isCopy.value = true;
+        isClone.value = true;
         isEdit.value = false;
     };
     
@@ -159,7 +159,7 @@ export function useCategory(watchSource = null) {
         categoryName.value = name;
         newCategoryName.value = name;
         isEdit.value = true;
-        isCopy.value = false;
+        isClone.value = false;
     };
 
     const clearCategoryTasks = (name, datetime) => {
@@ -235,7 +235,7 @@ export function useCategory(watchSource = null) {
         clearCategoryTasks,
         removeCategory,
         setCopyCategory,
-        isCopy,
+        isClone,
         copyCategory,
     };
 }
