@@ -10,6 +10,7 @@ import TasksNew from '@/components/TasksNew.vue';
 import ExportModal from '@/components/ExportModal.vue';
 
 import { useMenuStore } from '@/store/useStore';
+import { useCategory } from "@/composables/useCategory.js";
 import { useTask } from "@/composables/useTask.js";
 import NotFound from '@/views/404.vue'  // 你的 404 頁面
 
@@ -31,6 +32,7 @@ const routes = [
       { path: 'category/list', name: 'v2.category.list', component: CategoryList },
       { path: ':category/tasks', name: 'v2.category.tasks', component: CategoryTaskList },
       { path: ':category/tasks/:date', name: 'v2.category.tasks.date', component: CategoryTaskDateList },
+      // { path: ':category/tasks/:date/:action', name: 'v2.category.tasks.date.action', component: CategoryTaskDateList },
       { path: 'export', name: 'v2.export', component: ExportModal },
     ]
   }
@@ -43,9 +45,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const menuStore = useMenuStore(); // 確保 store 在這裡被調用
+  const category = useCategory();
+  const task = useTask();
   //  close menu
   menuStore.isOpen = false;
-  // console.lg(to.path)
+  category.isEdit.value = false;
+  category.isClone.value = false;
+  task.isEdit.value = false;
   next();
 });
 

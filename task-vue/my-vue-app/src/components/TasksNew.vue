@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import { useTask } from "@/composables/useTask.js";
 import { useCategory } from "@/composables/useCategory.js";
 import { useDate } from "@/composables/useDate.js";
@@ -31,9 +32,12 @@ if(!isEdit.value){
   selectedCategory.value = '';
 }
 
+const isFromTaskListCondition = ref(false);
+
 if(props.page){
   selectedCategory.value = props.categoryName;
   task.value.date = props.date;
+  isFromTaskListCondition.value = true;
 }
 
 // console.log(
@@ -72,6 +76,12 @@ if(props.page){
       <i v-if="!isEdit" title="Let's do it bro!" @click="addTaskToCategory(task)" class="fa-solid fa-paper-plane"></i>
     </div>
   </div>
+  <div class="describe" v-if="isEdit">You can select a new category or choose the task time or edit the task content.</div>
+  <div class="describe" v-if="!isEdit && !isFromTaskListCondition">First, you must select a category, then choose the task time, and enter the task content.</div>
+  <div class="describe common-describe" v-if="isHint">if you do not need to perform this action, 
+        you can click <router-link :to="{ name: 'v2.home' }" class="clean-link" >home</router-link>
+        or the icon in the top right corner <i class="fa-solid fa-arrow-left"></i> to return to the homepage.</div>
+
 </template>
 
 <style scoped>

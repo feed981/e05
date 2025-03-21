@@ -10,7 +10,7 @@ const {
   newCategoryName,
   createCategory,
   isEdit,
-  isCopy,
+  isClone,
   editCategory,
   copyCategory,
 } = useCategory();
@@ -21,6 +21,9 @@ const {
   urgentTaskCount,
 } = useTask();
 
+if(!isEdit.value){
+  newCategoryName.value = '';
+}
 
 </script>
 
@@ -35,13 +38,17 @@ const {
         <input type="text" v-model="newCategoryName" placeholder="Enter a new category..." required>
         <div class="task-menu">
             <!-- 修复函数调用语法 -->
-            <i v-if="isCopy" @click="copyCategory(categoryName, newCategoryName)" class="fa-solid fa-clone"></i>
-            <i v-if="!isEdit && !isCopy" title="As you see is add a new category!" @click="createCategory(newCategoryName)" class="fa-solid fa-paper-plane"></i>
+            <i v-if="isClone" @click="copyCategory(categoryName, newCategoryName)" class="fa-solid fa-clone"></i>
             <i v-if="isEdit" title="As you see is add a new category!" @click="editCategory(categoryName, newCategoryName)" class="fa-solid fa-pen-to-square"></i>
+            <i v-if="!isEdit && !isClone" title="As you see is add a new category!" @click="createCategory(newCategoryName)" class="fa-solid fa-paper-plane"></i>
         </div>
       </div>
-      
-      <br>
+      <div class="describe" v-if="!isEdit && !isClone">You can create a new category here.</div> 
+      <div class="describe" v-if="isEdit">You can edit this category name.</div> 
+      <div class="describe" v-if="isClone">You can clone all tasks from an existing category to a new category, but please note that category names cannot be duplicated.</div>
+      <div class="describe common-describe" v-if="isHint">if you do not need to perform this action, 
+        you can click <router-link :to="{ name: 'v2.home' }" class="clean-link" >home</router-link>
+        or the icon in the top right corner <i class="fa-solid fa-arrow-left"></i> to return to the homepage.</div>
 
       <div v-for="(categoryData, categoryKey) in categories" :key="categoryKey">
         <div class="category" >

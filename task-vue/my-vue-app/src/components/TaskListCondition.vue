@@ -9,7 +9,7 @@ const {
   allTaskCount,
   finishTaskCount,
   urgentTaskCount,
-  allTasklist
+  allTasklist,
 } = useTask();
 
 const props = defineProps({
