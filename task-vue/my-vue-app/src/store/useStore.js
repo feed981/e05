@@ -124,3 +124,15 @@ export const useMuteStore = defineStore('mute', () => {
     isSoundMute, toggleSound,
    };
 });
+
+export const useHintStore = defineStore('hint', () => {
+  const isOpen = ref(false);
+
+  function toggleBars() {
+    isOpen.value = !isOpen.value;
+  }
+
+  return { 
+    isOpen, toggleBars,
+   };
+});
