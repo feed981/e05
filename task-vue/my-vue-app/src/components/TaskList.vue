@@ -6,12 +6,14 @@ const {
   allTaskCount,
   finishTaskCount,
   urgentTaskCount,
+  normalTaskCount,
   allTasklist
 } = useTask();
 
 const props = defineProps({
   page: String,
   categoryName: String,
+  status: String,
 });
 
 // console.log('category exists:', props.categoryName === '');
@@ -20,15 +22,32 @@ const props = defineProps({
 // Computed property to filter tasks based on categoryName
 const filteredTasklist = computed(() => {
   const category = props.categoryName;
+  const status = props.status;
   if (!category) {
     return allTasklist.value; // Return all tasks if no category specified
   } else {
     // Create a new plain object with just the specific category
-
+    
     // Only return the specific category
     const filtered = {};
     if (allTasklist.value[category]) {
-      filtered[category] = { ...allTasklist.value[category] };
+      if(status){
+        const filteredTasks = {}; // 儲存篩選結果的新 JSON
+
+        Object.entries(allTasklist.value[category]).forEach(([date, tasks]) => {
+          const filtered = tasks.filter(task => task.status === status);
+          if (filtered.length > 0) {
+            filteredTasks[date] = filtered; // 只存入有符合條件的資料
+          }
+        });
+
+        filtered[category] = filteredTasks;
+
+        // filtered[category] = { ...allTasklist.value[category]['2025-03-10'].find(task => task.status === props.status) };
+
+      }else{
+        filtered[category] = { ...allTasklist.value[category] };
+      }
     }
     return filtered;
   }
@@ -50,12 +69,21 @@ const filteredTasklist = computed(() => {
         </div>
       </router-link>
       <div class="export-category">
-        <i title="This category task count!" class="fa-solid fa-list-check"></i> : {{
-          allTaskCount(category) }}
-        　<i title="This category archive task count!" class="fa-solid fa-flag-checkered"></i> : {{
-          finishTaskCount(category) }}
-        　<i title="This category urgent task count!" class="fa-solid fa-thumbtack"></i> : {{
-          urgentTaskCount(category) }}
+        <router-link :to="{ name: 'v2.category.tasks', params: { category: `${category}`} }" class="clean-link">
+          <i class="fa-regular fa-calendar"></i> : {{ allTaskCount(category) }}
+        </router-link>
+
+        <router-link :to="{ name: 'v2.category.tasks.status', params: { category: `${category}`,status: 'normal' } }" class="clean-link">
+          <i class="fa-solid fa-person-skiing-nordic"></i> : {{ normalTaskCount(category) }}
+        </router-link>
+        
+        <router-link :to="{ name: 'v2.category.tasks.status', params: { category: `${category}`,status: 'completed' } }" class="clean-link">
+          <i class="fa-solid fa-font-awesome"></i> : {{ finishTaskCount(category) }}
+        </router-link>
+        
+        <router-link :to="{ name: 'v2.category.tasks.status', params: { category: `${category}`,status: 'urgent' } }" class="clean-link">
+          <i class="fa-solid fa-thumbtack"></i> : {{ urgentTaskCount(category) }}
+        </router-link>
       </div>
 
       <div v-for="(tasks, date) in dates" :key="date" class="post">
@@ -72,7 +100,7 @@ const filteredTasklist = computed(() => {
                 'completed': task.status === 'completed', 
                 'urgent': task.status === 'urgent' 
               }">
-              <i v-if="task.status === 'completed'" class="fa-solid fa-flag-checkered"></i>
+              <i v-if="task.status === 'completed'" class="fa-solid fa-font-awesome"></i>
               <i v-if="task.status === 'urgent'" class="fa-solid fa-thumbtack"></i>
               {{ index + 1 }}. {{ task.text }}
             </div>

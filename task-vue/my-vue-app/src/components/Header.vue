@@ -42,6 +42,11 @@ const { hiddenPrepage } = useCommon();
                         <li @click="resetdata">
                             <i class="fa-solid fa-toilet-paper"></i><span>|　Clear all data</span>
                         </li>
+                        <router-link :to="{ name: 'v2.import.json' }" class="clean-link">
+                            <li>
+                                <i class="fa-solid fa-file-import"></i>|　Import
+                            </li>
+                        </router-link>
                         <router-link :to="{ name: 'v2.export' }" class="clean-link">
                             <li>
                                 <i class="fa-solid fa-file-export"></i>|　Export
@@ -51,7 +56,7 @@ const { hiddenPrepage } = useCommon();
                             <li><i class="fa-solid fa-icons"></i>|　Add new category</li>
                         </router-link>
                         <router-link :to="{ name: 'v2.tasks.new' }" class="clean-link">
-                            <li><i class="fa-solid fa-list-check"></i>|　Add new task</li>
+                            <li><i class="fa-regular fa-calendar"></i>|　Add new task</li>
                         </router-link>
                         <router-link :to="{ name: 'v2.home' }" class="clean-link" v-show="hiddenPrepage">
                             <li><i class="fa-solid fa-arrow-left"></i>|　Pre page</li>

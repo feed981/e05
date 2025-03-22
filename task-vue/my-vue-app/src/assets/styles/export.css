@@ -44,6 +44,11 @@
     font-size: 14px;
   }
 
+  .export-category .clean-link{
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
   .post {
     cursor: pointer;
     background: #222;

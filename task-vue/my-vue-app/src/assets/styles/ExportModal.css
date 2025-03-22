@@ -64,18 +64,30 @@
   
   
   .modal-backdrop {
+    width: 370px;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
+    left: 175px;
+    
+    background-color: rgb(63 63 63 / 50%);
+    /* display: flex; */
+    /* justify-content: center; */
     align-items: center;
     z-index: 1000;
   }
   
+  .modal-backdrop{
+    left: 90px;
+    bottom: 70px;
+    background-color: rgb(63 63 63 / 50%);
+  }
+  
+  
+.describe{
+  text-align: left;
+  padding: 0px 5px 20px 15px;
+}
+
+
   .light-mode select ,
   .light-mode .date ,
   .light-mode .modal-content {
@@ -126,9 +138,12 @@
     color: #fff;
   }
   
-  .close-btn {
+ .close-btn {
+  padding: 5px 10px 0px 0px;
+    text-align: right;
     background: none;
     border: none;
+    color: #fff;
     font-size: 24px;
     cursor: pointer;
   }

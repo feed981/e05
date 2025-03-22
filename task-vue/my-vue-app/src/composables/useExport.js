@@ -168,7 +168,7 @@ export function useExport() {
             try {
                 const json = JSON.parse(e.target.result);
                 if(type === 'overwrite'){
-                    localStorage.setItem("categories", JSON.stringify(json.categories));
+                    localStorage.setItem("categories", JSON.stringify(json));
                     successNotyftMessage([`Coverage completed and reorganizing in progress...`,`資料覆蓋已完成，重組中請稍等...`]);
                     isLoading.value = true;
                 }else if(type === 'append'){

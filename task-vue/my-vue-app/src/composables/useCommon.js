@@ -233,8 +233,10 @@ export function useCommon() {
         }
         
         // Check dynamic path with regex pattern
-        const dynamicPattern = /^\/task\/v2\/[^/]+\/tasks\/[^/]+$/;
-        if (dynamicPattern.test(route.path)) {
+        if (/^\/task\/v2\/[^/]+\/tasks\/[^/]+$/.test(route.path)) {
+            return false;
+        }
+        if (/^\/task\/v2\/[^/]+\/tasks\/[^/]+(\/normal|\/completed|\/urgent)$/.test(route.path)) {
             return false;
         }
 

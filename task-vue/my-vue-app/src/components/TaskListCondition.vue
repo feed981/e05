@@ -9,6 +9,7 @@ const {
   allTaskCount,
   finishTaskCount,
   urgentTaskCount,
+  normalTaskCount,
   allTasklist,
 } = useTask();
 
@@ -16,6 +17,7 @@ const props = defineProps({
   page: String,
   categoryName: String,
   date: String,
+  status: String,
 });
 
 // Computed property to filter tasks based on categoryName
@@ -23,6 +25,7 @@ const props = defineProps({
 const filteredTasklist = computed(() => {
   const category = props.categoryName;
   const date = props.date;
+  const status = props.status;
   
   if (!category || !date) {
     return [];  // 如果没有类别或日期，返回空数组
@@ -32,31 +35,42 @@ const filteredTasklist = computed(() => {
   if (!allTasklist.value || !allTasklist.value[category]) {
     return [];
   }
-  
-  // 尚未完成
-  const filtered = allTasklist.value[category][date];
-  return filtered;  // 直接返回任务数组，而不是嵌套对象
+  // console.log('status:',status)
+  if(status){
+    return allTasklist.value[category][date].filter(
+      task => task.status === status
+    );
+  }
+  return allTasklist.value[category][date]; // 直接返回任务数组，而不是嵌套对象
 });
 
 </script>
 
 <template>
-  <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page }}</h1>
+  <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page + ' ' + date}}</h1>
   <TasksNew 
     v-bind:page="categoryName"
     v-bind:categoryName="categoryName"
     v-bind:date="date"
   />
   <br>
-  <div class="title-date">{{ date }}</div>
 
   <div class="export-category">
-    <i title="This category task count!" class="fa-solid fa-list-check"></i> : {{
-      allTaskCount(categoryName, date) }}
-    　<i title="This category archive task count!" class="fa-solid fa-flag-checkered"></i> : {{
-      finishTaskCount(categoryName, date) }}
-    　<i title="This category urgent task count!" class="fa-solid fa-thumbtack"></i> : {{
-      urgentTaskCount(categoryName, date) }}
+    <router-link :to="{ name: 'v2.category.tasks.date', params: { category: `${categoryName}`} }" class="clean-link">
+      <i class="fa-regular fa-calendar"></i> : {{ allTaskCount(categoryName, date) }}
+    </router-link>
+
+    <router-link :to="{ name: 'v2.category.tasks.date.status', params: { category: `${categoryName}`,status: 'normal' } }" class="clean-link">
+      <i class="fa-solid fa-person-skiing-nordic"></i> : {{ normalTaskCount(categoryName, date) }}
+    </router-link>
+    
+    <router-link :to="{ name: 'v2.category.tasks.date.status', params: { category: `${categoryName}`,status: 'completed' } }" class="clean-link">
+      <i class="fa-solid fa-font-awesome"></i> : {{ finishTaskCount(categoryName, date) }}
+    </router-link>
+    
+    <router-link :to="{ name: 'v2.category.tasks.date.status', params: { category: `${categoryName}`,status: 'urgent' } }" class="clean-link">
+      <i class="fa-solid fa-thumbtack"></i> : {{ urgentTaskCount(categoryName, date) }}
+    </router-link>
   </div>
 
   <div class="export-container">
@@ -104,5 +118,9 @@ const filteredTasklist = computed(() => {
     max-height: 35vh;
 }  
 
+.export-category .clean-link{
+    font-size: 14px;
+    margin-right: 10px;
+  }
 </style>
   
