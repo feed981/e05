@@ -120,6 +120,7 @@ export function useTask() {
     }
     return categories[category].tasks.length; // 獲取該分類下所有任務數量
   };
+  
 
   // 計算已完成的任務數量
   const finishTaskCount = (category, date) => {
@@ -132,11 +133,14 @@ export function useTask() {
     return categories[category].tasks.filter(task => task.completed).length;
   };
 
-  const NotfinishTaskDateCount = (category, date) => {
+  const normalTaskCount = (category, date) => {
     if (!categories[category]) return 0; // 確保分類存在
-    return categories[category].tasks.filter(
-      task => !task.completed && task.date === date
-    ).length;
+    if(date){
+      return categories[category].tasks.filter(
+        task => task.date === date && !task.urgent && !task.completed
+      ).length;
+    }
+    return categories[category].tasks.filter(task => !task.urgent && !task.completed).length;
   };
 
 
@@ -429,6 +433,7 @@ export function useTask() {
     allTaskCount,
     finishTaskCount,
     urgentTaskCount,
+    normalTaskCount,
     allTasklist,
     addTaskToCategory,
     finishTask,

@@ -30,8 +30,22 @@ const routes = [
       { path: 'import/as/json', name: 'v2.import.json', component: ImportAsJson },
       { path: 'tasks/new', name: 'v2.tasks.new', component: TasksNew },
       { path: 'category/list', name: 'v2.category.list', component: CategoryList },
-      { path: ':category/tasks', name: 'v2.category.tasks', component: CategoryTaskList },
-      { path: ':category/tasks/:date', name: 'v2.category.tasks.date', component: CategoryTaskDateList },
+      {
+        path: ':category/tasks',
+        component: CategoryTaskList,
+        children: [
+          { path: '', name: 'v2.category.tasks', component: CategoryTaskList },
+          { path: ':status', name: 'v2.category.tasks.status', component: CategoryTaskList }
+        ]
+      },
+      {
+        path: ':category/tasks/:date',
+        component: CategoryTaskDateList,
+        children: [
+          { path: '', name: 'v2.category.tasks.date', component: CategoryTaskDateList },
+          { path: ':status', name: 'v2.category.tasks.date.status', component: CategoryTaskDateList }
+        ]
+      },
       // { path: ':category/tasks/:date/:action', name: 'v2.category.tasks.date.action', component: CategoryTaskDateList },
       { path: 'export', name: 'v2.export', component: ExportModal },
     ]

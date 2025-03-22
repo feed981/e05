@@ -3,7 +3,7 @@ import { useTask } from "@/composables/useTask.js";
 import { useCategory } from "@/composables/useCategory.js";
 // import CategoryNew from '@/components/CategoryNew.vue'
 import CategoryMenu from '@/components/CategoryMenu.vue'
-import { useHintStore } from '@/store/useStore';
+import Hint from '@/components/Hint.vue'
 
 const {
   categories,
@@ -26,7 +26,6 @@ if(!isEdit.value){
   newCategoryName.value = '';
 }
 
-const hideStore = useHintStore();
 </script>
 
 
@@ -48,9 +47,7 @@ const hideStore = useHintStore();
       <div class="describe" v-if="!isEdit && !isClone">You can create a new category here.</div> 
       <div class="describe" v-if="isEdit">You can edit this category name.</div> 
       <div class="describe" v-if="isClone">You can clone all tasks from an existing category to a new category, but please note that category names cannot be duplicated.</div>
-      <div class="describe common-describe" v-if="hideStore.isOpen">if you do not need to perform this action, 
-        you can click <router-link :to="{ name: 'v2.home' }" class="clean-link" >home</router-link>
-        or the icon in the top right corner <i class="fa-solid fa-arrow-left"></i> to return to the homepage.</div>
+      <Hint/>
 
       <div v-for="(categoryData, categoryKey) in categories" :key="categoryKey">
         <div class="category" >

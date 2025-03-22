@@ -11,6 +11,7 @@ const route = useRoute();
     v-bind:page="route.params.category" 
     v-bind:categoryName="route.params.category" 
     v-bind:date="route.params.date" 
+    v-bind:status="route.params.status" 
   />
 </template>
 

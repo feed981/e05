@@ -10,6 +10,7 @@ const route = useRoute();
   <TaskList 
     v-bind:page="route.params.category" 
     v-bind:categoryName="route.params.category" 
+    v-bind:status="route.params.status" 
   />
 </template>
 

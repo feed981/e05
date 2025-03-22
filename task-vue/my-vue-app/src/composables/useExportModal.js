@@ -460,7 +460,7 @@ function convertToHtml1(filteredCategories, exportParams) {
         color: #efefef;
         }
       .task-completed {
-        text-decoration: line-through;
+        /*text-decoration: line-through;*/
         color: #7f8c8d;
       }
       .task-urgent {
@@ -505,8 +505,11 @@ function convertToHtml1(filteredCategories, exportParams) {
                   groupedTasks.get(task.date).push(task);
                 });
 
+                const sortedDates = Array.from(groupedTasks.keys()).sort((a, b) => new Date(b) - new Date(a));
+
                 // 2. 依據日期依次生成 HTML
-                groupedTasks.forEach((taskList, date) => {
+                sortedDates.forEach((date) => {
+                  const taskList = groupedTasks.get(date);
                   html += `<div class="log-entry"><div class="date-header">${date}</div>`;  // 新的日期區塊
                   taskList.forEach((task, index)=> {
                     // 判斷 CSS 類別
@@ -692,8 +695,9 @@ function filterTasksByDateRange(categories, exportParams) {
   // 選擇對應的過濾函數
   const filterFunction = dateFilters[exportParams.type];
   
-  if (!filterFunction) {
-    // console.error('未知的時間範圍類型:', exportParams.type);
+  if (!filterFunction && exportParams.selectedCategories === ''){
+
+      // console.error('未知的時間範圍類型:', exportParams.type);
     return filteredCategories;
   }
   
@@ -711,8 +715,12 @@ function filterTasksByDateRange(categories, exportParams) {
     const category = filteredCategories[categoryKey];
     if (category.tasks && Array.isArray(category.tasks)) {
       category.tasks = category.tasks.filter(task => {
+        if(!filterFunction){
+          return task.date;
+        }else{
+          return task.date && filterFunction(task);
+        }
         // 確保任務具有有效的日期
-        return task.date && filterFunction(task);
       });
     }
   });
