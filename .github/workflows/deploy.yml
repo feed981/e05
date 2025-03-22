@@ -38,6 +38,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # 這是 User 的憑證
           role-to-assume: arn:aws:iam::533267147653:role/GitHubActionsS3Role-task-v2
           aws-region: ap-southeast-2
+          role-duration-seconds: 900  # 將此值減小，例如設為15分鐘
 
       - name: Deploy to S3
         run: aws s3 sync ./task-vue/my-vue-app/dist s3://fedoubt-prod-web-assets/task/v2 --delete
