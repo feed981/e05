@@ -23,11 +23,14 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
+        working-directory: ./task-vue/my-vue-app  # 完整路徑到Vue項目目錄
         run: npm install
 
       - name: Build project
+        working-directory: ./task-vue/my-vue-app  # 完整路徑到Vue項目目錄
         run: npm run build
 
+# ... AWS credential setup ...
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -37,4 +40,4 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: Deploy to S3
-        run: aws s3 sync ./dist s3://fedoubt-prod-web-assets/task/v2 --delete
+        run: aws s3 sync ./task-vue/my-vue-app/dist s3://fedoubt-prod-web-assets/task/v2 --delete
