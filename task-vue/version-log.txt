@@ -19,7 +19,7 @@ S3 + CloudFront + VUE3
 2. import as json overwrite
 3. scripts: After npm run build is executed, it will be automatically synchronized to another gitpage push
 4. GitHub Actions .github/workflows/deploy.yml
-5. iam policy add sts:TagSession, check role Trust relationships
+5. iam policy add sts:TagSession, check role Trust relationships, add sts:TagSession
 
 
 885845c2a694b8b7ef39d190952afb3e080db8c4
