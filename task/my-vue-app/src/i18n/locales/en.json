@@ -1,0 +1,231 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "profile": "Profile",
+    "settings": "Settings",
+    "search": "Search",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "home": "home"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "services": "Services"
+  },
+  "task": {
+    "new": {
+      "title": "New Task!",
+      "category": "Category",
+      "categoryPlaceholder": "You can choose your category for your task, if you don't have one you should add a new category first!",
+      "datePlaceholder": "Must set a date for this task!",
+      "textPlaceholder": "Enter a task here...",
+      "editTooltip": "Edit this task content!",
+      "addTooltip": "Let's do it bro!",
+      "editHint": "You can select a new category or choose the task time or edit the task content.",
+      "newHint": "First, you must select a category, then choose the task time, and enter the task content."
+    },
+    "empty": {
+      "normal": "No normal tasks at the moment",
+      "urgent": "No urgent tasks at the moment",
+      "completed": "No completed tasks at the moment"
+    },
+    "menu": {
+      "copy": "Copy task text",
+      "edit": "Edit task",
+      "urgent": "Set urgent task",
+      "finish": "Finish task",
+      "remove": "Remove task",
+      "archive": "Archive task"
+    },
+    "status": {
+      "completed": "completed",
+      "urgent": "urgent",
+      "normal": "normal"
+    },
+    "confirm": {
+      "remove": "Are you sure you want to remove this task?",
+      "finish": "Are you sure you want to mark this task as finished?"
+    }
+  },
+  "hint": {
+    "returnMessage": {
+      "before": "If you do not need to perform this action, you can click",
+      "middle": "or the icon in the top right corner",
+      "after": "to return to the homepage."
+    }
+  },
+  "header": {
+    "sections": {
+      "core": "core",
+      "data": "data",
+      "settings": "settings",
+      "others": "others",
+      "navigation": "navigation"
+    },
+    "menu": {
+      "language": "Language",
+      "login": "Login",
+      "qrcode": "QR-Code",
+      "darkMode": "Toggle dark-mode",
+      "lightMode": "Toggle light-mode",
+      "feedback": "Feedback",
+      "clearData": "Clear all data",
+      "import": "Import",
+      "export": "Export",
+      "addCategory": "Add new category",
+      "addTask": "Add new task",
+      "prePage": "Pre page",
+      "close": "Close the {sections} menu"
+    }
+  },
+  "category": {
+    "copy": "Copy category",
+    "edit": "Edit category",
+    "clear": "Clear category tasks",
+    "remove": "Remove category",
+    "confirmClear": "Are you sure you want to clear all tasks in this category?",
+    "confirmRemove": "Are you sure you want to remove this category?",
+    "title": "All Categories!",
+    "input": {
+      "placeholder": "Enter a new category..."
+    },
+    "actions": {
+      "clone": "Clone this category and its tasks",
+      "edit": "Edit this category name",
+      "create": "Create a new category"
+    },
+    "hints": {
+      "create": "You can create a new category here.",
+      "edit": "You can edit this category name.",
+      "clone": "You can clone all tasks from an existing category to a new category, but please note that category names cannot be duplicated."
+    },
+    "counts": {
+      "tasks": "This category task count!",
+      "archived": "This category archive task count!",
+      "urgent": "This category urgent task count!"
+    }
+  },
+  "export": {
+    "title": "Export File",
+    "chooseCategory": "Choose your export category",
+    "allCategory": "All category",
+    "categoryPlaceholder": "You can choose your category for your task, if you don't have one you should add a new category first!",
+    "chooseDateRange": "Choose your export date range",
+    "dateRange": {
+      "all": "all",
+      "year": "Year",
+      "quarter": "Quarter",
+      "month": "Month",
+      "date": "Custom Date"
+    },
+    "labels": {
+      "year": "Year",
+      "quarter": "Quarter",
+      "month": "Month",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    }
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalid_email": "Invalid email address",
+    "password_length": "Password must be at least 8 characters",
+    "network_error": "Network error occurred",
+    "unknown_error": "An unknown error occurred"
+  },
+  "messages": {
+    "success": "Operation successful",
+    "error": "Operation failed",
+    "confirm_delete": "Are you sure you want to delete this?",
+    "data_updated": "Data updated successfully",
+    "please_wait": "Please wait..."
+  },
+  "feedback": {
+    "title": "FEEDBACK!",
+    "form": {
+      "emailPlaceholder": "Enter your email address",
+      "namePlaceholder": "Enter your name...",
+      "messagePlaceholder": "Enter your message here...",
+      "submitTooltip": "Send your feedback mail!"
+    },
+    "status": {
+      "sending": "Sending...",
+      "success": "Sending successfully!",
+      "error": "Sending error, try later..."
+    },
+    "error": {
+      "message": "Error sending email: {error}"
+    }
+  },
+  "import": {
+    "title": "Import as JSON!",
+    "fileInput": {
+      "title": "Select a JSON file to import"
+    },
+    "actions": {
+      "overwrite": "Overwrite, careful!",
+      "append": "Append, will keep the original, but still can work ha!"
+    },
+    "hints": {
+      "overwrite": "Import existing json document to overwrite all existing data!"
+    }
+  },
+  "language": {
+    "en": "English",
+    "zh": "Chinese"
+  },
+  "login": {
+    "title": "LOGIN!",
+    "actions": {
+      "signInWithGoogle": "Sign in with Google",
+      "signInWithGoogleOAuth": "Sign in with Google OAuth",
+      "logout": "Logout"
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "selectDate": "Select a date to view tasks",
+    "tasksForDate": "Tasks for {date}",
+    "noTasks": "No tasks scheduled for this date",
+    "unknownCategory": "Unknown Category",
+    "hint": "View all tasks from different categories for the selected date",
+    "navigation": {
+      "prevYear": "Previous Year",
+      "prevMonth": "Previous Month",
+      "nextMonth": "Next Month",
+      "nextYear": "Next Year"
+    },
+    "weekDays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  }
+} 

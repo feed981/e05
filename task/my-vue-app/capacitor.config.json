@@ -1,0 +1,8 @@
+{
+  "appId": "com.nidia.taskapp",
+  "appName": "nidiaTask",
+  "webDir": "dist",
+  "android": {
+    "path": "android"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "common": {
+    "welcome": "歡迎",
+    "login": "登入",
+    "logout": "登出",
+    "register": "註冊",
+    "profile": "個人資料",
+    "settings": "設定",
+    "search": "搜尋",
+    "submit": "提交",
+    "cancel": "取消",
+    "save": "儲存",
+    "delete": "刪除",
+    "edit": "編輯",
+    "back": "返回",
+    "home": "首頁"
+  },
+  "nav": {
+    "home": "首頁",
+    "about": "關於",
+    "contact": "聯絡我們",
+    "services": "服務"
+  },
+  "hint": {
+    "returnMessage": {
+      "before": "如果您不需要執行此操作，可以點擊",
+      "middle": "或右上角的圖標",
+      "after": "返回首頁。"
+    }
+  },
+  "task": {
+    "new": {
+      "title": "新增任務！",
+      "category": "分類",
+      "categoryPlaceholder": "您可以為任務選擇分類，如果沒有合適的分類，請先新增一個！",
+      "datePlaceholder": "必須為任務設置日期！",
+      "textPlaceholder": "在此輸入任務內容...",
+      "editTooltip": "編輯任務內容！",
+      "addTooltip": "開始行動吧！",
+      "editHint": "您可以選擇新的分類、更改任務時間或編輯任務內容。",
+      "newHint": "首先，您必須選擇一個分類，然後選擇任務時間，最後輸入任務內容。"
+    },
+    "empty": {
+      "normal": "目前沒有一般任務",
+      "urgent": "目前沒有緊急任務",
+      "completed": "目前沒有已完成任務"
+    },
+    "menu": {
+      "copy": "複製任務文字",
+      "edit": "編輯任務",
+      "urgent": "設為緊急任務",
+      "finish": "完成任務",
+      "remove": "刪除任務",
+      "archive": "歸檔任務"
+    },
+    "status": {
+      "completed": "已完成",
+      "urgent": "緊急",
+      "normal": "一般"
+    },
+    "confirm": {
+      "remove": "確定要刪除此任務嗎？",
+      "finish": "確定要將此任務標記為完成嗎？"
+    }
+  },
+  "header": {
+    "sections": {
+      "core": "任務相關",
+      "data": "資料管理",
+      "settings": "設定",
+      "others": "其他功能",
+      "navigation": "導航"
+    },
+    "menu": {
+      "language": "語言",
+      "login": "登入",
+      "qrcode": "QR碼",
+      "darkMode": "切換深色模式",
+      "lightMode": "切換淺色模式",
+      "feedback": "意見回饋",
+      "clearData": "清除所有數據",
+      "import": "導入",
+      "export": "導出",
+      "addCategory": "新增分類",
+      "addTask": "新增任務",
+      "prePage": "返回上頁",
+      "close": "關閉{sections}選單"
+    }
+  },
+  "category": {
+    "copy": "複製分類",
+    "edit": "編輯分類",
+    "clear": "清空分類任務",
+    "remove": "刪除分類",
+    "confirmClear": "確定要清空此分類的所有任務嗎？",
+    "confirmRemove": "確定要刪除此分類嗎？",
+    "title": "所有分類！",
+    "input": {
+      "placeholder": "輸入新分類名稱..."
+    },
+    "actions": {
+      "clone": "複製此分類及其任務",
+      "edit": "編輯分類名稱",
+      "create": "創建新分類"
+    },
+    "hints": {
+      "create": "您可以在此創建新分類。",
+      "edit": "您可以編輯此分類名稱。",
+      "clone": "您可以將現有分類的所有任務複製到新分類中，但請注意分類名稱不能重複。"
+    },
+    "counts": {
+      "tasks": "此分類的任務數量！",
+      "archived": "此分類的已歸檔任務數量！",
+      "urgent": "此分類的緊急任務數量！"
+    }
+  },
+  "export": {
+    "title": "導出文件",
+    "chooseCategory": "選擇導出分類",
+    "allCategory": "所有分類",
+    "categoryPlaceholder": "您可以選擇要導出的任務分類，如果沒有分類，請先添加新分類！",
+    "chooseDateRange": "選擇導出日期範圍",
+    "dateRange": {
+      "all": "全部",
+      "year": "年度",
+      "quarter": "季度",
+      "month": "月份",
+      "date": "自定義日期"
+    },
+    "labels": {
+      "year": "年",
+      "quarter": "季",
+      "month": "月",
+      "startDate": "開始日期",
+      "endDate": "結束日期"
+    }
+  },
+  "errors": {
+    "required": "此欄位為必填",
+    "invalid_email": "無效的電子郵件地址",
+    "password_length": "密碼長度至少需要8個字符",
+    "network_error": "網路錯誤",
+    "unknown_error": "發生未知錯誤"
+  },
+  "messages": {
+    "success": "操作成功",
+    "error": "操作失敗",
+    "confirm_delete": "確定要刪除嗎？",
+    "data_updated": "數據更新成功",
+    "please_wait": "請稍候..."
+  },
+  "feedback": {
+    "title": "意見回饋！",
+    "form": {
+      "emailPlaceholder": "請輸入您的電子郵件地址",
+      "namePlaceholder": "請輸入您的姓名...",
+      "messagePlaceholder": "請在此輸入您的訊息...",
+      "submitTooltip": "發送您的回饋郵件！"
+    },
+    "status": {
+      "sending": "發送中...",
+      "success": "發送成功！",
+      "error": "發送失敗，請稍後再試..."
+    },
+    "error": {
+      "message": "發送郵件時發生錯誤：{error}"
+    }
+  },
+  "import": {
+    "title": "導入 JSON！",
+    "fileInput": {
+      "title": "選擇要導入的 JSON 文件"
+    },
+    "actions": {
+      "overwrite": "覆蓋模式，所有現有數據將被覆蓋，請謹慎！",
+      "append": "追加模式，將保留原有數據，但功能仍可正常使用！"
+    },
+    "hints": {
+      "overwrite": "將導出的 JSON 文件導入，覆蓋所有現有數據！"
+    }
+  },
+  "language": {
+    "en": "英文",
+    "zh": "中文"
+  },
+  "login": {
+    "title": "登入！",
+    "actions": {
+      "signInWithGoogle": "使用 Google 帳號登入",
+      "signInWithGoogleOAuth": "使用 Google OAuth 登入",
+      "logout": "登出"
+    }
+  },
+  "calendar": {
+    "title": "行事曆",
+    "selectDate": "選擇日期查看任務",
+    "tasksForDate": "{date} 的任務",
+    "noTasks": "此日期沒有排程的任務",
+    "unknownCategory": "未知分類",
+    "hint": "查看所選日期的所有類別的任務",
+    "navigation": {
+      "prevYear": "上一年",
+      "prevMonth": "上個月",
+      "nextMonth": "下個月",
+      "nextYear": "下一年"
+    },
+    "weekDays": {
+      "sun": "日",
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六"
+    },
+    "months": {
+      "january": "一月",
+      "february": "二月",
+      "march": "三月",
+      "april": "四月",
+      "may": "五月",
+      "june": "六月",
+      "july": "七月",
+      "august": "八月",
+      "september": "九月",
+      "october": "十月",
+      "november": "十一月",
+      "december": "十二月"
+    }
+  }
+} 

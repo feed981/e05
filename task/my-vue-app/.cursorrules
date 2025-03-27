@@ -1,0 +1,147 @@
+# Web Development Project Rules
+
+# Code Style
+style {
+    # General formatting
+    indent: 2 spaces
+    max_line_length: 80
+    quotes: single
+
+    # File organization
+    imports_order: [
+        vue
+        vue-i18n
+        external_libraries
+        components
+        utils
+        styles
+    ]
+}
+
+# Internationalization (i18n) Guidelines
+i18n {
+    # Supported languages
+    languages: [
+        zh: Chinese
+        en: English
+    ]
+    
+    # Translation file structure
+    structure: {
+        format: JSON
+        location: src/i18n/locales
+        naming: {
+            pattern: [language_code].json
+            examples: [zh.json, en.json]
+        }
+    }
+    
+    # Key naming conventions
+    key_naming: {
+        format: camelCase
+        namespace: required
+        max_depth: 3
+    }
+    
+    # Translation requirements
+    requirements: {
+        missing_keys: not_allowed
+        placeholder_format: {$variable}
+        html_in_translations: not_allowed
+    }
+}
+
+# Component Guidelines
+component {
+    naming: PascalCase
+    max_lines: 300
+    structure: [
+        imports
+        i18n_setup
+        interface/types
+        component
+        styles
+        exports
+    ]
+}
+
+# Best Practices
+practices {
+    prefer_functional_components: true
+    use_typescript: true
+    use_eslint: true
+    use_prettier: true
+    i18n: {
+        use_composition_api: true
+        prefer_named_exports: true
+        lazy_loading: recommended
+    }
+}
+
+# Documentation Requirements
+documentation {
+    required_for: [
+        components
+        utils
+        apis
+        i18n_keys
+        complex_functions
+    ]
+    include: [
+        description
+        params
+        return_values
+        examples
+        i18n_usage
+    ]
+}
+
+# Testing Guidelines
+testing {
+    framework: jest
+    coverage_threshold: 80%
+    required_for: [
+        components
+        utils
+        hooks
+        i18n_functions
+    ]
+    i18n_testing: {
+        test_all_languages: required
+        mock_translations: recommended
+    }
+}
+
+# Performance Guidelines
+performance {
+    max_bundle_size: 500kb
+    lazy_loading: required_for_routes
+    image_optimization: required
+    i18n_optimization: {
+        lazy_load_translations: true
+        bundle_splitting_by_locale: true
+    }
+}
+
+# Accessibility
+accessibility {
+    wcag_level: AA
+    aria_labels: required
+    semantic_html: required
+    i18n_requirements: {
+        rtl_support: optional
+        language_selection: visible
+        language_auto_detection: recommended
+    }
+}
+
+# Security
+security {
+    input_validation: required
+    xss_protection: required
+    csrf_protection: required
+    i18n_security: {
+        sanitize_translations: required
+        escape_html: required
+    }
+} 

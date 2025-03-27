@@ -1,0 +1,54 @@
+# 依賴項目目錄
+node_modules/
+.pnpm/
+.npm/
+
+# 構建輸出目錄
+dist/
+build/
+.output/
+
+# IDE 和編輯器文件
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 日誌文件
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 環境文件
+.env
+.env.*
+!.env.example
+
+# Capacitor 相關
+android/build/
+ios/build/
+ios/App/Pods/
+ios/DerivedData/
+android/.gradle/
+android/app/build/
+
+# 系統文件
+.DS_Store
+Thumbs.db
+
+# 快取文件
+.cache/
+.temp/
+.vite/
+
+# 測試覆蓋率報告
+coverage/
+
+# 本地文件
+*.local 

@@ -1,0 +1,293 @@
+/* body {
+    font-family: "BhuTuka Expanded One", serif;
+    background-color: #1E1E1E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+} */
+
+  
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* background-color:  #121212; */
+    background-color: #323232;
+    /* font-family: Arial, sans-serif; */
+    font-family: "Unbounded", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    overflow: hidden;
+  }
+
+.app-container {
+    position: relative;
+    /* overflow-y: auto;
+  overflow-x: hidden; */
+    height: 400px;
+}
+
+.task-container {
+    position: relative;
+    height: 150%;
+    background: #2b2b2b;
+    /* background-color: #2C2C2C; */
+    color: #E0E0E0;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    padding: 20px;
+    width: 300px;
+    
+}
+    
+
+h1 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input-container textarea {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+input[type="file"] {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
+}
+
+.font-awesome-i-inbutton {
+    background-color: #26212100;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0s;
+    padding: 0px;
+}
+
+.font-awesome-i-inbutton:hover {
+    background-color: #26212100;
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+
+.format-label {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.category-content {
+    /* display: none; */
+    cursor: pointer;
+    padding-left: 15px;
+}
+
+.category i {
+    font-size: 15px;
+}
+
+.selected-category-sub {
+    font-size: 12px;
+    text-align: left;
+}
+
+.task-item {
+    border-left: 4px solid #359bd6;
+    border-bottom: 4px solid #0056b3;
+    background-color: #2e94cf;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-wrap: break-word;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+
+}
+
+.task-archive {
+    display: none;
+}
+
+.category-task-archive {
+    border-left: 4px solid #a6d635;
+    border-bottom: 4px solid #a1b300;
+    background-color: #accf2e;
+}
+
+.task-urgent {
+    border-left: 4px solid #d64d35;
+    border-bottom: 4px solid #b32a00;
+    background-color: #cf472e;
+}
+
+.task-completed {
+    color: #fff;
+    background: #6e6e6e;
+    border-left: 4px solid #2C2C2C;
+    border-bottom: 4px solid #414141;
+}
+
+i {
+    cursor: pointer;
+    color: #fff;
+    font-size: 24px;
+}
+
+.bars {
+    width: 220px;
+}
+
+.text-content {
+    /* width: 80%; */
+    flex: 1;
+    /* 讓文字內容占用剩餘空間 */
+    word-wrap: break-word;
+    /* 允許長單字換行 */
+    min-width: 0;
+    /* 確保可以正確換行 */
+    text-align: left;
+}
+
+.notyf__toast {
+    font-family: Arial, sans-serif;
+    max-width: 300px;
+    /* 設定最大寬度 */
+    white-space: normal;
+    /* 允許換行 */
+    word-break: break-word;
+    /* 避免超出容器 */
+}
+.notyf__icon i {
+    color: white !important; /* 強制白色 */
+    font-size: 20px;
+}
+
+
+.bhutuka-expanded-one-regular {
+    /* font-family: Arial, sans-serif; */
+    /* font-family: "BhuTuka Expanded One", serif; */
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1287ca;
+    /* text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3); */
+}
+
+h1 i{
+    color: #1287ca;
+}
+
+
+
+.heading-style1 {
+    font-family: 'Creepster', cursive;
+    color: #1287ca;
+    text-shadow: 2px 2px 4px rgba(1, 1, 32, 0.3);
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 20px;
+
+}
+
+
+.clean-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .clean-link:visited, 
+  .clean-link:active,
+  .clean-link:focus,
+  .clean-link:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+
+
+  
+.describe{
+    margin  : 10px 0px;
+    text-align: left;
+    color: #797979;
+  }
+  
+  .common-describe .clean-link{
+    color: #1287ca;
+  }
+  
+  .common-describe i{
+    font-size: 12px;
+    color: #1287ca;
+  }
+
+ .light-mode .common-describe i{
+    font-size: 12px;
+    color: #1287ca;
+  }
+
+
+.margin-top{
+    margin-top: 60px;
+  }
+  
+@media screen and (max-width: 768px) {
+    body {
+        height: auto;
+    }
+
+    .task-container {
+        height: 150%;
+    }
+}
