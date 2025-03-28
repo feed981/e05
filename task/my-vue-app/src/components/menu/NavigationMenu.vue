@@ -5,7 +5,7 @@ import { useCommon } from "@/composables/useCommon.js";
 
 const navigationMenuStore = useNavigationMenuStore();
 const { t, locale } = useI18n();
-const { hiddenPrepage } = useCommon();  
+const { hiddenPrepage, goBack } = useCommon();  
 const menuStore = useMenuStore();
 </script>
 
@@ -13,9 +13,7 @@ const menuStore = useMenuStore();
     <div class="dropdown">
         <!-- 核心功能 -->
         <ul v-show="navigationMenuStore.isOpen" class="dropdown-menu dropdown-menu-sub">
-            <router-link :to="{ name: 'v2.home' }" class="clean-link" v-show="hiddenPrepage">
-                <li><i class="fa-solid fa-arrow-left"></i>|　{{ t('header.menu.prePage') }}</li>
-            </router-link>
+            <li @click="goBack"><i class="fa-solid fa-arrow-left"></i>|　{{ t('header.menu.prePage') }}</li>
             <li @click="menuStore.toggleBars">
                 <i class="fa-solid fa-xmark"></i>|　{{ t('header.menu.close', { section: t('header.sections.navigation') }) }}
             </li>

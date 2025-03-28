@@ -106,6 +106,15 @@ export function useCommon() {
     const router = useRouter();
 
 
+const goBack = () => {
+    if (window.history.length > 2) {
+        router.go(-1);
+    } else {
+        // 如果沒有上一頁，則返回首頁
+        router.push({ name: 'v2.home' });
+    }
+};
+
     const windowConfirm = (message) => {
         speechSynthesisSpeak(message[language]);
         return window.confirm(message[language]);
@@ -295,5 +304,6 @@ export function useCommon() {
         hiddenPrepage,
         hiddenFooter,
         hiddenHint,
+        goBack
     };
 }

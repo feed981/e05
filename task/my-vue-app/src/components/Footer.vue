@@ -18,11 +18,11 @@ const hideStore = useHintStore();
         <router-link :to="{ name: 'v2.calendar' }" class="clean-link">
           <i class="fa-solid fa-calendar"></i>
         </router-link>
-        <router-link :to="{ name: 'v2.tasks.new' }" v-show="hiddenFooter" class="clean-link">
-            <i class="fa-solid fa-rocket"></i>
-        </router-link>
         <router-link :to="{ name: 'v2.category.list' }" v-show="hiddenFooter" class="clean-link">
             <i class="fa-solid fa-icons"></i>
+        </router-link>
+        <router-link :to="{ name: 'v2.tasks.new' }" v-show="hiddenFooter" class="clean-link">
+            <i class="fa-solid fa-rocket"></i>
         </router-link>
         <i class="fa-solid fa-question" @click="hideStore.toggleBars" v-show="hiddenHint" ></i>
     </div>
