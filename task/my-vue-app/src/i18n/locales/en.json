@@ -84,7 +84,8 @@
       "addCategory": "Add new category",
       "addTask": "Add new task",
       "prePage": "Pre page",
-      "close": "Close the {sections} menu"
+      "close": "Close the {sections} menu",
+      "list": "List all categories"
     }
   },
   "category": {

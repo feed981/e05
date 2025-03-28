@@ -12,6 +12,12 @@ const hideStore = useHintStore();
 
 <template>
     <div class="footer">
+        <router-link :to="{ name: 'v2.home' }" class="clean-link">
+            <i class="fa-solid fa-folder-tree"></i>
+        </router-link>
+        <router-link :to="{ name: 'v2.calendar' }" class="clean-link">
+          <i class="fa-solid fa-calendar"></i>
+        </router-link>
         <router-link :to="{ name: 'v2.tasks.new' }" v-show="hiddenFooter" class="clean-link">
             <i class="fa-solid fa-rocket"></i>
         </router-link>

@@ -245,7 +245,7 @@ const formatDate = (day) => {
 
 .today:hover {
   background-color: #424242;
-  box-shadow: rgba(197, 216, 238, 0.4) 0px 0px 0px 1px, rgba(121, 160, 175, 0.65) 0px 0px 3px 1px, rgba(232, 235, 235, 0.08) 0px 1px 0px inset;
+  box-shadow: rgba(180, 180, 180, 0.4) 0px 0px 0px 1px, rgba(95, 95, 95, 0.65) 0px 0px 3px 1px, rgba(121, 121, 121, 0.08) 0px 1px 0px inset;
 }
 
 .has-entry {

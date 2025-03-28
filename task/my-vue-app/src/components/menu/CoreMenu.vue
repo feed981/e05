@@ -15,6 +15,9 @@ const { t, locale } = useI18n();
             <router-link :to="{ name: 'v2.tasks.new' }" class="clean-link">
                 <li><i class="fa-solid fa-rocket"></i>|　{{ t('header.menu.addTask') }}</li>
             </router-link>
+            <router-link :to="{ name: 'v2.home' }" class="clean-link">
+                <li><i class="fa-solid fa-folder-tree"></i>|　{{ t('header.menu.list') }}</li>
+            </router-link>
             <router-link :to="{ name: 'v2.calendar' }" class="clean-link">
                 <li><i class="fa-solid fa-calendar"></i>|　{{ t('calendar.title') }}</li>
             </router-link>
