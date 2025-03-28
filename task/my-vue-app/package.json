@@ -20,6 +20,7 @@
     "@emailjs/browser": "^4.4.1",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "axios": "^1.8.4",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
     "google-auth-library": "^9.15.1",
     "notyf": "^3.10.0",

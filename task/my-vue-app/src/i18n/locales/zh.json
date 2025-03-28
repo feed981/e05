@@ -85,7 +85,9 @@
       "addTask": "新增任務",
       "prePage": "返回上頁",
       "close": "關閉{sections}選單",
-      "list": "列出所有分類"
+      "list": "列出所有分類",
+      "database": "備份到資料庫",
+      "restore": "恢復資料"
     }
   },
   "category": {

@@ -1,7 +1,8 @@
-import { ref, reactive, watch, toRaw } from "vue";
+import { ref, reactive, watch, toRaw, onMounted } from "vue";
 import { useCommon } from "@/composables/useCommon.js";
 import { useRouter } from 'vue-router';
-
+import { encryption } from "@/utils/encryption.js";
+import { useUserStore } from '@/store/useStore';
 // 定义响应式变量用于存储新分类名称
 /// 從 export 搬出來 ，修改 useCategory.js 为单例模式
 const isEdit = ref(false);
@@ -115,7 +116,7 @@ export function useCategory(watchSource = null) {
         successNotyftMessage(['Copy category successfully!','已複製類別!']);
         isClone.value = false;
         newCategoryName.value = '';
-        router.push(`/task/v2/${newName}/tasks`);
+        router.push({ name: 'v2.category.tasks', params: { category: newName } });
     };
 
     const editCategory = (categoryName, newName) => {
@@ -143,7 +144,7 @@ export function useCategory(watchSource = null) {
         successNotyftMessage(['Edit category successfully!','已修改類別!']);
         isEdit.value = false;
         newCategoryName.value = '';
-        router.push(`/task/v2/${newName}/tasks`);
+        router.push({ name: 'v2.category.tasks', params: { category: newName } });
     };
 
     const setCopyCategory = (name, datetime) => {
@@ -221,6 +222,61 @@ export function useCategory(watchSource = null) {
         successNotyftMessage(['Add category successfully!','已新增類別!']);
     };
 
+    // 保存分類到後端（加密）
+    const saveCategories = async () => {
+        try {
+            const encryptedData = await encryption.encrypt(categories);
+            if (encryptedData) {
+                const userStore = useUserStore();
+                const response = await fetch('http://localhost:64202/api/categories/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userStore.token}`,
+                    },
+                    body: JSON.stringify({ encryptedData })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to save categories');
+                }
+            }
+        } catch (error) {
+            console.error('Error saving categories:', error);
+        }
+    };
+
+    // 從後端獲取分類（解密）
+    const loadCategories = async () => {
+        try {
+            const response = await fetch('http://localhost:64202/api/categories');
+            if (response.ok) {
+                const { encryptedData } = await response.json();
+                if (encryptedData) {
+                    const decryptedData = await fetch('http://localhost:64202/api/encryption/decrypt', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${userStore.token}`,
+                        },
+                        body: JSON.stringify({ encryptedData })
+                    }).then(res => res.json());
+                    
+                    if (decryptedData) {
+                        Object.assign(categories, decryptedData);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    };
+
+    // 在組件掛載時加載數據
+    // onMounted(() => {
+    //     loadCategories();
+    // });
+
     return {
         refreshKey,
         categoryName,
@@ -237,5 +293,7 @@ export function useCategory(watchSource = null) {
         setCopyCategory,
         isClone,
         copyCategory,
+        saveCategories,
+        loadCategories,
     };
 }

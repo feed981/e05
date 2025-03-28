@@ -85,7 +85,9 @@
       "addTask": "Add new task",
       "prePage": "Pre page",
       "close": "Close the {sections} menu",
-      "list": "List all categories"
+      "list": "List all categories",
+      "database": "Backup to database",
+      "restore": "Restore data"
     }
   },
   "category": {

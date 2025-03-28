@@ -145,7 +145,7 @@ const goBack = () => {
             message: 'Please feedback this error, <br>' + message[language]
         });
         setTimeout(() => {
-            router.push('/task/v2/feedback');
+            router.push({ name: 'v2.feedback' });
         }, 3000);
     };
 

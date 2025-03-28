@@ -242,3 +242,40 @@ export const useHintStore = defineStore('hint', () => {
     isOpen, toggleBars,
    };
 });
+
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    user: null,
+    token: null,
+    isAuthenticated: false
+  }),
+  
+  actions: {
+    setUser(userData) {
+      this.user = userData;
+      this.isAuthenticated = true;
+    },
+    
+    setToken(token) {
+      this.token = token;
+      // 將 token 存入 localStorage
+      localStorage.setItem('userToken', token);
+    },
+    
+    logout() {
+      this.user = null;
+      this.token = null;
+      this.isAuthenticated = false;
+      localStorage.removeItem('userToken');
+    },
+    
+    // 從 localStorage 恢復登入狀態
+    restoreAuth() {
+      const token = localStorage.getItem('userToken');
+      if (token) {
+        this.token = token;
+        this.isAuthenticated = true;
+      }
+    }
+  }
+});

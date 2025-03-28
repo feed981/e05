@@ -3,9 +3,8 @@ import { useTask } from "@/composables/useTask.js";
 import { useCategory } from "@/composables/useCategory.js";
 import { useCommon } from "@/composables/useCommon.js";
 import { useDate } from "@/composables/useDate.js";
-import { useStore, } from '@/store/useStore';
+import { useStore,  } from '@/store/useStore';
 import { useRouter } from 'vue-router';
-
 
 const { domain_soundtrack, } = useStore();
 
@@ -19,7 +18,6 @@ const {
 const { 
     formatDateTime,
 } = useDate();
-
 
 const html = () => {
 
