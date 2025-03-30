@@ -74,8 +74,7 @@ const filteredTasklist = computed(() => {
     return filtered;
   }
 });
-
-console.log('filteredTasklist:',filteredTasklist.value)
+const hasTask = Object.keys(filteredTasklist.value).length > 0;
 </script>
 
 
@@ -88,7 +87,7 @@ console.log('filteredTasklist:',filteredTasklist.value)
     </span>
   </h1>
 
-  <div v-if="!plusStore.isOpen" class="describe">{{ t('task.new.clickHint') }}</div>
+  <div v-if="!plusStore.isOpen && categoryName !== undefined && !hasTask" class="describe">{{ t('task.new.clickHint') }}</div>
   <div class="float-plus-container" v-if="categoryName !== undefined">
     <div class="float float-plus2" @click="plusStore.toggleBars">
       <i class="my-float font-awesome-i fa-solid fa-plus"></i>
