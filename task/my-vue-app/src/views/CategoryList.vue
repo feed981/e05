@@ -1,7 +1,6 @@
 <script setup>
-import { useTask } from "@/composables/useTask.js";
 import { useCategory } from "@/composables/useCategory.js";
-// import CategoryNew from '@/components/CategoryNew.vue'
+import CategoryTaskCount from '@/components/CategoryTaskCount.vue'
 import CategoryMenu from '@/components/CategoryMenu.vue'
 import Hint from '@/components/Hint.vue'
 import { useI18n } from 'vue-i18n';
@@ -19,11 +18,7 @@ const {
   copyCategory,
 } = useCategory();
 
-const {
-  allTaskCount,
-  finishTaskCount,
-  urgentTaskCount,
-} = useTask();
+
 
 if(!isEdit.value){
   newCategoryName.value = '';
@@ -83,12 +78,18 @@ if(!isEdit.value){
         <div class="category" >
         <!-- <div class="category" v-if="refreshKey"> -->
           <div class="category-name" >
+
             <router-link :to="{ name: 'v2.category.tasks', params: { category: `${categoryData.info.name}` } }" class="clean-link">
               <span class="title">{{ categoryData.info.name }}</span>
             </router-link>
-              <i :title="t('category.counts.tasks')" class="fa-solid fa-list-check"></i> : {{ allTaskCount(categoryData.info.name) }}
-            　<i :title="t('category.counts.archived')" class="fa-solid fa-flag-checkered"></i> : {{ finishTaskCount(categoryData.info.name) }} 
-            　<i :title="t('category.counts.urgent')" class="fa-solid fa-thumbtack"></i> : {{ urgentTaskCount(categoryData.info.name) }} 
+
+            <CategoryTaskCount 
+            :category="categoryData.info.name" 
+          />
+
+              <!-- <i :title="t('category.counts.tasks')" class="fa-solid fa-list-check"></i> : {{ allTaskCount(categoryData.info.name) }} -->
+            <!-- 　<i :title="t('category.counts.completed')" class="fa-solid fa-font-awesome"></i> : {{ finishTaskCount(categoryData.info.name) }}  -->
+            <!-- 　<i :title="t('category.counts.urgent')" class="fa-solid fa-thumbtack"></i> : {{ urgentTaskCount(categoryData.info.name) }}  -->
           </div>
           <CategoryMenu 
             v-bind:categoryName="categoryData.info.name" 
@@ -107,5 +108,6 @@ if(!isEdit.value){
 .describe{
   margin: 0px;
 }
+
 </style>
   

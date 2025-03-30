@@ -518,7 +518,7 @@ function convertToHtml1(filteredCategories, exportParams) {
 
                     html += `
                       <div class="${taskClass2}">
-                        <i class="fa-solid ${taskClass === 'completed' ? 'fa-flag-checkered' : 'fa-thumbtack'}"></i>
+                        <i class="fa-solid ${taskClass === 'completed' ? 'fa-font-awesome' : 'fa-thumbtack'}"></i>
                         ${index + 1}. ${task.text}
                       </div>
                     `;

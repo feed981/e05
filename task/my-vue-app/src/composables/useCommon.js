@@ -246,12 +246,12 @@ const goBack = () => {
         }
         
         // Check dynamic path with regex pattern
-        if (/^\/task\/v2\/[^/]+\/tasks\/[^/]+$/.test(route.path)) {
-            return false;
-        }
-        if (/^\/task\/v2\/[^/]+\/tasks\/[^/]+(\/normal|\/completed|\/urgent)$/.test(route.path)) {
-            return false;
-        }
+        // if (/^\/task\/v2\/[^/]+\/tasks\/[^/]+$/.test(route.path)) {
+        //     return false;
+        // }
+        // if (/^\/task\/v2\/[^/]+\/tasks\/[^/]+(\/normal|\/completed|\/urgent)$/.test(route.path)) {
+        //     return false;
+        // }
 
         return true;
     });

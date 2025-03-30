@@ -48,10 +48,13 @@ const {
 <style scoped>
 @import "../assets/styles/import-loading.css";
 input[type="file"] {
-  font-family: "Unbounded", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-weight: 800;
+  /* font-family: "Unbounded", sans-serif; */
+  /* font-optical-sizing: auto; */
+  /* font-style: normal; */
+  /* font-weight: 800; */
+  box-shadow: none;
+  border: none;
+  border-radius: 0px;
 }
 </style>
   

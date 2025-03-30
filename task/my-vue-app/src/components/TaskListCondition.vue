@@ -4,8 +4,11 @@ import { useTask } from "@/composables/useTask.js";
 import TaskMenu from '@/components/TaskMenu.vue'
 import TasksNew from '@/components/TasksNew.vue'
 import { useI18n } from 'vue-i18n';
+import { usePlusStore } from '@/store/useStore.js';
 
 const { t } = useI18n();
+
+const plusStore = usePlusStore();
 
 const {
   allTaskCount,
@@ -49,13 +52,16 @@ const filteredTasklist = computed(() => {
 
 <template>
   <h1 class="bhutuka-expanded-one-regular"><i class="fa-solid fa-folder-tree"></i> {{ page }}</h1>
-  <TasksNew 
+  <div class="float float-plus2" @click="plusStore.toggleBars">
+      <i class="my-float font-awesome-i fa-solid fa-plus"></i>
+  </div>
+  <TasksNew v-if="plusStore.isOpen"
   v-bind:page="categoryName"
   v-bind:categoryName="categoryName"
   v-bind:date="date"
   />
   <br>
-  <div>{{ date }}</div>
+  <div class="date-title">{{ date }}</div>
 
   <div class="export-category">
     <router-link :to="{ name: 'v2.category.tasks.date', params: { category: `${categoryName}`} }" class="clean-link">
@@ -85,7 +91,7 @@ const filteredTasklist = computed(() => {
           }">
         <div class="category-name">
           <span class="title">
-            <i v-if="task.status === 'completed'" class="fa-solid fa-flag-checkered"></i>
+            <i v-if="task.status === 'completed'" class="fa-solid fa-font-awesome"></i>
             <i v-if="task.status === 'urgent'" class="fa-solid fa-thumbtack"></i>
           {{ task.text }}</span>
           <!-- <span class="title">{{ task.updatetime }}</span> -->
@@ -140,6 +146,9 @@ const filteredTasklist = computed(() => {
   
 .empty-message-container div{
   margin-top: 30px;
+}
+.date-title{
+  color: #9a9a9a;
 }
 </style>
   

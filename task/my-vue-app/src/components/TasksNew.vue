@@ -27,7 +27,9 @@ const {
 const props = defineProps({
   page: String,
   categoryName: String,
-  date: String,
+  date: {
+    type: String,
+  },
 });
 
 if(!isEdit.value){
@@ -44,6 +46,12 @@ if(props.page){
   isFromTaskListCondition.value = true;
 }
 
+if(props.date === undefined){
+  console.log('props.date:',props.date)
+  console.log('props.date:',setDate())
+  task.value.date = setDate();
+}
+
 // console.log(
 //   'selectedCategory.value:',props.categoryName,
 //   'task.value.date:',props.date,
@@ -58,7 +66,7 @@ if(props.page){
     <i class="fa-solid fa-rocket"></i> {{ t('task.new.title') }}
   </h1>
     <div class="describe" v-if="isEdit">{{ t('task.new.editHint') }}</div>
-    <div class="describe" v-if="!isEdit && !isFromTaskListCondition">{{ t('task.new.newHint') }}</div>
+    <div class="describe" v-if="!isEdit">{{ t('task.new.newHint') }}</div>
   <Hint/>
 
   <div class="button-container">
@@ -99,5 +107,8 @@ if(props.page){
 
 <style scoped>
 @import "../assets/styles/tasks2.css";
+.light-mode h1 i{
+    color: #1287ca;
+}   
 </style>
   

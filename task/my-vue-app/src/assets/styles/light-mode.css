@@ -60,7 +60,7 @@
 
 .light-mode i,
 .light-mode .task-menu i {
-    color: #f6f6f6;
+    color: #eae9e9;
 }
 
 .light-mode .heading-style1 {
@@ -73,7 +73,6 @@
     color: #000;
     background: #fff;
 }
-
 
 .light-mode .task-urgent {
     border-left: 4px solid #d64d35;
@@ -91,12 +90,9 @@
 
 /* export.css s */
 
-.light-mode .export-category {
-    color: #c5c5c5;
-  }
-
-  .light-mode .export-category i{
-    color: #c5c5c5;
+.light-mode .export-category ,
+.light-mode .export-category i{
+    color: #b9b9b9;
   }
 
 

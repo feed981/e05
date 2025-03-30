@@ -30,11 +30,6 @@
     z-index: 9998;
 }
 
-.dropdown span {
-    font-size: 24px;
-    cursor: pointer;
-}
-
 .dropdown-menu {
     position: absolute;
     top: 30px;
@@ -55,11 +50,6 @@
     cursor: pointer;
 }
 
-.dropdown-menu li span {
-    font-size: 10px;
-    cursor: pointer;
-}
-
 .dropdown-menu li {
     border-bottom: 1px solid;
     padding: 10px;
@@ -70,6 +60,7 @@
 
 .dropdown-menu li:hover {
     background: #6a7075;
+    color: #fff;
 }
 
 .dropdown-menu-sub {

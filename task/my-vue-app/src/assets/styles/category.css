@@ -53,6 +53,11 @@ input[type="text"]{
     font-size: 14px;
   }
 
+  .light-mode  .export-container {
+    scrollbar-color: #ffffff #ffffff;
+}
+
+
 .category-name .title {
     /* border: 2px red solid; */
     margin-bottom: 5px;
@@ -126,10 +131,10 @@ input[type="text"]{
 } */
 
 .light-mode .category {
-    color: #b6b4b4;
+    color: #b9b9b9;
     background-color: #FFF;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-    transition: all 2.8s ease;
+    box-shadow: rgb(184, 184, 184) 0px 1px 1px, rgba(122, 122, 122, 0.13) 0px 0px 1px 1px;
+    transition: all 0.8s ease;
 }
 
 .light-mode .category .font-awesome-i {
@@ -141,6 +146,5 @@ input[type="text"]{
 }
 
 .light-mode .category:hover {
-    box-shadow: rgb(184, 184, 184) 0px 1px 1px, rgba(122, 122, 122, 0.13) 0px 0px 1px 1px;
-    transition: all 0.8s ease;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 10px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;    transition: all 0.8s ease;
 }  

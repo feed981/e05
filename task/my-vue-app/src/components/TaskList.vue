@@ -2,8 +2,13 @@
 import { ref, computed } from 'vue';
 import { useTask } from "@/composables/useTask.js";
 import { useI18n } from 'vue-i18n';
+import TasksNew from '@/components/TasksNew.vue'
+import CategoryTaskCount from '@/components/CategoryTaskCount.vue'
+import { usePlusStore } from '@/store/useStore.js';
 
 const { t } = useI18n();
+
+const plusStore = usePlusStore();
 
 const {
   allTaskCount,
@@ -23,6 +28,7 @@ const props = defineProps({
   },
 });
 
+// console.log('props.categoryName:', props.categoryName);
 // Computed property to filter tasks based on categoryName and date
 const filteredTasklist = computed(() => {
   const category = props.categoryName;
@@ -69,6 +75,7 @@ const filteredTasklist = computed(() => {
   }
 });
 
+console.log('filteredTasklist:',filteredTasklist.value)
 </script>
 
 
@@ -81,72 +88,38 @@ const filteredTasklist = computed(() => {
     </span>
   </h1>
 
+  <div v-if="!plusStore.isOpen" class="describe">{{ t('task.new.clickHint') }}</div>
+  <div class="float-plus-container" v-if="categoryName !== undefined">
+    <div class="float float-plus2" @click="plusStore.toggleBars">
+      <i class="my-float font-awesome-i fa-solid fa-plus"></i>
+    </div>
+    <TasksNew v-if="plusStore.isOpen"
+      v-bind:page="categoryName"
+      v-bind:categoryName="categoryName"
+      v-bind:date="date"
+    />
+  </div>
+
   <div class="export-container">
+
     <div v-for="(dates, category, index) in filteredTasklist" :key="category">
       <div v-if="index !== 0" class="hr"></div>
-      <router-link v-if="categoryName === '' || date"
+      <router-link v-if="categoryName === undefined || date"
         :to="{ name: 'v2.category.tasks', params: { category: `${category}` } }" class="clean-link">
         <div class="export-category">
           <span>{{ category }}</span>
         </div>
       </router-link>
 
+      
 
       <div class="export-category">
-        <router-link 
-          :to="{ 
-            name: date ? 'v2.category.tasks.date' : 'v2.category.tasks', 
-            params: { 
-              category: `${category}`,
-              ...(date ? { date } : {})
-            }
-          }" 
-          class="clean-link"
-        >
-          <i class="fa-solid fa-rocket"></i> : {{ allTaskCount(category, date) }}
-        </router-link>
-
-        <router-link 
-          :to="{ 
-            name: date ? 'v2.category.tasks.date.status' : 'v2.category.tasks.status', 
-            params: { 
-              category: `${category}`,
-              ...(date ? { date } : {}),
-              status: 'normal'
-            }
-          }" 
-          class="clean-link"
-        >
-          <i class="fa-solid fa-person-skiing-nordic"></i> : {{ normalTaskCount(category, date) }}
-        </router-link>
         
-        <router-link 
-          :to="{ 
-            name: date ? 'v2.category.tasks.date.status' : 'v2.category.tasks.status', 
-            params: { 
-              category: `${category}`,
-              ...(date ? { date } : {}),
-              status: 'completed'
-            }
-          }" 
-          class="clean-link"
-        >
-          <i class="fa-solid fa-font-awesome"></i> : {{ finishTaskCount(category, date) }}
-        </router-link>
+        <CategoryTaskCount 
+          :category="category" 
+          :date="date"
+        />
         
-        <router-link 
-          :to="{ 
-            name: date ? 'v2.category.tasks.date.status' : 'v2.category.tasks.status', 
-            params: { 
-              category: `${category}`,
-              ...(date ? { date } : {}),
-              status: 'urgent'
-            }
-          }" 
-          class="clean-link"
-        >
-          <i class="fa-solid fa-thumbtack"></i> : {{ urgentTaskCount(category, date) }}
-        </router-link>
 
         <div class="empty-message-container">
           <div v-if="props.status === 'normal' && normalTaskCount(category, date) === 0">
@@ -200,5 +173,8 @@ const filteredTasklist = computed(() => {
 }
 .empty-message-container div{
   margin-top: 150px;
+}
+.float-plus-container{
+  margin-bottom: 10px;
 }
 </style>

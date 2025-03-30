@@ -59,7 +59,7 @@ const {
                             <i class="fa-solid fa-jug-detergent"></i>|　{{ t('task.menu.urgent') }}
                         </li>
                         <li @click="finishTask(categoryName, date, updatetime)">
-                            <i class="fa-solid fa-flag-checkered"></i>|　{{ t('task.menu.finish') }}
+                            <i class="fa-solid fa-font-awesome"></i>|　{{ t('task.menu.finish') }}
                         </li>
                         <li @click="removeTask(categoryName, date, updatetime, text)" >
                             <i class="fa-solid fa-trash"></i>|　{{ t('task.menu.remove') }}

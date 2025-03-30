@@ -31,7 +31,8 @@
       "editTooltip": "Edit this task content!",
       "addTooltip": "Let's do it bro!",
       "editHint": "You can select a new category or choose the task time or edit the task content.",
-      "newHint": "First, you must select a category, then choose the task time, and enter the task content."
+      "newHint": "First, you must select a category, then choose the task time, and enter the task content.",
+      "clickHint": "This category has no tasks at the moment, please click the + button to add a new task to this category."
     },
     "empty": {
       "normal": "No normal tasks at the moment",
@@ -113,7 +114,7 @@
     },
     "counts": {
       "tasks": "This category task count!",
-      "archived": "This category archive task count!",
+      "completed": "This category completed task count!",
       "urgent": "This category urgent task count!"
     }
   },
@@ -202,10 +203,10 @@
     "unknownCategory": "Unknown Category",
     "hint": "View all tasks from different categories for the selected date",
     "navigation": {
-      "prevYear": "Previous Year",
-      "prevMonth": "Previous Month",
-      "nextMonth": "Next Month",
-      "nextYear": "Next Year"
+      "prevYear": "Previous\nYear",
+      "prevMonth": "Previous\nMonth",
+      "nextMonth": "Next\nMonth",
+      "nextYear": "Next\nYear"
     },
     "weekDays": {
       "sun": "Sun",
